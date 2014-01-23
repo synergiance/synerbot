@@ -19,3 +19,7 @@
 *.exe
 *.out
 *.app
+
+# Compiled program and its configuration files
+ibot
+*.cfg
