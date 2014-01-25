@@ -443,8 +443,6 @@ void IrcBot::AI(string sender, string msg)
                 }
             }
 
-            // <-------------------- END CODE EDIT -------------------->
-
             else if (message.find(nick) != -1) // Be nice
                 say(channel, "Hi " + name);
         } else
@@ -611,7 +609,7 @@ int IrcBot::commandHandle(string cmd, string args, string talkto, bool admin)
             say(talkto, "Invalid quote: Null");
         }
     }
-    if (command.compare("numquotes") == 0)
+    if (cmd.compare("numquotes") == 0)
     {
         cout<<"There are "<<quotes.size()<<" quotes loaded\n";
         stringstream ss;
