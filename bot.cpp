@@ -635,7 +635,7 @@ int IrcBot::commandHandle(string cmd, string args, string talkto, bool admin)
 bool IrcBot::extractCommandArgs(string message, string& command, string& args)
 {
     bool ecaStatus = false;
-    int tmp; string str = mesasge;
+    int tmp; string str = message;
     trimWhite(str);
     tmp = str.find(" ");
     cout<<"The argument splits at "<<tmp<<endl;
