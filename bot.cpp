@@ -394,6 +394,8 @@ void IrcBot::AI(string sender, string msg)
         {// Message is a channel
             cout<<name<<" said on "<<channel<<": "<<message<<endl;
             
+            // <------------------- BEGIN CODE EDIT ------------------->
+
             if (message.find(nick + ": ") == 0)
             {// Got pinged, determine command
                 if (message.size() > nick.size() + 2)
@@ -414,11 +416,17 @@ void IrcBot::AI(string sender, string msg)
                             command = message.substr(0, tmp++);
                             message = message.substr(tmp, message.size() - tmp);
                         }
+
+                        // Relay command to command handler
+                        cout<<"Handler returns: " << // Debug code
+                         commandHandle(command, message, channelName, isAdmin)<<endl;
+
                         // Normal Commands
                         cout<<name<<" issued command "<<command<<" with "
                             <<(parameters ? ("parameters: " + message)
                             : "no parameters")<<endl;
                         
+                        /* This will be removed permanently in a bit
                         if (command.compare("add") == 0)
                         {
                             int tmpq;
@@ -435,6 +443,8 @@ void IrcBot::AI(string sender, string msg)
                                 say(channelName, "Invalid quote: Null");
                             }
                         }
+                        */
+
                         if (command.compare("numquotes") == 0)
                         {
                             cout<<"There are "<<quotes.size()<<" quotes loaded\n";
@@ -444,13 +454,20 @@ void IrcBot::AI(string sender, string msg)
                         }
                     }
                 }
-            } else if (message.find(nick) != -1) // Be nice
+            }
+
+            // <-------------------- END CODE EDIT -------------------->
+
+            else if (message.find(nick) != -1) // Be nice
                 say(channel, "Hi " + name);
         } else
         {// Message is a user
             cout<<name<<" said to me: "<<message<<endl;
             
+            //cout<<"Handler returns ";
+
             // Normal commands
+            
             if (message.find("add") == 0)
             {
                 int tmpq;
@@ -606,4 +623,11 @@ int IrcBot::commandHandle(string cmd, string args, string talkto, bool admin)
     {
         //code
     }
+    return intReturn;
+}
+
+bool IrcBot::extractCommandArgs(string message, string& command, string& args)
+{
+    //code
+    return true;
 }

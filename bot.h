@@ -59,6 +59,7 @@ private:
 	void AI(string sender, string msg);
     
     int commandHandle(string cmd, string args, string talkto, bool admin);
+    bool extractCommandArgs(string message, string& command, string& args);
 	
 	void say(string target, string message);
 	void action(string target, string message);
