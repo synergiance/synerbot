@@ -405,7 +405,7 @@ void IrcBot::AI(string sender, string msg)
                     {
 
                         // Relay command to command handler
-                        commandHandle(command, message, channelName, isAdmin);
+                        commandHandle(command, args, channelName, isAdmin);
 
                         // Normal Commands
                         cout<<name<<" issued command "<<command<<" with "
@@ -450,7 +450,7 @@ void IrcBot::AI(string sender, string msg)
 
             extractCommandArgs(message, command, args);
 
-            commandHandle(command, message, name, isAdmin);
+            commandHandle(command, args, name, isAdmin);
 
             // Normal commands
             
@@ -650,7 +650,6 @@ bool IrcBot::extractCommandArgs(string message, string& command, string& args)
             command = str.substr(0, tmp++);
             args = str.substr(tmp, str.size() - tmp);
             trimWhite(args);
-            cout<<args<<endl;
         }
         ecaStatus = true;
     }
