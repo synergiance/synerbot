@@ -405,8 +405,7 @@ void IrcBot::AI(string sender, string msg)
                     {
 
                         // Relay command to command handler
-                        cout<<"Handler returns: " << // Debug code
-                         commandHandle(command, message, channelName, isAdmin)<<endl;
+                        commandHandle(command, message, channelName, isAdmin);
 
                         // Normal Commands
                         cout<<name<<" issued command "<<command<<" with "
@@ -451,8 +450,7 @@ void IrcBot::AI(string sender, string msg)
 
             extractCommandArgs(message, command, args);
 
-            cout<<"Handler returns: " << // Debug code
-             commandHandle(command, message, name, isAdmin)<<endl;
+            commandHandle(command, message, name, isAdmin);
 
             // Normal commands
             
@@ -640,6 +638,7 @@ bool IrcBot::extractCommandArgs(string message, string& command, string& args)
     int tmp;
     trimWhite(message);
     tmp = message.find(" ");
+    cout<<"The argument splits at "<<tmp<<endl;
     if (message.compare("") != 0 && tmp != 0)
     {// Bot will not accept too much whitespace
         if (tmp == -1)
