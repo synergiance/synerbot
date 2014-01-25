@@ -446,11 +446,6 @@ void IrcBot::AI(string sender, string msg)
                 }
             } else if (message.find(nick) != -1) // Be nice
                 say(channel, "Hi " + name);
-            
-            if (isAdmin)
-            {
-                ;// Admin commands
-            }
         } else
         {// Message is a user
             cout<<name<<" said to me: "<<message<<endl;
@@ -557,17 +552,17 @@ int IrcBot::saveQuotes(string file)
 }
 
 int IrcBot::addQuote(string quote)
-{
+{// Adds a quote the quote file and checls to see if it already exists
     bool alreadyTaken = false;
     trimWhite(quote);
     if (quote.compare("") != 0)
-    {
+    {// Check to see the quote exists
         if (quotes.size() > 0)
             for (long index = 0; (index<(long)quotes.size() && (alreadyTaken == false)); ++index)
                 if (quote.compare(quotes.at(index)) == 0)
                     alreadyTaken = true;
         if (alreadyTaken == false)
-        {
+        {// Add quote
             quotes.push_back(quote);
             addedQuotes = true;
             return 0;
@@ -584,4 +579,31 @@ void IrcBot::trimWhite(string& text)
     while ((text.compare("") != 0) && (text.at(text.size() - 1) == ' '))
         text.erase(text.end() - 1);
     return;
+}
+
+int IrcBot::commandHandle(string cmd, string args, string talkto, bool admin)
+{// This method handles all the commands sent to the bot
+    int intReturn = 0;
+    // Normal commands
+    if (cmd.compare("add") == 0)
+    {
+        int tmpq;
+        tmpq = addQuote(message);
+        if (tmpq == -1)
+        {
+            cout<<"Quote already exists:\n"<<message<<endl;
+            say(talkto, "Quote already exists");
+        } else if (tmpq == 0) {
+            cout<<"Adding quote:\n"<<message<<endl;
+            say(talkto, "Quote added");
+        } else {
+            cout<<"Quote null\n";
+            say(talkto, "Invalid quote: Null");
+        }
+    }
+    // Admin commands
+    if (admin)
+    {
+        //code
+    }
 }

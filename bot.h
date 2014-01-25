@@ -57,6 +57,8 @@ private:
 	int msgParse(string buf, string& sender, string& message);
 	
 	void AI(string sender, string msg);
+    
+    int commandHandle(string cmd, string args, string talkto, bool admin);
 	
 	void say(string target, string message);
 	void action(string target, string message);
