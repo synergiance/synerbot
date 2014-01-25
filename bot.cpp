@@ -635,21 +635,21 @@ int IrcBot::commandHandle(string cmd, string args, string talkto, bool admin)
 bool IrcBot::extractCommandArgs(string message, string& command, string& args)
 {
     bool ecaStatus = false;
-    int tmp;
-    trimWhite(message);
-    tmp = message.find(" ");
+    int tmp; str = mesasge;
+    trimWhite(str);
+    tmp = str.find(" ");
     cout<<"The argument splits at "<<tmp<<endl;
-    if (message.compare("") != 0 && tmp != 0)
+    if (str.compare("") != 0 && tmp != 0)
     {// Bot will not accept too much whitespace
         if (tmp == -1)
         {
-            command = message;
+            command = str;
             args = "";
         }
         else
         {
-            command = message.substr(0, tmp++);
-            args = message.substr(tmp, message.size() - tmp);
+            command = str.substr(0, tmp++);
+            args = str.substr(tmp, str.size() - tmp);
             trimWhite(args);
         }
         ecaStatus = true;
