@@ -376,6 +376,7 @@ void IrcBot::AI(string sender, string msg)
     string message;
     string name;
     string command;
+    string args;
     int tmp;
     bool isAdmin = false;
     bool parameters;
@@ -393,8 +394,6 @@ void IrcBot::AI(string sender, string msg)
         if (channel.substr(0,1) == "#")
         {// Message is a channel
             cout<<name<<" said on "<<channel<<": "<<message<<endl;
-            
-            // <------------------- BEGIN CODE EDIT ------------------->
 
             if (message.find(nick + ": ") == 0)
             {// Got pinged, determine command
@@ -402,20 +401,8 @@ void IrcBot::AI(string sender, string msg)
                 {// Now we know there's text to parse after the ping
                     message = message.substr(nick.size() + 2,
                         message.size() - (nick.size() + 2));
-                    tmp = message.find(" ");
-                    if (tmp != 0)
-                    {// Bot will not accept too much whitespace
-                        if (tmp == -1)
-                        {
-                            parameters = false;
-                            command = message;
-                        }
-                        else
-                        {
-                            parameters = true;
-                            command = message.substr(0, tmp++);
-                            message = message.substr(tmp, message.size() - tmp);
-                        }
+                    if (extractCommandArgs(message, command, args))
+                    {
 
                         // Relay command to command handler
                         cout<<"Handler returns: " << // Debug code
@@ -443,7 +430,6 @@ void IrcBot::AI(string sender, string msg)
                                 say(channelName, "Invalid quote: Null");
                             }
                         }
-                        */
 
                         if (command.compare("numquotes") == 0)
                         {
@@ -452,6 +438,7 @@ void IrcBot::AI(string sender, string msg)
                             ss<<"I have "<<quotes.size()<<" quotes loaded";
                             say(channelName, ss.str());
                         }
+                        */
                     }
                 }
             }
@@ -463,11 +450,15 @@ void IrcBot::AI(string sender, string msg)
         } else
         {// Message is a user
             cout<<name<<" said to me: "<<message<<endl;
-            
-            //cout<<"Handler returns ";
+
+            extractCommandArgs(message, command, args);
+
+            cout<<"Handler returns: " << // Debug code
+             commandHandle(command, message, name, isAdmin)<<endl;
 
             // Normal commands
             
+            /*
             if (message.find("add") == 0)
             {
                 int tmpq;
@@ -498,6 +489,7 @@ void IrcBot::AI(string sender, string msg)
                     action(channelName, message.substr(7, message.size() - 7));
                 }
             }
+            */
         }
     }
     return;
@@ -601,33 +593,69 @@ void IrcBot::trimWhite(string& text)
 int IrcBot::commandHandle(string cmd, string args, string talkto, bool admin)
 {// This method handles all the commands sent to the bot
     int intReturn = 0;
+    
     // Normal commands
     if (cmd.compare("add") == 0)
     {
         int tmpq;
-        tmpq = addQuote(message);
+        tmpq = addQuote(args);
         if (tmpq == -1)
         {
-            cout<<"Quote already exists:\n"<<message<<endl;
+            cout<<"Quote already exists:\n"<<args<<endl;
             say(talkto, "Quote already exists");
         } else if (tmpq == 0) {
-            cout<<"Adding quote:\n"<<message<<endl;
+            cout<<"Adding quote:\n"<<args<<endl;
             say(talkto, "Quote added");
         } else {
             cout<<"Quote null\n";
             say(talkto, "Invalid quote: Null");
         }
     }
+    if (command.compare("numquotes") == 0)
+    {
+        cout<<"There are "<<quotes.size()<<" quotes loaded\n";
+        stringstream ss;
+        ss<<"I have "<<quotes.size()<<" quotes loaded";
+        say(talkto, ss.str());
+    }
+    
     // Admin commands
     if (admin)
     {
-        //code
+        if (cmd.compare("say") == 0 && args.compare("") != 0)
+        {
+            say(channelName, args);
+        }
+        if (cmd.compare("action") == 0 && args.compare("") != 0)
+        {
+            say(talkto, "ACTION is currently buggy");
+            cout<<"ACTION buggy, alerting user\n";
+            action(channelName, args);
+        }
     }
     return intReturn;
 }
 
 bool IrcBot::extractCommandArgs(string message, string& command, string& args)
 {
-    //code
-    return true;
+    bool ecaStatus = false;
+    int tmp;
+    trimWhite(message);
+    tmp = message.find(" ");
+    if (message.compare("") != 0 && tmp != 0)
+    {// Bot will not accept too much whitespace
+        if (tmp == -1)
+        {
+            command = message;
+            args = "";
+        }
+        else
+        {
+            command = message.substr(0, tmp++);
+            args = message.substr(tmp, message.size() - tmp);
+            trimWhite(args);
+        }
+        ecaStatus = true;
+    }
+    return ecaStatus;
 }
