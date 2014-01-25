@@ -639,6 +639,7 @@ bool IrcBot::extractCommandArgs(string message, string& command, string& args)
     trimWhite(str);
     tmp = str.find(" ");
     cout<<"The argument splits at "<<tmp<<endl;
+    cout<<str<<endl;
     if (str.compare("") != 0 && tmp != 0)
     {// Bot will not accept too much whitespace
         if (tmp == -1)
