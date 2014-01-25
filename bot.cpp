@@ -403,41 +403,13 @@ void IrcBot::AI(string sender, string msg)
                         message.size() - (nick.size() + 2));
                     if (extractCommandArgs(message, command, args))
                     {
-
-                        // Relay command to command handler
-                        commandHandle(command, args, channelName, isAdmin);
-
-                        // Normal Commands
+                        // Print command in console
                         cout<<name<<" issued command "<<command<<" with "
                             <<(parameters ? ("parameters: " + message)
                             : "no parameters")<<endl;
-                        
-                        /* This will be removed permanently in a bit
-                        if (command.compare("add") == 0)
-                        {
-                            int tmpq;
-                            tmpq = addQuote(message);
-                            if (tmpq == -1)
-                            {
-                                cout<<"Quote already exists:\n"<<message<<endl;
-                                say(channelName, "Quote already exists");
-                            } else if (tmpq == 0) {
-                                cout<<"Adding quote:\n"<<message<<endl;
-                                say(channelName, "Quote added");
-                            } else {
-                                cout<<"Quote null\n";
-                                say(channelName, "Invalid quote: Null");
-                            }
-                        }
 
-                        if (command.compare("numquotes") == 0)
-                        {
-                            cout<<"There are "<<quotes.size()<<" quotes loaded\n";
-                            stringstream ss;
-                            ss<<"I have "<<quotes.size()<<" quotes loaded";
-                            say(channelName, ss.str());
-                        }
-                        */
+                        // Commands go here now, so GIT
+                        commandHandle(command, args, channelName, isAdmin);
                     }
                 }
             }
@@ -450,42 +422,8 @@ void IrcBot::AI(string sender, string msg)
 
             extractCommandArgs(message, command, args);
 
+            // Commands go here now, now git
             commandHandle(command, args, name, isAdmin);
-
-            // Normal commands
-            
-            /*
-            if (message.find("add") == 0)
-            {
-                int tmpq;
-                tmpq = addQuote(message);
-                if (tmpq == -1)
-                {
-                    cout<<"Quote already exists:\n"<<message<<endl;
-                    say(name, "Quote already exists");
-                } else if (tmpq == 0) {
-                    cout<<"Adding quote:\n"<<message<<endl;
-                    say(name, "Quote added");
-                } else {
-                    cout<<"Quote null\n";
-                    say(name, "Invalid quote: Null");
-                }
-            }
-            
-            if (isAdmin)
-            {// Admin commands
-                if (message.find("say") == 0)
-                {
-                    say(channelName, message.substr(4, message.size() - 4));
-                }
-                if (message.find("action") == 0)
-                {
-                    say(name, "ACTION is currently buggy");
-                    cout<<"ACTION buggy, alerting user\n";
-                    action(channelName, message.substr(7, message.size() - 7));
-                }
-            }
-            */
         }
     }
     return;
