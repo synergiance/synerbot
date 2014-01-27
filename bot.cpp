@@ -100,8 +100,8 @@ IrcBot::IrcBot(string cfg)
         if (ofile)
         {// Success
             cout<<", writing defaults...";
-            ofile<<"Nick="<<nick<<"\nUsername="<<usr<<"\nDescription="<<realName;
-            ofile<<"\nServer="<<server<<"\nPort="<<port<<"\nChannel="<<channelName;
+            ofile<<"Nick="<<nick<<"\nUsername="<<usr<<"\nDescription="<<realName
+             <<"\nServer="<<server<<"\nPort="<<port<<"\nChannel="<<channelName;
             ofile.close(); cout<<" Done\n";
         } else {// Errors
             cout<<", errors writing file, continuing with defaults\n";
@@ -141,7 +141,8 @@ void IrcBot::start()
 
 
 	//setup the socket
-	if ((s = socket(servinfo->ai_family,servinfo->ai_socktype,servinfo->ai_protocol)) == -1)
+	if ((s = socket(servinfo->ai_family,
+      servinfo->ai_socktype,servinfo->ai_protocol)) == -1)
 	{
 		perror("client: socket");
 	}
@@ -501,7 +502,8 @@ int IrcBot::addQuote(string quote)
     if (quote.compare("") != 0)
     {// Check to see the quote exists
         if (quotes.size() > 0)
-            for (long index = 0; (index<(long)quotes.size() && (alreadyTaken == false)); ++index)
+            for (long index = 0; (index<(long)quotes.size()
+                                && (alreadyTaken == false)); ++index)
                 if (quote.compare(quotes.at(index)) == 0)
                     alreadyTaken = true;
         if (alreadyTaken == false)
