@@ -100,11 +100,11 @@ IrcBot::IrcBot(string cfg)
         if (ofile)
         {// Success
             cout<<", writing defaults...";
-            ofile<<"Nick="<<nick<<"\n"
-                 <<"Username="<<usr<<"\n"
-                 <<"Description="<<realName<<"\n"
-                 <<"Server="<<server<<"\n"
-                 <<"Port="<<port<<"\n"
+            ofile<<"Nick="<<nick<<endl
+                 <<"Username="<<usr<<endl
+                 <<"Description="<<realName<<endl
+                 <<"Server="<<server<<endl
+                 <<"Port="<<port<<endl
                  <<"Channel="<<channelName;
             ofile.close(); cout<<" Done\n";
         } else {// Errors
