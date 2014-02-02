@@ -168,14 +168,18 @@ void IrcBot::start()
 	int numbytes;
 	char buf[MAXDATASIZE];
 
-	int count = 0;
+	// Some variables
+    int count = 0;
 	string str;
 	int auth = 0;
 	
+    // Initialize a random seed
+    srand(time(NULL));
+
 	// Send username info
 	sendData("NICK " + nick + "\r\n");
 	sendData("USER " + usr + " 8 * :" + realName + "\r\n");
-	
+
 	while (1)
 	{
 		//declars
@@ -555,6 +559,15 @@ int IrcBot::commandHandle(string cmd, string args, string talkto, bool admin)
         stringstream ss;
         ss<<"I have "<<quotes.size()<<" quotes loaded";
         say(talkto, ss.str());
+    }
+
+    // Say a random quote
+    if (cmd.compare("quote") == 0)
+    { if (quotes.size() > 0) {
+        cout<<"Selecting random quote\n";
+        say(talkto, quotes[rand() % quotes.size()]);
+    } else
+        say(talkto, "No quotes");
     }
     
     // Admin commands
