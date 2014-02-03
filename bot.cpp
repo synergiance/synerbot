@@ -126,7 +126,7 @@ IrcBot::IrcBot(string cfg)
             if (bchannelName)
                 ofile<<"Channel="<<channelName;
             if (bquoteFile)
-                ofile<<"QuoteFile="<<QuoteFile<<endl;
+                ofile<<"QuoteFile="<<quoteFile<<endl;
             ofile.close(); cout<<" Done\n";
         } else {// Errors
             cout<<", errors writing file, continuing with defaults\n";
