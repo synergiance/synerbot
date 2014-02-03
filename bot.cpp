@@ -65,34 +65,71 @@ IrcBot::IrcBot(string cfg)
             {// Determine validity
                 tmpstr = strBuffer.substr(0,tmp); tmp++;
                 tmpstr2 = strBuffer.substr(tmp, strBuffer.length() - tmp);
-                if (tmpstr.compare("Nick") == 0)
+                if (!bnick && tmpstr.compare("Nick") == 0)
                 {
                     nick = tmpstr2;
-                } else if (tmpstr.compare("Username") == 0)
+                    bnick = true;
+                } else if (!busr && tmpstr.compare("Username") == 0)
                 {
                     usr = tmpstr2;
-                } else if (tmpstr.compare("Description") == 0)
+                    busr = true;
+                } else if (!brealName && tmpstr.compare("Description") == 0)
                 {
                     realName = tmpstr2;
-                } else if (tmpstr.compare("Server") == 0)
+                    brealName = true;
+                } else if (!bserver && tmpstr.compare("Server") == 0)
                 {
                     server = tmpstr2;
-                } else if (tmpstr.compare("ServerName") == 0)
+                    bserver = true;
+                } else if (!bserverName && tmpstr.compare("ServerName") == 0)
                 {
                     serverName = tmpstr2;
-                } else if (tmpstr.compare("Port") == 0)
+                    bserverName = true;
+                } else if (!bport && tmpstr.compare("Port") == 0)
                 {
                     port = tmpstr2;
-                } else if (tmpstr.compare("Channel") == 0)
+                    bport = true;
+                } else if (!bchannelName && tmpstr.compare("Channel") == 0)
                 {
                     channelName = tmpstr2;
-                } else if (tmpstr.compare("QuoteFile") == 0)
+                    bchannelName = true;
+                } else if (!bquoteFile && tmpstr.compare("QuoteFile") == 0)
                 {
                     quoteFile = tmpstr2;
+                    bquoteFile = true;
                 } else {
                     cout<<"Unknown config setting: "<<tmpstr<<endl;
                 }
             }
+        }
+        cout<<"Loading complete!\n";
+        // Always make sure to close your files
+        ifile.close();
+
+        // Let's rewrite everything to disk
+        ofstream ofile (cfg.c_str());
+        if (ofile)
+        {// Success
+            cout<<"Writing configuration...";
+            if (bnick)
+                ofile<<"Nick="<<nick<<endl;
+            if (busr)
+                ofile<<"Username="<<usr<<endl;
+            if (brealName)
+                ofile<<"Description="<<realName<<endl;
+            if (bserver)
+                ofile<<"Server="<<server<<endl;
+            if (bserverName)
+                ofile<<"ServerName="<<serverName<<endl;
+            if (bport)
+                ofile<<"Port="<<port<<endl;
+            if (bchannelName)
+                ofile<<"Channel="<<channelName;
+            if (bquoteFile)
+                ofile<<"QuoteFile="<<quoteFile<<endl;
+            ofile.close(); cout<<" Done\n";
+        } else {// Errors
+            cout<<", errors writing file, continuing with defaults\n";
         }
     } else {// File does not exist, create it and write defaults
         cout<<"Could not find "<<cfgFile;
