@@ -48,7 +48,7 @@ int main()
     
     // Launch bot
     bot = new (botmem) IrcBot("ibot.cfg");
-	bot->start();
+    bot->start();
     
 
   return 0;

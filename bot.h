@@ -17,58 +17,58 @@ using namespace std;
 class IrcBot
 {
 public:
-	IrcBot(string cfg);
-	virtual ~IrcBot();
+    IrcBot(string cfg);
+    virtual ~IrcBot();
 
-	bool setup;
+    bool setup;
 
-	void start();
+    void start();
 
 private:
-	int s; //the socket descriptor
+    int s; //the socket descriptor
 
-	// Config variables
+    // Config variables
     string nick;
-	string usr;
-	string realName;
-	string server;
-	string cfgFile;
-	string quoteFile;
-	string serverName;
+    string usr;
+    string realName;
+    string server;
+    string cfgFile;
+    string quoteFile;
+    string serverName;
     string channelName;
     string port;
-    
+
     // Variables
     vector<string> quotes;
     vector<string> bufquotes;
-    
+
     bool addedQuotes;
 
-	// Functions
+    // Functions
     char * timeNow();
 
-	bool sendData(char *msg);
-	bool sendData(string msg);
+    bool sendData(char *msg);
+    bool sendData(string msg);
 
-	void sendPong(string data);
+    void sendPong(string data);
 
-	void msgHandel(string buf);
-	
-	int msgParse(string buf, string& sender, string& message);
-	
-	void AI(string sender, string msg);
-    
+    void msgHandel(string buf);
+
+    int msgParse(string buf, string& sender, string& message);
+
+    void AI(string sender, string msg);
+
     int commandHandle(string cmd, string args, string talkto, bool admin);
     bool extractCommandArgs(string message, string& command, string& args);
-	
-	void say(string target, string message);
-	void action(string target, string message);
-    
-    
+
+    void say(string target, string message);
+    void action(string target, string message);
+
+
     int addQuote(string quote);
     bool loadQuotes(string file);
     int saveQuotes(string file);
-    
+
     void trimWhite(string& text);
 };
 

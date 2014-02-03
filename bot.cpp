@@ -160,82 +160,82 @@ IrcBot::~IrcBot()
 
 void IrcBot::start()
 {
-	struct addrinfo hints, *servinfo;
+    struct addrinfo hints, *servinfo;
 
-	//Setup run with no errors
-	setup = true;
+    //Setup run with no errors
+    setup = true;
 
-	//Ensure that servinfo is clear
-	memset(&hints, 0, sizeof hints); // make sure the struct is empty
+    //Ensure that servinfo is clear
+    memset(&hints, 0, sizeof hints); // make sure the struct is empty
 
-	//setup hints
-	hints.ai_family = AF_UNSPEC; // don't care IPv4 or IPv6
-	hints.ai_socktype = SOCK_STREAM; // TCP stream sockets
+    //setup hints
+    hints.ai_family = AF_UNSPEC; // don't care IPv4 or IPv6
+    hints.ai_socktype = SOCK_STREAM; // TCP stream sockets
 
-	//Setup the structs if error print why
-	int res;
-	if ((res = getaddrinfo(server.c_str(),port.c_str(),&hints,&servinfo)) != 0)
-	{
-		setup = false;
-		fprintf(stderr,"getaddrinfo: %s\n", gai_strerror(res));
-	}
+    //Setup the structs if error print why
+    int res;
+    if ((res = getaddrinfo(server.c_str(),port.c_str(),&hints,&servinfo)) != 0)
+    {
+        setup = false;
+        fprintf(stderr,"getaddrinfo: %s\n", gai_strerror(res));
+    }
 
 
-	//setup the socket
-	if ((s = socket(servinfo->ai_family,servinfo->ai_socktype,servinfo->ai_protocol)) == -1)
-	{
-		perror("client: socket");
-	}
+    //setup the socket
+    if ((s = socket(servinfo->ai_family,servinfo->ai_socktype,servinfo->ai_protocol)) == -1)
+    {
+        perror("client: socket");
+    }
 
-	cout<<"Connecting to "<<server<<" on port "<<port<<" with username "<<nick<<endl;
-	
+    cout<<"Connecting to "<<server<<" on port "<<port<<" with username "<<nick<<endl;
+
     //Connect
-	if (connect(s,servinfo->ai_addr, servinfo->ai_addrlen) == -1)
-	{
-		close (s);
-		perror("Client Connect");
-	}
+    if (connect(s,servinfo->ai_addr, servinfo->ai_addrlen) == -1)
+    {
+        close (s);
+        perror("Client Connect");
+    }
 
 
-	//We dont need this anymore
-	freeaddrinfo(servinfo);
+    //We dont need this anymore
+    freeaddrinfo(servinfo);
 
 
-	//Recv some data
-	int numbytes;
-	char buf[MAXDATASIZE];
+    //Recv some data
+    int numbytes;
+    char buf[MAXDATASIZE];
 
-	// Some variables
+    // Some variables
     int count = 0;
-	string str;
-	int auth = 0;
-	
+    string str;
+    int auth = 0;
+
     // Initialize a random seed
     srand(time(NULL));
 
-	// Send username info
-	sendData("NICK " + nick + "\r\n");
-	sendData("USER " + usr + " 8 * :" + realName + "\r\n");
+    // Send username info
+    sendData("NICK " + nick + "\r\n");
+    sendData("USER " + usr + " 8 * :" + realName + "\r\n");
 
-	while (1)
-	{
-		//declars
-		//count++;
-		int msgCode; int found;
-	    string message;
-	    string sender;
-	    string rawMessage;
+    while (1)
+    {
+        //declars
+        //count++;
+        int msgCode; int found;
+        string message;
+        string sender;
+        string rawMessage;
 
 
-		// Receive data
-		numbytes = recv(s,buf,MAXDATASIZE-1,0);
-		buf[numbytes]='\0';
-		str += buf;
-		
-		// Determine if there is a new message
+        // Receive data
+        numbytes = recv(s,buf,MAXDATASIZE-1,0);
+        buf[numbytes]='\0';
+        str += buf;
+
+        // Determine if there is a new message
         found = str.find('\n');
-		while (found != -1)
-		{
+        while (found != -1)
+        {
             found++; // Fix off by 1 error
             
             // Extract single message and pass to handler
@@ -245,28 +245,28 @@ void IrcBot::start()
             // Test again
             found = str.find('\n');
         }
-		
-		//break if connection closed
-		if (numbytes==0)
-		{
-			cout << "----------------------CONNECTION CLOSED---------------------------"<< endl;
-			cout << timeNow() << endl;
 
-			break;
-		}
-	}
+        //break if connection closed
+        if (numbytes==0)
+        {
+            cout << "----------------------CONNECTION CLOSED---------------------------"<< endl;
+            cout << timeNow() << endl;
+
+            break;
+        }
+    }
 }
 
 
 char * IrcBot::timeNow()
 {//returns the current date and time
-	time_t rawtime;
-	struct tm * timeinfo;
+    time_t rawtime;
+    struct tm * timeinfo;
 
-	time ( &rawtime );
-	timeinfo = localtime ( &rawtime );
+    time ( &rawtime );
+    timeinfo = localtime ( &rawtime );
 
-	return asctime (timeinfo);
+    return asctime (timeinfo);
 }
 
 
@@ -279,12 +279,12 @@ bool IrcBot::sendData(string msg)
 bool IrcBot::sendData(char *msg)
 {//Send some data (deprecated)
     int len = strlen(msg);
-	int bytes_sent = send(s,msg,len,0);
+    int bytes_sent = send(s,msg,len,0);
 
-	if (bytes_sent == 0)
-		return false;
-	else
-		return true;
+    if (bytes_sent == 0)
+        return false;
+    else
+        return true;
 }
 
 
@@ -306,7 +306,7 @@ int IrcBot::msgParse(string buf, string& sender, string& message)
     int tmp, intCode;
     string str = buf;
     
-	// Find pings
+    // Find pings
     if (str.substr(0,4).find("PING") == 0)
     {
         sender = "PING";
@@ -319,7 +319,7 @@ int IrcBot::msgParse(string buf, string& sender, string& message)
     }
     
     // Trim out the fat
-	tmp = str.find("\r");
+    tmp = str.find("\r");
     if (tmp != -1)
         str = str.substr(0,tmp);
     
