@@ -603,6 +603,27 @@ int IrcBot::commandHandle(string cmd, string args, string talkto, bool admin)
             cout<<"ACTION buggy, alerting user\n";
             action(channelName, args);
         }
+        if (command.compare("showquote") == 0)
+        {
+            int intTmp = atoi(args);
+            if (intTmp > 0)
+            {
+                intTmp--;
+                if (intTmp < quotes.size())
+                {
+                    cout<<"Reciting quote "<<intTmp<<endl;
+                    say(talkto, quotes[intTmp]);
+                }
+                else
+                {
+                    stringstream ss;
+                    cout<<"Value entered is greater than number of quotes\n";
+                    ss<<"There are only "<<quotes.size()<<" quotes in database"
+                      <<", please enter a value less than "<<quotes.size();
+                    say(talkto, ss.str());
+                }
+            }
+        }
     }
     return intReturn;
 }
