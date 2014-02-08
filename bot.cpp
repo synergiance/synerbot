@@ -605,7 +605,7 @@ int IrcBot::commandHandle(string cmd, string args, string talkto, bool admin)
         }
         if (cmd.compare("showquote") == 0)
         {
-            int intTmp = atoi(args);
+            int intTmp = atoi(args.c_str());
             if (intTmp > 0)
             {
                 intTmp--;
