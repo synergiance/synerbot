@@ -23,3 +23,6 @@
 # Compiled program and its configuration files
 ibot
 *.cfg
+
+# Specific files
+quotes.txt
