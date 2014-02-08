@@ -603,7 +603,7 @@ int IrcBot::commandHandle(string cmd, string args, string talkto, bool admin)
             cout<<"ACTION buggy, alerting user\n";
             action(channelName, args);
         }
-        if (command.compare("showquote") == 0)
+        if (cmd.compare("showquote") == 0)
         {
             int intTmp = atoi(args);
             if (intTmp > 0)
