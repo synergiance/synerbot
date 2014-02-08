@@ -124,7 +124,7 @@ IrcBot::IrcBot(string cfg)
             if (bport)
                 ofile<<"Port="<<port<<endl;
             if (bchannelName)
-                ofile<<"Channel="<<channelName;
+                ofile<<"Channel="<<channelName<<endl;
             if (bquoteFile)
                 ofile<<"QuoteFile="<<quoteFile<<endl;
             ofile.close(); cout<<" Done\n";
@@ -619,6 +619,27 @@ int IrcBot::commandHandle(string cmd, string args, string talkto, bool admin)
             say(talkto, "ACTION is currently buggy");
             cout<<"ACTION buggy, alerting user\n";
             action(channelName, args);
+        }
+        if (cmd.compare("showquote") == 0)
+        {
+            int intTmp = atoi(args.c_str());
+            if (intTmp > 0)
+            {
+                intTmp--;
+                if (intTmp < quotes.size())
+                {
+                    cout<<"Reciting quote "<<intTmp<<endl;
+                    say(talkto, quotes[intTmp]);
+                }
+                else
+                {
+                    stringstream ss;
+                    cout<<"Value entered is greater than number of quotes\n";
+                    ss<<"There are only "<<quotes.size()<<" quotes in database"
+                      <<", please enter a value less than "<<quotes.size();
+                    say(talkto, ss.str());
+                }
+            }
         }
     }
     return intReturn;
