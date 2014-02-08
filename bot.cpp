@@ -124,7 +124,7 @@ IrcBot::IrcBot(string cfg)
             if (bport)
                 ofile<<"Port="<<port<<endl;
             if (bchannelName)
-                ofile<<"Channel="<<channelName;
+                ofile<<"Channel="<<channelName<<endl;
             if (bquoteFile)
                 ofile<<"QuoteFile="<<quoteFile<<endl;
             ofile.close(); cout<<" Done\n";
