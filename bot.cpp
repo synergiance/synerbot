@@ -697,7 +697,7 @@ void IrcBot::quote(string cmd, string args, string talkto, bool admin)
         else
             say(talkto, "No quotes");
     }
-    if (cmd.compare("help") == 0)
+    else if (cmd.compare("help") == 0)
     {
         if (args.compare("show") == 0)
         {
