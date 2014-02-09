@@ -640,6 +640,15 @@ int IrcBot::commandHandle(string cmd, string args, string talkto, bool admin)
                     say(talkto, ss.str());
                 }
             }
+            else
+            {
+                cout<<"Value entered was not positive\n";
+                say(talkto, "Please enter a number greater than zero");
+            }
+        }
+        if (cmd.compare("remquote") == 0)
+        {
+            //code
         }
     }
     return intReturn;
