@@ -643,7 +643,7 @@ int IrcBot::commandHandle(string cmd, string args, string talkto, bool admin)
             }
             else if (intTmp < 0)
             {
-                cout<<"Value entered was not positive\n";
+                cout<<"Value entered was not positive: "<<intTmp<<endl;
                 say(talkto, "Please enter a number greater than zero");
             }
             else if (args.compare("0") == 0)
