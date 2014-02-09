@@ -687,7 +687,7 @@ int IrcBot::commandHandle(string cmd, string args, string talkto, bool admin)
 void IrcBot::quote(string cmd, string args, string talkto, bool admin)
 {
     int intTmp = atoi(args.c_str());
-    cout<<"args: "<<args<<endl;
+    cout<<"cmd: "<<cmd<<endl<<"args: "<<args<<endl;
     if (cmd.compare("help") == 0)
     {
         if (args.compare("show") == 0)
