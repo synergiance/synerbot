@@ -689,15 +689,26 @@ void IrcBot::quote(string cmd, string args, string talkto, bool admin)
     cout<<"cmd: "<<cmd<<endl<<"args: "<<args<<endl;
     if (cmd.compare("help") == 0)
     {
-        if (args.compare("show") == 0)
+        if ((args.compare("show") == 0) && admin)
         {
             cout<<"Help Show command used\n";
+            say(talkto, "QUOTE SHOW:");
+            say(talkto, "Shows the specified quote");
             say(talkto, "Usage: quote show <number>");
         }
-        else if (args.compare("remove") == 0)
+        else if ((args.compare("remove") == 0) && admin)
         {
             cout<<"Help Remove command used\n";
+            say(talkto, "QUOTE REMOVE:");
+            say(talkto, "Removes the specified quote");
             say(talkto, "Usage: quote remove <number>");
+        }
+        else if (args.compare("help") == 0)
+        {
+            cout<<"Quote help help";
+            say(talkto, "QUOTE HELP:");
+            say(talkto, "Shows help on this command");
+            say(talkto, "Usage: quote help [<topic>]");
         }
     }
     else if (admin && ((cmd.compare("show") == 0) || (cmd.compare("remove") == 0)))
