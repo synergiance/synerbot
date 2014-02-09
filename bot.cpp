@@ -686,7 +686,6 @@ int IrcBot::commandHandle(string cmd, string args, string talkto, bool admin)
 
 void IrcBot::quote(string cmd, string args, string talkto, bool admin)
 {
-    int intTmp = atoi(args.c_str());
     cout<<"cmd: "<<cmd<<endl<<"args: "<<args<<endl;
     if (cmd.compare("help") == 0)
     {
@@ -701,8 +700,9 @@ void IrcBot::quote(string cmd, string args, string talkto, bool admin)
             say(talkto, "Usage: quote remove <number>");
         }
     }
-    else if (admin && ((cmd.compare("show") == 0) || (cmd.compare("remove"))))
+    else if (admin && ((cmd.compare("show") == 0) || (cmd.compare("remove") == 0)))
     {
+        int intTmp = atoi(args.c_str());
         if (intTmp > 0)
         {
             intTmp--;
