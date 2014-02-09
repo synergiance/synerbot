@@ -600,11 +600,21 @@ int IrcBot::commandHandle(string cmd, string args, string talkto, bool admin)
 
     // Say a random quote
     if (cmd.compare("quote") == 0)
-    { if (quotes.size() > 0) {
-        cout<<"Selecting random quote\n";
-        say(talkto, quotes[rand() % quotes.size()]);
-    } else
-        say(talkto, "No quotes");
+    {
+        /*
+        if (quotes.size() > 0) {
+            cout<<"Selecting random quote\n";
+            say(talkto, quotes[rand() % quotes.size()]);
+        }
+        else
+            say(talkto, "No quotes");
+        */
+
+        // Forward everything to method
+        string subcmd; string subargs;
+        if !(extractCommandArgs(args, subcmd, subargs))
+        { subcmd = ""; subcmd = ""; }
+        adminQuote(subcmd, subargs, talkto, admin);
     }
     
     // Admin commands
@@ -622,11 +632,13 @@ int IrcBot::commandHandle(string cmd, string args, string talkto, bool admin)
         }
         if (cmd.compare("quote") == 0)
         {
+            /*
+            
             // Forward everything to method
             string subcmd; string subargs;
             extractCommandArgs(args, subcmd, subargs);
-            adminQuote(subcmd, subargs, talkto);
-            /*
+            adminQuote(subcmd, subargs, talkto, admin);
+            
             int intTmp = atoi(subargs.c_str());
             cout<<"args: "<<subargs<<endl;
             if (intTmp > 0)
@@ -672,10 +684,19 @@ int IrcBot::commandHandle(string cmd, string args, string talkto, bool admin)
     return intReturn;
 }
 
-void IrcBot::adminQuote(string cmd, string args, string talkto)
+void IrcBot::quote(string cmd, string args, string talkto, bool admin)
 {
     int intTmp = atoi(args.c_str());
     cout<<"args: "<<args<<endl;
+    if (cmd.compare("") == 0 || cmd.compare("say"))
+    {
+        if (quotes.size() > 0) {
+            cout<<"Selecting random quote\n";
+            say(talkto, quotes[rand() % quotes.size()]);
+        }
+        else
+            say(talkto, "No quotes");
+    }
     if (cmd.compare("help") == 0)
     {
         if (args.compare("show") == 0)
@@ -689,50 +710,53 @@ void IrcBot::adminQuote(string cmd, string args, string talkto)
             say(talkto, "Usage: quote remove <number>");
         }
     }
-    else if (intTmp > 0)
+    else if (admin && ((cmd.compare("show") == 0) || (cmd.compare("remove"))))
     {
-        intTmp--;
-        if (intTmp < quotes.size())
+        if (intTmp > 0)
         {
-            if (cmd.compare("show") == 0)
+            intTmp--;
+            if (intTmp < quotes.size())
             {
-                cout<<"Reciting quote "<<intTmp<<endl;
-                say(talkto, quotes[intTmp]);
+                if (cmd.compare("show") == 0)
+                {
+                    cout<<"Reciting quote "<<intTmp<<endl;
+                    say(talkto, quotes[intTmp]);
+                }
+                if (cmd.compare("remove") == 0)
+                {
+                    cout<<"Remove not implemented yet\n";
+                    say(talkto, "Remove function not yet implemented");
+                }
             }
-            if (cmd.compare("remove") == 0)
+            else
             {
-                cout<<"Remove not implemented yet\n";
-                say(talkto, "Remove function not yet implemented");
+                stringstream ss;
+                cout<<"Value entered is greater than number of quotes\n";
+                ss<<"There are only "<<quotes.size()<<" quotes in database"
+                  <<", please enter a value less than "<<quotes.size();
+                say(talkto, ss.str());
             }
+        }
+        else if (intTmp < 0)
+        {
+            cout<<"Value entered was not positive: "<<intTmp<<endl;
+            say(talkto, "Please enter a number greater than zero");
+        }
+        else if (args.compare("0") == 0)
+        {
+            cout<<"Value entered was 0\n";
+            say(talkto, "Please enter a number greater than zero");
+        }
+        else if (args.compare("101702100412530688") == 0)
+        {
+            cout<<"easter egg\n";
+            say(talkto, "Let's try a number less than that");
         }
         else
         {
-            stringstream ss;
-            cout<<"Value entered is greater than number of quotes\n";
-            ss<<"There are only "<<quotes.size()<<" quotes in database"
-              <<", please enter a value less than "<<quotes.size();
-            say(talkto, ss.str());
+            cout<<"No number detected\n";
+            say(talkto, "Usage: showquote <number>");
         }
-    }
-    else if (intTmp < 0)
-    {
-        cout<<"Value entered was not positive: "<<intTmp<<endl;
-        say(talkto, "Please enter a number greater than zero");
-    }
-    else if (args.compare("0") == 0)
-    {
-        cout<<"Value entered was 0\n";
-        say(talkto, "Please enter a number greater than zero");
-    }
-    else if (args.compare("101702100412530688") == 0)
-    {
-        cout<<"easter egg\n";
-        say(talkto, "Let's try a number less than that");
-    }
-    else
-    {
-        cout<<"No number detected\n";
-        say(talkto, "Usage: showquote <number>");
     }
 }
 

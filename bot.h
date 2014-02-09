@@ -75,7 +75,7 @@ private:
     void trimWhite(string& text);
 
     // User Functions
-    void adminQuote(string cmd, string args, string talkto);
+    void quote(string cmd, string args, string talkto);
 };
 
 #endif /* IRCBOT_H_ */
