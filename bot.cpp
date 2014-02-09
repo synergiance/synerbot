@@ -575,7 +575,7 @@ int IrcBot::commandHandle(string cmd, string args, string talkto, bool admin)
     
     // Normal commands
     if (cmd.compare("add") == 0)
-    {
+    {// Add a quote
         int tmpq;
         tmpq = addQuote(args);
         if (tmpq == -1)
@@ -620,10 +620,15 @@ int IrcBot::commandHandle(string cmd, string args, string talkto, bool admin)
             cout<<"ACTION buggy, alerting user\n";
             action(channelName, args);
         }
-        if (cmd.compare("showquote") == 0)
+        if (cmd.compare("quote") == 0)
         {
-            int intTmp = atoi(args.c_str());
-            cout<<"args: "<<args<<endl;
+            // Forward everything to method
+            string subcmd; string subargs;
+            extractCommandArgs(args, subcmd, subargs);
+            adminQuote(subcmd, subargs, talkto);
+            /*
+            int intTmp = atoi(subargs.c_str());
+            cout<<"args: "<<subargs<<endl;
             if (intTmp > 0)
             {
                 intTmp--;
@@ -646,12 +651,12 @@ int IrcBot::commandHandle(string cmd, string args, string talkto, bool admin)
                 cout<<"Value entered was not positive: "<<intTmp<<endl;
                 say(talkto, "Please enter a number greater than zero");
             }
-            else if (args.compare("0") == 0)
+            else if (subargs.compare("0") == 0)
             {
                 cout<<"Value entered was 0\n";
                 say(talkto, "Please enter a number greater than zero");
             }
-            else if (args.compare("101702100412530688") == 0)
+            else if (subargs.compare("101702100412530688") == 0)
             {
                 cout<<"easter egg\n";
                 say(talkto, "Let's try a number less than that");
@@ -661,18 +666,78 @@ int IrcBot::commandHandle(string cmd, string args, string talkto, bool admin)
                 cout<<"No number detected\n";
                 say(talkto, "Usage: showquote <number>");
             }
-        }
-        if (cmd.compare("remquote") == 0)
-        {
-            cout<<"Unimplemented function\n";
-            say(talkto, "Function not yet implemented");
+            */
         }
     }
     return intReturn;
 }
 
-bool IrcBot::extractCommandArgs(string message, string& command, string& args)
+void IrcBot::adminQuote(string cmd, string args, string talkto)
 {
+    int intTmp = atoi(args.c_str());
+    cout<<"args: "<<args<<endl;
+    if (cmd.compare("help") == 0)
+    {
+        if (args.compare("show") == 0)
+        {
+            cout<<"Help Show command used\n";
+            say(talkto, "Usage: quote show <number>");
+        }
+        else if (args.compare("remove") == 0)
+        {
+            cout<<"Help Remove command used\n";
+            say(talkto, "Usage: quote remove <number>");
+        }
+    }
+    else if (intTmp > 0)
+    {
+        intTmp--;
+        if (intTmp < quotes.size())
+        {
+            if (cmd.compare("show") == 0)
+            {
+                cout<<"Reciting quote "<<intTmp<<endl;
+                say(talkto, quotes[intTmp]);
+            }
+            if (cmd.compare("remove") == 0)
+            {
+                cout<<"Remove not implemented yet\n";
+                say(talkto, "Remove function not yet implemented");
+            }
+        }
+        else
+        {
+            stringstream ss;
+            cout<<"Value entered is greater than number of quotes\n";
+            ss<<"There are only "<<quotes.size()<<" quotes in database"
+              <<", please enter a value less than "<<quotes.size();
+            say(talkto, ss.str());
+        }
+    }
+    else if (intTmp < 0)
+    {
+        cout<<"Value entered was not positive: "<<intTmp<<endl;
+        say(talkto, "Please enter a number greater than zero");
+    }
+    else if (args.compare("0") == 0)
+    {
+        cout<<"Value entered was 0\n";
+        say(talkto, "Please enter a number greater than zero");
+    }
+    else if (args.compare("101702100412530688") == 0)
+    {
+        cout<<"easter egg\n";
+        say(talkto, "Let's try a number less than that");
+    }
+    else
+    {
+        cout<<"No number detected\n";
+        say(talkto, "Usage: showquote <number>");
+    }
+}
+
+bool IrcBot::extractCommandArgs(string message, string& command, string& args)
+{// This method separates a command from it's arguments
     bool ecaStatus = false;
     int tmp; string str = message;
     trimWhite(str);

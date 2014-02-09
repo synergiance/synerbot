@@ -73,6 +73,9 @@ private:
     int saveQuotes(string file);
 
     void trimWhite(string& text);
+
+    // User Functions
+    void adminQuote(string cmd, string args, string talkto);
 };
 
 #endif /* IRCBOT_H_ */
