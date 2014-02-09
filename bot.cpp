@@ -688,16 +688,7 @@ void IrcBot::quote(string cmd, string args, string talkto, bool admin)
 {
     int intTmp = atoi(args.c_str());
     cout<<"args: "<<args<<endl;
-    if (cmd.compare("") == 0 || cmd.compare("say"))
-    {
-        if (quotes.size() > 0) {
-            cout<<"Selecting random quote\n";
-            say(talkto, quotes[rand() % quotes.size()]);
-        }
-        else
-            say(talkto, "No quotes");
-    }
-    else if (cmd.compare("help") == 0)
+    if (cmd.compare("help") == 0)
     {
         if (args.compare("show") == 0)
         {
@@ -757,6 +748,15 @@ void IrcBot::quote(string cmd, string args, string talkto, bool admin)
             cout<<"No number detected\n";
             say(talkto, "Usage: showquote <number>");
         }
+    }
+    else if (cmd.compare("") == 0 || cmd.compare("say"))
+    {
+        if (quotes.size() > 0) {
+            cout<<"Selecting random quote\n";
+            say(talkto, quotes[rand() % quotes.size()]);
+        }
+        else
+            say(talkto, "No quotes");
     }
 }
 
