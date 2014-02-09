@@ -38,6 +38,9 @@ private:
     string channelName;
     string port;
 
+    // Important static values
+    static int atoimax;
+
     // Variables
     vector<string> quotes;
     vector<string> bufquotes;
