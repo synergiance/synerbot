@@ -39,7 +39,7 @@ private:
     string port;
 
     // Important static values
-    static int atoimax;
+    static unsigned int atoimax;
 
     // Variables
     vector<string> quotes;
