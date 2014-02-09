@@ -425,7 +425,6 @@ void IrcBot::AI(string sender, string msg)
     string args;
     int tmp;
     bool isAdmin = false;
-    bool parameters;
     
     // Get sender's name
     name = sender.substr(0, sender.find("!"));
@@ -451,7 +450,7 @@ void IrcBot::AI(string sender, string msg)
                     {
                         // Print command in console
                         cout<<name<<" issued command "<<command<<" with "
-                            <<(parameters ? ("parameters: " + message)
+                            <<((args.compare("") != 0) ? ("parameters: " + args)
                             : "no parameters")<<endl;
 
                         // Commands go here now, so GIT
