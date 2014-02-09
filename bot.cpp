@@ -749,7 +749,7 @@ void IrcBot::quote(string cmd, string args, string talkto, bool admin)
             say(talkto, "Usage: showquote <number>");
         }
     }
-    else if (cmd.compare("") == 0 || cmd.compare("say"))
+    else if (cmd.compare("") == 0 || cmd.compare("say") == 0)
     {
         if (quotes.size() > 0) {
             cout<<"Selecting random quote\n";
