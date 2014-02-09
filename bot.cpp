@@ -612,9 +612,9 @@ int IrcBot::commandHandle(string cmd, string args, string talkto, bool admin)
 
         // Forward everything to method
         string subcmd; string subargs;
-        if !(extractCommandArgs(args, subcmd, subargs))
+        if (!(extractCommandArgs(args, subcmd, subargs)))
         { subcmd = ""; subcmd = ""; }
-        adminQuote(subcmd, subargs, talkto, admin);
+        quote(subcmd, subargs, talkto, admin);
     }
     
     // Admin commands
@@ -633,7 +633,7 @@ int IrcBot::commandHandle(string cmd, string args, string talkto, bool admin)
         if (cmd.compare("quote") == 0)
         {
             /*
-            
+
             // Forward everything to method
             string subcmd; string subargs;
             extractCommandArgs(args, subcmd, subargs);
