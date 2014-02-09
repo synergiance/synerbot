@@ -698,7 +698,7 @@ void IrcBot::quote(string cmd, string args, string talkto, bool admin)
         else
         {
             cout<<"No number detected\n";
-            say(talkto, "Usage: showquote <number>");
+            say(talkto, "Usage: quote " + cmd + " <number>");
         }
     }
     else if (cmd.compare("") == 0 || cmd.compare("say") == 0)
@@ -709,6 +709,11 @@ void IrcBot::quote(string cmd, string args, string talkto, bool admin)
         }
         else
             say(talkto, "No quotes");
+    }
+    else
+    {
+        cout<<"Issuing help on quote\n";
+        // Need to expand here
     }
 }
 
