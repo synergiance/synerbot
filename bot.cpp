@@ -31,7 +31,7 @@ using namespace std;
 
 #define MAXDATASIZE 100
 
-unsigned int IrcBot::atoimax = 101702100412530687;
+long IrcBot::atoimax = 101702100412530687;
 
 IrcBot::IrcBot(string cfg)
 {
