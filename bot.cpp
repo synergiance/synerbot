@@ -641,15 +641,31 @@ int IrcBot::commandHandle(string cmd, string args, string talkto, bool admin)
                     say(talkto, ss.str());
                 }
             }
-            else
+            else if (intTmp < 0)
             {
                 cout<<"Value entered was not positive\n";
                 say(talkto, "Please enter a number greater than zero");
             }
+            else if (args.compare("0") == 0)
+            {
+                cout<<"Value entered was 0\n";
+                say(talkto, "Please enter a number greater than zero");
+            }
+            else if (args.compare("101702100412530688") == 0)
+            {
+                cout<<"easter egg\n";
+                say(talkto, "Let's try a number less than that");
+            }
+            else
+            {
+                cout<<"No number detected\n";
+                say(talkto, "Usage: showquote <number>");
+            }
         }
         if (cmd.compare("remquote") == 0)
         {
-            //code
+            cout<<"Unimplemented function\n";
+            say(talkto, "Function not yet implemented");
         }
     }
     return intReturn;
