@@ -634,13 +634,33 @@ void IrcBot::quote(string cmd, string args, string talkto, bool admin)
             say(talkto, "Removes the specified quote");
             say(talkto, "Usage: quote remove <number>");
         }
-
+        else if (args.compare("add") == 0)
+        {
+            cout<<"Help Add command used\n";
+            say(talkto, "QUOTE ADD:");
+            say(talkto, "Adds a new quote to the bot");
+            say(talkto, "Usage: quote add <quote>");
+        }
+        else if (args.compare("num") == 0)
+        {
+            cout<<"Help Num command used\n";
+            say(talkto, "QUOTE NUM:");
+            say(talkto, "Returns the amount of quotes");
+            say(talkto, "Usage: quote num");
+        }
         else if (args.compare("help") == 0)
         {
-            cout<<"Quote help help";
+            cout<<"Help Help command used (quote)\n";
             say(talkto, "QUOTE HELP:");
             say(talkto, "Shows help on this command");
             say(talkto, "Usage: quote help [<topic>]");
+        }
+        else
+        {
+            cout<<"Help command used (Quote)\n";
+            say(talkto, "QUOTE:");
+            say(talkto, "Recites a quote at random");
+            say(talkto, "Usage: quote");
         }
     }
     else if (cmd.compare("add") == 0)
