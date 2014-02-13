@@ -564,7 +564,10 @@ int IrcBot::remQuote(int pos)
 {// Removes quote at 0 based index, returns -1 if index is out of bounds
     int tmpRet = 0;
     if ((pos >= 0) && (pos < quotes.size()))
+    {
         quotes.erase(quotes.begin()+pos+1);
+        addedQuotes = true;
+    }
     else
         tmpRet = -1;
     return tmpRet;
