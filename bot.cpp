@@ -587,32 +587,6 @@ int IrcBot::commandHandle(string cmd, string args, string talkto, bool admin)
     int intReturn = 0;
     
     // Normal commands
-    
-    /* Will be redundant if I succeeded
-    if (cmd.compare("add") == 0)
-    {// Add a quote
-        int tmpq;
-        tmpq = addQuote(args);
-        if (tmpq == -1)
-        {
-            cout<<"Quote already exists:\n"<<args<<endl;
-            say(talkto, "Quote already exists");
-        } else if (tmpq == 0) {
-            cout<<"Adding quote:\n"<<args<<endl;
-            say(talkto, "Quote added");
-        } else {
-            cout<<"Quote null\n";
-            say(talkto, "Invalid quote: Null");
-        }
-    }
-    if (cmd.compare("numquotes") == 0)
-    {
-        cout<<"There are "<<quotes.size()<<" quotes loaded\n";
-        stringstream ss;
-        ss<<"I have "<<quotes.size()<<" quotes loaded";
-        say(talkto, ss.str());
-    }
-    */
 
     // Say a random quote
     if (cmd.compare("quote") == 0)
