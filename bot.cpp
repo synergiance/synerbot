@@ -669,7 +669,7 @@ void IrcBot::quote(string cmd, string args, string talkto, bool admin)
             say(talkto, "Usage: quote help [<topic>]");
         }
     }
-    if (cmd.compare("add") == 0)
+    else if (cmd.compare("add") == 0)
     {// Add a quote
         int tmpq;
         tmpq = addQuote(args);
@@ -685,7 +685,7 @@ void IrcBot::quote(string cmd, string args, string talkto, bool admin)
             say(talkto, "Invalid quote: Null");
         }
     }
-    if (cmd.compare("num") == 0)
+    else if (cmd.compare("num") == 0)
     {
         cout<<"There are "<<quotes.size()<<" quotes loaded\n";
         stringstream ss;
