@@ -69,6 +69,7 @@ private:
 
 
     int addQuote(string quote);
+    int remQuote(int pos);
     bool loadQuotes(string file);
     int saveQuotes(string file);
 

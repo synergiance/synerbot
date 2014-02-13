@@ -560,6 +560,16 @@ int IrcBot::addQuote(string quote)
         return -2;
 }
 
+int IrcBot::remQuote(int pos)
+{// Removes quote at 0 based index, returns -1 if index is out of bounds
+    int tmpRet = 0;
+    if ((pos >= 0) && (pos < quotes.size()))
+        quotes.erase(quotes.begin()+pos+1);
+    else
+        tmpRet = -1;
+    return tmpRet;
+}
+
 void IrcBot::trimWhite(string& text)
 {// Trim Whitespace
     while ((text.compare("") != 0) && (text.at(0) == ' '))
@@ -667,8 +677,9 @@ void IrcBot::quote(string cmd, string args, string talkto, bool admin)
                 }
                 if (cmd.compare("remove") == 0)
                 {
-                    cout<<"Remove not implemented yet\n";
-                    say(talkto, "Remove function not yet implemented");
+                    cout<<"Removing quote "<<intTmp<<endl;
+                    remQuote(intTmp);
+                    say(talkto, "Quote successfully removed");
                 }
             }
             else
