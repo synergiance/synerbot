@@ -5,14 +5,17 @@
  *      By: Tim Gerety
  */
 
- #include <string>
- #include <vector>
+#include <string>
+#include <vector>
 
- using namespace std;
+using namespace std;
 
- #ifndef QUOTES_H_
- #define QUOTES_H_
+#ifndef QUOTES_H_
+#define QUOTES_H_
 
+class QuoteHandler
+{
+    //code
+};
 
-
- #endif /* QUOTES_H_ */
+#endif /* QUOTES_H_ */

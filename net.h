@@ -10,6 +10,9 @@ using namespace std;
 #ifndef NETWORK_H_
 #define NETWORK_H_
 
-
+class NetSocket
+{
+    //code
+};
 
 #endif /* NETWORK_H_ */
