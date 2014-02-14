@@ -10,6 +10,11 @@
 #include <signal.h>
 #include <cstdlib>
 #include <new>
+#include <stdio.h>
+#include <errno.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/wait.h>
 
 #include "bot.h"
 
@@ -18,6 +23,8 @@ using namespace std;
 
 //Global
 IrcBot* bot;
+
+int startNet();
 
 void sigHandler(int signum)
 {
@@ -53,4 +60,9 @@ int main()
 
     return 0;
 
+}
+
+int startNet()
+{
+    //code
 }
