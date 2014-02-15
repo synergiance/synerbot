@@ -22,8 +22,17 @@ class NetShell
 
 class NetSocket
 {
+public:
+    // Class Functions
+    NetSocket(string server, string port);
+    virtual ~NetSocket();
+
+    // Call Functions
+    bool connect(string nick, string user);
+private:
     bool sendData(char *msg);
     bool sendData(string msg);
+    void sendPong(string data);
 };
 
 #endif /* NETWORK_H_ */
