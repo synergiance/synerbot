@@ -37,12 +37,12 @@ IrcBot::IrcBot(string cfg)
 {
     // Set defaults
     cfgFile = cfg;
-	nick = "synerbot";
-	usr = "synbot";
-	realName = "The bot of Synergiance";
-	server = "127.0.0.1";
-	quoteFile = "quotes.txt";
-	serverName = "server";
+    nick = "synerbot";
+    usr = "synbot";
+    realName = "The bot of Synergiance";
+    server = "127.0.0.1";
+    quoteFile = "quotes.txt";
+    serverName = "server";
     channelName = "#bots";
     port = "6667";
     

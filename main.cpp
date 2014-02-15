@@ -24,8 +24,6 @@ using namespace std;
 //Global
 IrcBot* bot;
 
-int startNet();
-
 void sigHandler(int signum)
 {
     switch (signum)
@@ -60,9 +58,4 @@ int main()
 
     return 0;
 
-}
-
-int startNet()
-{
-    //code
 }

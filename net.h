@@ -15,9 +15,15 @@ using namespace std;
 #ifndef NETWORK_H_
 #define NETWORK_H_
 
-class NetSocket
+class NetShell
 {
     //code
+};
+
+class NetSocket
+{
+    bool sendData(char *msg);
+    bool sendData(string msg);
 };
 
 #endif /* NETWORK_H_ */
