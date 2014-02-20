@@ -16,10 +16,14 @@ using namespace std;
 class QuoteHandler
 {
 public:
+    // Constructors
+    QuoteHandler()
+
     int addQuote(string quote);
     int remQuote(int pos);
     bool loadQuotes(string file);
     int saveQuotes(string file);
+private:
 };
 
 #endif /* QUOTES_H_ */
