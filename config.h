@@ -22,6 +22,13 @@ public:
     CConfig(string file);
     virtual ~CConfig();
 
+    string getNick();
+    string getUsr();
+    string getRealName();
+    string getServer();
+    string getServerName();
+    string getChannelName();
+    string getPort();
 private:
     // Config variables
     string nick;
@@ -29,13 +36,12 @@ private:
     string realName;
     string server;
     string cfgFile;
-    string quoteFile;
     string serverName;
     string channelName;
     string port;
 
-    // Read the file
     void loadConfig(string file);
+    void writeFillConfig();
 };
 
 #endif /* CONFIG_H_ */
