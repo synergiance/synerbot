@@ -20,6 +20,9 @@
 *.out
 *.app
 
+# File system garbage
+.DS_Store
+
 # Compiled program and its configuration files
 ibot
 *.cfg
