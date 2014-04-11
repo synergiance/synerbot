@@ -14,10 +14,13 @@ using namespace std;
 #ifndef CONFIG_H_
 #define CONFIG_H_
 
-class Config
+class CConfig
 {
 public:
-    //code
+    // Constructors
+    CConfig();
+    CConfig(string file);
+    ~CConfig();
 };
 
 #endif /* CONFIG_H_ */
