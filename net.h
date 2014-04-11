@@ -29,6 +29,7 @@ public:
 
     // Call Functions
     bool connect(string nick, string user);
+    void disconnect();
 private:
     bool sendData(char *msg);
     bool sendData(string msg);

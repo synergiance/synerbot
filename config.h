@@ -22,6 +22,7 @@ public:
     CConfig(string file);
     virtual ~CConfig();
 
+    // Configuration access methods
     string getNick();
     string getUsr();
     string getRealName();
