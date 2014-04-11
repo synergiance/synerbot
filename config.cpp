@@ -11,15 +11,22 @@
 // Global Imports
 #include <string>
 #include <vector>
+#include <iostream>
+#include <fstream>
 
 using namespace std;
 
 CConfig::CConfig()
 {// Load default config file name
-    //code
+    loadConfig("ibot.cfg")
 }
 
 CConfig::CConfig(string file)
-{
-    //code
+{// Load config file
+    loadConfig(file)
+}
+
+void CConfig::loadConfig(string file)
+{// Loads a configuration file
+	//code
 }
