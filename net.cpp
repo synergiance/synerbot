@@ -39,3 +39,8 @@ void NetSocket::sendPong(string data)
         sendData("PONG " + data + "\n");
     return;
 }
+
+void NetSocket::wait()
+{// This will be doing some net magic
+    //code
+}

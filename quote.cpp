@@ -16,25 +16,30 @@ using namespace std;
 
 QuoteHandler::QuoteHandler()
 {
-	//code
+    //code
 }
 
 int QuoteHandler::addQuote(string quote)
 {
-	//code
+    //code
 }
 
 int QuoteHandler::remQuote(int pos)
 {
-	//code
+    //code
 }
 
 bool QuoteHandler::loadQuotes(string file)
 {
-	//code
+    //code
 }
 
 int QuoteHandler::saveQuotes(string file)
 {
-	//code
+    //code
+}
+
+void QuoteHandler::getCapabilities(string& capabilities)
+{
+    //code
 }

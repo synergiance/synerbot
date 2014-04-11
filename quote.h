@@ -17,12 +17,13 @@ class QuoteHandler
 {
 public:
     // Constructors
-    QuoteHandler()
+    QuoteHandler();
 
     int addQuote(string quote);
     int remQuote(int pos);
     bool loadQuotes(string file);
     int saveQuotes(string file);
+    void getCapabilities(string& capabilities);
 private:
 };
 

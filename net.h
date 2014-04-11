@@ -33,6 +33,7 @@ private:
     bool sendData(char *msg);
     bool sendData(string msg);
     void sendPong(string data);
+    void wait();
 };
 
 #endif /* NETWORK_H_ */
