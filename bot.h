@@ -19,7 +19,7 @@ using namespace std;
 class IrcBot
 {
 public:
-    IrcBot(string cfg, bool bDebug);
+    IrcBot(string cfg, int bDebug);
     virtual ~IrcBot();
 
     bool setup;
@@ -30,7 +30,7 @@ private:
     int s; //the socket descriptor
 
     // Config variables
-    bool debugMode;
+    int debugMode;
     string nick;
     string usr;
     string realName;

@@ -34,7 +34,7 @@ using namespace std;
 
 long IrcBot::atoimax = 101702100412530687;
 
-IrcBot::IrcBot(string cfg, bool bDebug)
+IrcBot::IrcBot(string cfg, int bDebug)
 {
     debugMode = bDebug;
     // Allocate memory
@@ -264,6 +264,9 @@ void IrcBot::msgHandel(string buf)
     // Parse message
     code = msgParse(buf, sender, message);
     
+    if (debugMode == 5)
+        cout<<"<"<<sender<<"> ("<<code<<") "<<message<<endl;
+
     // This could prove useful: http://tools.ietf.org/html/rfc1459.html
     switch (code)
     {
@@ -292,7 +295,7 @@ void IrcBot::msgHandel(string buf)
         break;
 
     case 0: // These messages are tricky and require a separate handler
-        if (debugMode)
+        if (debugMode == 4)
             cout<<"<"<<sender<<"> "<<message<<endl;
         AI(sender, message);
         break;
@@ -318,9 +321,15 @@ void IrcBot::msgHandel(string buf)
     case 366:
         break;
 
+    // Channel topic
+    case 332: // Topic
+    case 333: // User who set topic
+        break;
+
     // Messages we don't yet handle will display on screen
     default:
-        cout<<"<"<<sender<<"> ("<<code<<") "<<message<<endl;
+        if (debugMode < 5)
+            cout<<"<"<<sender<<"> ("<<code<<") "<<message<<endl;
     }
     return;
 }
@@ -337,47 +346,54 @@ void IrcBot::AI(string sender, string msg)
     
     // Get sender's name
     name = sender.substr(0, sender.find("!"));
-    if (name == nick) ; // IRC modes and stuff
-    else
+    
+    // join part check
+    if (msg.substr(0,1) != ":")
     {
-        channel = msg.substr(0, msg.find(" "));
-        message = msg.substr(channel.size() + 2,
-            msg.size() - (channel.size() + 2));
-        if (sender == "Synergiance!Syn@synerfiles.info")
-            isAdmin = true;
-        if (channel.substr(0,1) == "#")
-        {// Message is a channel
-            cout<<name<<" said on "<<channel<<": "<<message<<endl;
+        if (name == nick) ; // IRC modes and stuff
+        else
+        {
+            
+            channel = msg.substr(0, msg.find(" "));
+            message = msg.substr(channel.size() + 2,
+                msg.size() - (channel.size() + 2));
+            if (sender.find("Synergiance!Syn@") != -1)
+                isAdmin = true;
+            if (channel.substr(0,1) == "#")
+            {// Message is a channel
+                cout<<name<<" said on "<<channel<<": "<<message<<endl;
 
-            if (message.find(nick + ": ") == 0)
-            {// Got pinged, determine command
-                if (message.size() > nick.size() + 2)
-                {// Now we know there's text to parse after the ping
-                    message = message.substr(nick.size() + 2,
-                        message.size() - (nick.size() + 2));
-                    if (extractCommandArgs(message, command, args))
-                    {
-                        // Print command in console
-                        cout<<name<<" issued command "<<command<<" with "
-                            <<((args.compare("") != 0) ? ("parameters: " + args)
-                            : "no parameters")<<endl;
+                if (message.find(nick + ": ") == 0)
+                {// Got pinged, determine command
+                    if (message.size() > nick.size() + 2)
+                    {// Now we know there's text to parse after the ping
+                        message = message.substr(nick.size() + 2,
+                            message.size() - (nick.size() + 2));
+                        if (extractCommandArgs(message, command, args))
+                        {
+                            // Print command in console
+                            cout<<name<<" issued command "<<command<<" with "
+                                <<((args.compare("") != 0) ?
+                                ("parameters: " + args)
+                                : "no parameters")<<endl;
 
-                        // Commands go here now, so GIT
-                        commandHandle(command, args, channelName, isAdmin);
+                            // Commands go here now, so GIT
+                            commandHandle(command, args, channelName, isAdmin);
+                        }
                     }
                 }
+
+                else if (message.find(nick) != -1) // Be nice
+                    say(channel, "Hi " + name);
+            } else
+            {// Message is a user
+                cout<<name<<" said to me: "<<message<<endl;
+
+                extractCommandArgs(message, command, args);
+
+                // Commands go here now, now git
+                commandHandle(command, args, name, isAdmin);
             }
-
-            else if (message.find(nick) != -1) // Be nice
-                say(channel, "Hi " + name);
-        } else
-        {// Message is a user
-            cout<<name<<" said to me: "<<message<<endl;
-
-            extractCommandArgs(message, command, args);
-
-            // Commands go here now, now git
-            commandHandle(command, args, name, isAdmin);
         }
     }
     return;
@@ -392,11 +408,9 @@ void IrcBot::say(string target, string message)
 
 void IrcBot::action(string target, string message)
 {
-    /*
-    string a = "\001";
+    string a = "\x01";
     cout<<"Action ("<<target<<"): " + message<<endl;
-    sendData("PRIVMSG " + target + " :" + a + "ACTION" + message + a + "\r\n");
-    */
+    sendData("PRIVMSG " + target + " :" + a + "ACTION " + message + a + "\r\n");
     return;
 }
 
