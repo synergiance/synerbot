@@ -18,12 +18,12 @@ using namespace std;
 
 CConfig::CConfig()
 {// Load default config file name
-    loadConfig("ibot.cfg")
+    loadConfig("ibot.cfg");
 }
 
 CConfig::CConfig(string file)
 {// Load config file
-    loadConfig(file)
+    loadConfig(file);
 }
 
 void CConfig::loadConfig(string file)
@@ -44,7 +44,7 @@ void CConfig::loadConfig(string file)
                 tmpstr2 = strBuffer.substr(tmp, strBuffer.length() - tmp);
                 if (nick.compare("") == 0 && tmpstr.compare("Nick") == 0)
                     nick = tmpstr2;
-                else if usr.compare("") == 0 && tmpstr.compare("Username") == 0)
+                else if (usr.compare("") == 0) && tmpstr.compare("Username") == 0)
                     usr = tmpstr2;
                 else if (realName.compare("") == 0 && tmpstr.compare("Description") == 0)
                     realName = tmpstr2;
