@@ -530,8 +530,6 @@ int IrcBot::commandHandle(string cmd, string args, string talkto, bool admin)
         }
         if (cmd.compare("action") == 0 && args.compare("") != 0)
         {
-            say(talkto, "ACTION is currently buggy");
-            cout<<"ACTION buggy, alerting user\n";
             action(channelName, args);
         }
     }
