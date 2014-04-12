@@ -38,6 +38,8 @@ private:
     string channelName;
     string port;
 
+    CConfig* botConfig;
+
     // Important static values
     static long atoimax;
 
@@ -49,6 +51,8 @@ private:
 
     // Functions
     char * timeNow();
+
+    void loadConfig(string file);
 
     bool sendData(char *msg);
     bool sendData(string msg);

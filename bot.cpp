@@ -7,6 +7,7 @@
  */
 
 #include "bot.h"
+#include "config.h"
 #include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
@@ -35,6 +36,14 @@ long IrcBot::atoimax = 101702100412530687;
 
 IrcBot::IrcBot(string cfg)
 {
+    // Allocate memory
+    char* bcfgint = new char[sizeof(CConfig)];
+    botConfig = new (bcfgint) CConfig(cfg);
+
+    cfgFile = cfg;
+    nick = botConfig->getNick();
+    cout<<nick<<endl;
+/*
     // Set defaults
     cfgFile = cfg;
     nick = "synerbot";
@@ -45,9 +54,11 @@ IrcBot::IrcBot(string cfg)
     serverName = "server";
     channelName = "#bots";
     port = "6667";
+*/
+    quoteFile = "quotes.txt";
     
     addedQuotes = false;
-    
+/*
     // some booleans for ini setting tracking, could save from trickery
     bool bnick; bool busr; bool brealName; bool bserver; bool bport;
     bool bquoteFile; bool bserverName; bool bchannelName;
@@ -149,6 +160,7 @@ IrcBot::IrcBot(string cfg)
             cout<<", errors writing file, continuing with defaults\n";
         }
     }
+*/
     loadQuotes(quoteFile);
 }
 

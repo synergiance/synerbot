@@ -17,6 +17,7 @@
 #include <sys/wait.h>
 
 #include "bot.h"
+#include "config.h"
 
 
 using namespace std;
@@ -53,7 +54,7 @@ int main()
     
     // Launch bot
     bot = new (botmem) IrcBot("ibot.cfg");
-    bot->start();
+    //bot->start();
     
 
     return 0;
