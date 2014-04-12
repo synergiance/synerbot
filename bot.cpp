@@ -42,7 +42,12 @@ IrcBot::IrcBot(string cfg)
 
     cfgFile = cfg;
     nick = botConfig->getNick();
-    cout<<nick<<endl;
+    usr = botConfig->getUsr();
+    realName = botConfig->getRealName();
+    server = botConfig->getServer();
+    serverName = botConfig->getServerName();
+    channelName = botConfig->getChannelName();
+    port = botConfig->getPort();
 /*
     // Set defaults
     cfgFile = cfg;
