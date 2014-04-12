@@ -34,8 +34,9 @@ using namespace std;
 
 long IrcBot::atoimax = 101702100412530687;
 
-IrcBot::IrcBot(string cfg)
+IrcBot::IrcBot(string cfg, bool bDebug)
 {
+    debugMode = bDebug;
     // Allocate memory
     char* bcfgint = new char[sizeof(CConfig)];
 
@@ -291,6 +292,8 @@ void IrcBot::msgHandel(string buf)
         break;
 
     case 0: // These messages are tricky and require a separate handler
+        if (debugMode)
+            cout<<"<"<<sender<<"> "<<message<<endl;
         AI(sender, message);
         break;
     case 1: // This means we logged in successfully
