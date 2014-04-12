@@ -25,3 +25,13 @@ CPrivleges::CPrivleges(string file)
 {
     //code
 }
+
+bool CPrivleges::loadFile()
+{// Loads all admin strings from file
+	//code
+}
+
+bool CPrivleges::checkUsr(string usr)
+{
+	//code
+}

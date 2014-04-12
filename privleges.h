@@ -6,6 +6,7 @@
  */
 
 #include <string>
+#include <vector>
 #include <iostream>
 #include <fstream>
 
@@ -20,11 +21,17 @@ public:
     // Constructors
     CPrivleges();
     CPrivleges(string file);
-    virtual ~CPrivleges();
+    //virtual ~CPrivleges();
+
+    // Calls
+    bool checkUsr(string usr);
 
 private:
     // Config variables
     string privFile;
+    vector<string> admins;
+
+    bool loadFile();
 };
 
 #endif /* CPRIVLEGES_H_ */
