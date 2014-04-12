@@ -41,7 +41,7 @@ private:
     string channelName;
     string port;
 
-    void loadConfig(string file);
+    void loadConfig();
     void writeFillConfig();
 };
 

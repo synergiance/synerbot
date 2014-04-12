@@ -18,22 +18,24 @@ using namespace std;
 
 CConfig::CConfig()
 {// Load default config file name
-    loadConfig("ibot.cfg");
+    cfgFile = "ibot.cfg";
+    loadConfig();
 }
 
 CConfig::CConfig(string file)
 {// Load config file
-    loadConfig(file);
+    cfgFile = file;
+    loadConfig();
 }
 
-void CConfig::loadConfig(string file)
+void CConfig::loadConfig()
 {// Loads a configuration file
     // Look for the file
-    ifstream ifile (file.c_str());
+    ifstream ifile (cfgFile.c_str());
     if (ifile)
     {// File exists, read configuration from it
         string strBuffer;
-        cout<<"Found "<<file<<", loading configuration...\n";
+        cout<<"Found "<<cfgFile<<", loading configuration...\n";
         int tmp; string tmpstr; string tmpstr2;
         while (getline(ifile, strBuffer))
         {// Read a line
@@ -44,7 +46,7 @@ void CConfig::loadConfig(string file)
                 tmpstr2 = strBuffer.substr(tmp, strBuffer.length() - tmp);
                 if (nick.compare("") == 0 && tmpstr.compare("Nick") == 0)
                     nick = tmpstr2;
-                else if (usr.compare("") == 0) && tmpstr.compare("Username") == 0)
+                else if ((usr.compare("") == 0) && (tmpstr.compare("Username") == 0))
                     usr = tmpstr2;
                 else if (realName.compare("") == 0 && tmpstr.compare("Description") == 0)
                     realName = tmpstr2;
@@ -64,12 +66,12 @@ void CConfig::loadConfig(string file)
         // Always make sure to close your files
         ifile.close();
     } else {// File does not exist, create it and write defaults
-        cout<<"Could not find "<<file<<", continuing with defaults\n";
+        cout<<"Could not find "<<cfgFile<<", continuing with defaults\n";
     }
     writeFillConfig();
 }
 
-void CConfig::writeFillConfig(string file)
+void CConfig::writeFillConfig()
 {// Saves config to file and fills in missing defaults
     bool bSuccess;
 
@@ -90,7 +92,7 @@ void CConfig::writeFillConfig(string file)
         port = "6667";
 
     // Let's write everything to disk
-    ofstream ofile (file.c_str());
+    ofstream ofile (cfgFile.c_str());
     if (ofile)
     {// Success
         cout<<"Writing configuration...";
