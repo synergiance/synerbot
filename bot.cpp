@@ -38,8 +38,11 @@ IrcBot::IrcBot(string cfg)
 {
     // Allocate memory
     char* bcfgint = new char[sizeof(CConfig)];
+
+    // Set config module
     botConfig = new (bcfgint) CConfig(cfg);
 
+    // Load configuration
     cfgFile = cfg;
     nick = botConfig->getNick();
     usr = botConfig->getUsr();
@@ -48,124 +51,10 @@ IrcBot::IrcBot(string cfg)
     serverName = botConfig->getServerName();
     channelName = botConfig->getChannelName();
     port = botConfig->getPort();
-/*
-    // Set defaults
-    cfgFile = cfg;
-    nick = "synerbot";
-    usr = "synbot";
-    realName = "The bot of Synergiance";
-    server = "127.0.0.1";
-    quoteFile = "quotes.txt";
-    serverName = "server";
-    channelName = "#bots";
-    port = "6667";
-*/
-    quoteFile = "quotes.txt";
-    
-    addedQuotes = false;
-/*
-    // some booleans for ini setting tracking, could save from trickery
-    bool bnick; bool busr; bool brealName; bool bserver; bool bport;
-    bool bquoteFile; bool bserverName; bool bchannelName;
-    
-    // Look for the file
-    ifstream ifile (cfg.c_str());
-    if (ifile)
-    {// File exists, read configuration from it
-        string strBuffer;
-        cout<<"Found "<<cfgFile<<", loading configuration...\n";
-        int tmp; string tmpstr; string tmpstr2;
-        while (getline(ifile, strBuffer))
-        {// Read a line
-            tmp = strBuffer.find("=");
-            if (tmp > -1 && (tmp + 1) < strBuffer.length())
-            {// Determine validity
-                tmpstr = strBuffer.substr(0,tmp); tmp++;
-                tmpstr2 = strBuffer.substr(tmp, strBuffer.length() - tmp);
-                if (!bnick && tmpstr.compare("Nick") == 0)
-                {
-                    nick = tmpstr2;
-                    bnick = true;
-                } else if (!busr && tmpstr.compare("Username") == 0)
-                {
-                    usr = tmpstr2;
-                    busr = true;
-                } else if (!brealName && tmpstr.compare("Description") == 0)
-                {
-                    realName = tmpstr2;
-                    brealName = true;
-                } else if (!bserver && tmpstr.compare("Server") == 0)
-                {
-                    server = tmpstr2;
-                    bserver = true;
-                } else if (!bserverName && tmpstr.compare("ServerName") == 0)
-                {
-                    serverName = tmpstr2;
-                    bserverName = true;
-                } else if (!bport && tmpstr.compare("Port") == 0)
-                {
-                    port = tmpstr2;
-                    bport = true;
-                } else if (!bchannelName && tmpstr.compare("Channel") == 0)
-                {
-                    channelName = tmpstr2;
-                    bchannelName = true;
-                } else if (!bquoteFile && tmpstr.compare("QuoteFile") == 0)
-                {
-                    quoteFile = tmpstr2;
-                    bquoteFile = true;
-                } else {
-                    cout<<"Unknown config setting: "<<tmpstr<<endl;
-                }
-            }
-        }
-        cout<<"Loading complete!\n";
-        // Always make sure to close your files
-        ifile.close();
 
-        // Let's rewrite everything to disk
-        ofstream ofile (cfg.c_str());
-        if (ofile)
-        {// Success
-            cout<<"Writing configuration...";
-            if (bnick)
-                ofile<<"Nick="<<nick<<endl;
-            if (busr)
-                ofile<<"Username="<<usr<<endl;
-            if (brealName)
-                ofile<<"Description="<<realName<<endl;
-            if (bserver)
-                ofile<<"Server="<<server<<endl;
-            if (bserverName)
-                ofile<<"ServerName="<<serverName<<endl;
-            if (bport)
-                ofile<<"Port="<<port<<endl;
-            if (bchannelName)
-                ofile<<"Channel="<<channelName<<endl;
-            if (bquoteFile)
-                ofile<<"QuoteFile="<<quoteFile<<endl;
-            ofile.close(); cout<<" Done\n";
-        } else {// Errors
-            cout<<", errors writing file, continuing with defaults\n";
-        }
-    } else {// File does not exist, create it and write defaults
-        cout<<"Could not find "<<cfgFile;
-        ofstream ofile (cfg.c_str());
-        if (ofile)
-        {// Success
-            cout<<", writing defaults...";
-            ofile<<"Nick="<<nick<<endl
-                 <<"Username="<<usr<<endl
-                 <<"Description="<<realName<<endl
-                 <<"Server="<<server<<endl
-                 <<"Port="<<port<<endl
-                 <<"Channel="<<channelName;
-            ofile.close(); cout<<" Done\n";
-        } else {// Errors
-            cout<<", errors writing file, continuing with defaults\n";
-        }
-    }
-*/
+    // Will hopefully be deprecated
+    quoteFile = "quotes.txt";
+    addedQuotes = false;
     loadQuotes(quoteFile);
 }
 
