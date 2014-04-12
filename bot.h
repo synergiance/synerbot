@@ -9,6 +9,8 @@
 #include <vector>
 #include <fstream>
 
+#include "config.h"
+
 using namespace std;
 
 #ifndef IRCBOT_H_
