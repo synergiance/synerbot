@@ -357,7 +357,7 @@ void IrcBot::AI(string sender, string msg)
             channel = msg.substr(0, msg.find(" "));
             message = msg.substr(channel.size() + 2,
                 msg.size() - (channel.size() + 2));
-            if (sender.find("Synergiance!Syn@") != -1)
+            if (sender.find("Synergiance!syn@") != -1)
                 isAdmin = true;
             if (channel.substr(0,1) == "#")
             {// Message is a channel
