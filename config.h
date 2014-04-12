@@ -20,7 +20,7 @@ public:
     // Constructors
     CConfig();
     CConfig(string file);
-    virtual ~CConfig();
+    //virtual ~CConfig();
 
     // Configuration access methods
     string getNick();
