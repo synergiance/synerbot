@@ -3,13 +3,13 @@ CFLAGS=-c
 
 all: ibot
 
-ibot: main.o bot.o
+ibot: main.o bot.o config.o
 	$(CC) main.o bot.o config.o -o ibot
 
 main.o: main.cpp bot.h config.h
 	$(CC) $(CFLAGS) main.cpp
 
-bot.o: bot.cpp bot.h
+bot.o: bot.cpp bot.h config.h
 	$(CC) $(CFLAGS) bot.cpp
 
 config.o: config.cpp config.h
