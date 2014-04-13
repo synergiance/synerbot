@@ -33,6 +33,11 @@ CPrivleges::CPrivleges(string file)
     addedUsers = false;
 }
 
+CPrivleges::~CPrivleges()
+{
+    saveFile();
+}
+
 bool CPrivleges::loadFile()
 {// Loads all admin strings from file
     // Look for file
@@ -97,6 +102,7 @@ int CPrivleges::addUsr(string usr)
 {// Adds a user the admins file and checls to see if it already exists
     bool alreadyTaken = false;
     trimWhite(usr);
+    usr = toLower(usr);
     if (usr.compare("") != 0)
     {// Check to see the user exists
         if (admins.size() > 0)
@@ -107,6 +113,7 @@ int CPrivleges::addUsr(string usr)
         {// Add user
             admins.push_back(usr);
             addedUsers = true;
+            saveFile();
             return 0;
         } else
             return -1;
@@ -118,6 +125,7 @@ int CPrivleges::remUsr(string usr)
 {// Removes a user based on user string, calls integer version
     int intReturn = -2;
     trimWhite(usr);
+    usr = toLower(usr);
     if (usr.compare("") != 0)
     {
         for (int index = 0; (intReturn == -2 && index<admins.size()); ++index)
@@ -136,6 +144,7 @@ int CPrivleges::remUsr(int pos)
     {
         admins.erase(admins.begin()+pos+1);
         addedUsers = true;
+        saveFile();
     }
     else
         tmpRet = -1;

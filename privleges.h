@@ -25,7 +25,7 @@ public:
     // Constructors
     CPrivleges();
     CPrivleges(string file);
-    //virtual ~CPrivleges();
+    virtual ~CPrivleges();
 
     // Calls
     bool checkUsr(string usr);
