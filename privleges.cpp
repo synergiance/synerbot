@@ -40,10 +40,13 @@ bool CPrivleges::loadFile()
     if (ifile)
     {// File exists, read configuration from it
         string strBuffer;
-        cout<<"Found "<<cfgFile<<", loading admins... ";
+        cout<<"Found "<<privFile<<", loading admins... ";
         while (getline(ifile, strBuffer))
         {// Read a line
-            //code
+            trimWhite(strBuffer);
+            // Insert string into vector if it isn't blank
+            if (strBuffer.compare("") != 0)
+                admins.push_back(strBuffer);
         }
         cout<<"Done!\n";
         // Always make sure to close your files
