@@ -29,6 +29,9 @@ public:
 
     // Calls
     bool checkUsr(string usr);
+    int addUsr(string usr);
+    int remUsr(string usr);
+    int remUsr(int pos);
 
 private:
     // Config variables
@@ -37,7 +40,11 @@ private:
     // Arrays
     vector<string> admins;
 
+    // Variables
+    bool addedUsers;
+
     bool loadFile();
+    int saveFile();
 };
 
 #endif /* CPRIVLEGES_H_ */
