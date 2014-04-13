@@ -41,7 +41,7 @@ bool CPrivleges::loadFile()
 bool CPrivleges::checkUsr(string usr)
 {
     bool bReturn = false;
-    cout<<"Testing: "<<usr<<endl;
+    //cout<<"Testing: "<<usr<<endl;
     if (admins.size() == 0)
         bReturn = (toLower(usr).find(defAdmin) == 0);
     else
