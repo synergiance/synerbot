@@ -117,9 +117,13 @@ int CPrivleges::addUsr(string usr)
 int CPrivleges::remUsr(string usr)
 {// Removes a user based on user string, calls integer version
     int intReturn = -2;
-    for (int index = 0; (intReturn == -2 && index<admins.size()); ++index)
-        if (usr.compare(admins[index]) == 0)
-            intReturn = remUsr(index);
+    trimWhite(usr);
+    if (usr.compare("") != 0)
+        for (int index = 0; (intReturn == -2 && index<admins.size()); ++index)
+            if (usr.compare(admins[index]) == 0)
+                intReturn = remUsr(index);
+    else
+        intReturn = -3;
     return intReturn;
 }
 

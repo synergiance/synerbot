@@ -534,6 +534,14 @@ int IrcBot::commandHandle(string cmd, string args, string talkto, bool admin)
         {
             action(channelName, args);
         }
+        if (cmd.compare("admin") == 0 && args.compare("") != 0)
+        {
+            // Forward everything to method
+            string subcmd; string subargs;
+            if (!(extractCommandArgs(args, subcmd, subargs)))
+            { subcmd = ""; subcmd = ""; }
+            editPrivs(subcmd, subargs, talkto);
+        }
     }
     return intReturn;
 }
@@ -672,6 +680,48 @@ void IrcBot::quote(string cmd, string args, string talkto, bool admin)
     {
         cout<<"Issuing help on quote\n";
         // Need to expand here
+    }
+}
+
+void IrcBot::editPrivs(string cmd, string args, string talkto)
+{// Privliges
+    if (cmd.compare("add") == 0)
+    {// Add a quote
+        int tmpq;
+        tmpq = botPriv->addUsr(args);
+        if (tmpq == -1)
+        {
+            cout<<"User privlege already exists: "<<args<<endl;
+            say(talkto, "User privlege already exists");
+        } else if (tmpq == 0) {
+            cout<<"Adding user: "<<args<<endl;
+            say(talkto, "User privleges added");
+        } else {
+            cout<<"Null string: User privlege\n";
+            say(talkto, "Invalid user: Null");
+        }
+    }
+    else if (cmd.compare("remove") == 0)
+    {// Add a quote
+        int tmpq;
+        tmpq = botPriv->remUsr(args);
+        if (tmpq == -1)
+        {
+            cout<<"Off by 1 error: User privleges";
+            say(talkto, "Contact bot author");
+        } else if (tmpq == 0) {
+            cout<<"Removing user privlege: "<<args<<endl;
+            say(talkto, "User privleges removed");
+        } else if (tmpq == -2) {
+            cout<<"User privlege does not exist: "<<args<<endl;
+            say(talkto, "User does not have privleges");
+        } else if (tmpq == -3) {
+            cout<<"Null string: User privlege\n";
+            say(talkto, "Invalid user: Null");
+        } else {
+            cout<<"Error: Impossible return value\n";
+            say(talkto, "Impossible return value, contact bot author")
+        }
     }
 }
 
