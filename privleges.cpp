@@ -17,7 +17,7 @@
 
 using namespace std;
 
-string defAdmin = "synergiance!syn@"
+string defAdmin = "synergiance!syn@";
 
 CPrivleges::CPrivleges()
 {// Load default privleges file name
@@ -42,9 +42,9 @@ bool CPrivleges::checkUsr(string usr)
     bool bReturn = false;
     cout<<"Testing: "<<usr<<endl;
     if (admins.size() == 0)
-        bReturn == (toLower(usr).find(defAdmin) == 0);
+        bReturn = (toLower(usr).find(defAdmin) == 0);
     else
         for (int index = 0; bReturn == false && index<admins.size(); index++)
-            bReturn == (toLower(usr).find(admins[index]) == 0);
+            bReturn = (toLower(usr).find(admins[index]) == 0);
     return bReturn;
 }
