@@ -42,6 +42,7 @@ private:
     string port;
 
     CConfig* botConfig;
+    CPrivleges* botPriv;
 
     // Important static values
     static long atoimax;

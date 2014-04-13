@@ -11,19 +11,28 @@
 // Global Imports
 #include <string>
 #include <vector>
+#include <cctype>
 
 using namespace std;
 
 string toLower(string str)
 {// Converts a string to lowercase
-	string strReturn;
-	strReturn = str;
-	return strReturn;
+    string strReturn;
+    for (int index = 0; index<str.length(); index++)
+        if (isalpha(str[index]))
+            strReturn += tolower(str[index]);
+        else
+            strReturn += str[index];
+    return strReturn;
 }
 
 string toUpper(string str)
 {// Converts a string to uppercase
-	string strReturn;
-	strReturn = str;
-	return strReturn;
+    string strReturn;
+    for (int index = 0; index<str.length(); index++)
+        if (isalpha(str[index]))
+            strReturn += toupper(str[index]);
+        else
+            strReturn += str[index];
+    return strReturn;
 }

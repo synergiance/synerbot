@@ -6,8 +6,13 @@
  *
  */
 
+// Local Includes
 #include "bot.h"
 #include "config.h"
+#include "privleges.h"
+#include "miscbotlib.h"
+
+// Global Includes
 #include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
@@ -39,9 +44,11 @@ IrcBot::IrcBot(string cfg, int bDebug)
     debugMode = bDebug;
     // Allocate memory
     char* bcfgint = new char[sizeof(CConfig)];
+    char* bprmint = new char[sizeof(CPrivleges)];
 
-    // Set config module
+    // Set modules
     botConfig = new (bcfgint) CConfig(cfg);
+    botPriv = new (bprmint) CPrivleges();
 
     // Load configuration
     cfgFile = cfg;
@@ -52,6 +59,9 @@ IrcBot::IrcBot(string cfg, int bDebug)
     serverName = botConfig->getServerName();
     channelName = botConfig->getChannelName();
     port = botConfig->getPort();
+
+    if (bDebug == 1)
+        cout<<"Testing toLower: "<<toLower("AnUsBiTeS")<<endl;
 
     // Will hopefully be deprecated
     quoteFile = "quotes.txt";

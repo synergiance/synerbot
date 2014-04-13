@@ -3,17 +3,23 @@ CFLAGS=-c
 
 all: ibot
 
-ibot: main.o bot.o config.o
-	$(CC) main.o bot.o config.o -o ibot
+ibot: main.o bot.o config.o privleges.o miscbotlib.o
+	$(CC) main.o bot.o config.o privleges.o miscbotlib.o -o ibot
 
-main.o: main.cpp bot.h config.h
+main.o: main.cpp
 	$(CC) $(CFLAGS) main.cpp
 
-bot.o: bot.cpp bot.h config.h
+bot.o: bot.cpp bot.h
 	$(CC) $(CFLAGS) bot.cpp
 
 config.o: config.cpp config.h
 	$(CC) $(CFLAGS) config.cpp
+
+privleges.o: privleges.cpp privleges.h
+	$(CC) $(CFLAGS) privleges.cpp
+
+miscbotlib.o: miscbotlib.cpp miscbotlib.h
+	$(CC) $(CFLAGS) miscbotlib.cpp
 
 bin:
 	mkdir -p bin
