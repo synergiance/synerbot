@@ -10,6 +10,7 @@
 #include <fstream>
 
 #include "config.h"
+#include "privleges.h"
 
 using namespace std;
 
