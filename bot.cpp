@@ -61,9 +61,6 @@ IrcBot::IrcBot(string cfg, int bDebug)
     channelName = botConfig->getChannelName();
     port = botConfig->getPort();
 
-    if (bDebug == 1)
-        cout<<"Testing toLower: "<<toLower("AnUsBiTeS")<<endl;
-
     // Will hopefully be deprecated
     quoteFile = "quotes.txt";
     addedQuotes = false;
