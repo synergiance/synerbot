@@ -119,9 +119,11 @@ int CPrivleges::remUsr(string usr)
     int intReturn = -2;
     trimWhite(usr);
     if (usr.compare("") != 0)
+    {
         for (int index = 0; (intReturn == -2 && index<admins.size()); ++index)
             if (usr.compare(admins[index]) == 0)
                 intReturn = remUsr(index);
+    }
     else
         intReturn = -3;
     return intReturn;
