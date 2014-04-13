@@ -35,6 +35,7 @@ bool CPrivleges::loadFile()
 {// Loads all admin strings from file
     // This is test code
     cout<<"This would open up the file: "<<privFile<<endl;
+    return true;
 }
 
 bool CPrivleges::checkUsr(string usr)
