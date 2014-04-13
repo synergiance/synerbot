@@ -33,8 +33,6 @@ CPrivleges::CPrivleges(string file)
 
 bool CPrivleges::loadFile()
 {// Loads all admin strings from file
-    // This is test code
-    cout<<"This would open up the file: "<<privFile<<endl;
     // Look for file
     ifstream ifile (privFile.c_str());
     if (ifile)
