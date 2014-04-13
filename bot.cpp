@@ -42,6 +42,7 @@ long IrcBot::atoimax = 101702100412530687;
 IrcBot::IrcBot(string cfg, int bDebug)
 {
     debugMode = bDebug;
+
     // Allocate memory
     char* bcfgint = new char[sizeof(CConfig)];
     char* bprmint = new char[sizeof(CPrivleges)];
@@ -504,15 +505,6 @@ int IrcBot::remQuote(int pos)
     else
         tmpRet = -1;
     return tmpRet;
-}
-
-void IrcBot::trimWhite(string& text)
-{// Trim Whitespace
-    while ((text.compare("") != 0) && (text.at(0) == ' '))
-        text.erase(text.begin());
-    while ((text.compare("") != 0) && (text.at(text.size() - 1) == ' '))
-        text.erase(text.end() - 1);
-    return;
 }
 
 int IrcBot::commandHandle(string cmd, string args, string talkto, bool admin)

@@ -35,11 +35,27 @@ bool CPrivleges::loadFile()
 {// Loads all admin strings from file
     // This is test code
     cout<<"This would open up the file: "<<privFile<<endl;
+    // Look for file
+    ifstream ifile (privFile.c_str());
+    if (ifile)
+    {// File exists, read configuration from it
+        string strBuffer;
+        cout<<"Found "<<cfgFile<<", loading admins... ";
+        while (getline(ifile, strBuffer))
+        {// Read a line
+            //code
+        }
+        cout<<"Done!\n";
+        // Always make sure to close your files
+        ifile.close();
+    } else {// File does not exist, create it and write defaults
+        cout<<"Could not find "<<privFile<<", continuing with defaults\n";
+    }
     return true;
 }
 
 bool CPrivleges::checkUsr(string usr)
-{
+{// Checks whether a specified user is an admin
     bool bReturn = false;
     //cout<<"Testing: "<<usr<<endl;
     if (admins.size() == 0)

@@ -82,8 +82,6 @@ private:
     bool loadQuotes(string file);
     int saveQuotes(string file);
 
-    void trimWhite(string& text);
-
     // User Functions
     void quote(string cmd, string args, string talkto, bool admin);
 };
