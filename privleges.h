@@ -5,10 +5,14 @@
  *      By: Tim Gerety
  */
 
+// Global Imports
 #include <string>
 #include <vector>
 #include <iostream>
 #include <fstream>
+
+// Local Imports
+#include "miscbotlib.h"
 
 using namespace std;
 
@@ -29,6 +33,8 @@ public:
 private:
     // Config variables
     string privFile;
+
+    // Arrays
     vector<string> admins;
 
     bool loadFile();

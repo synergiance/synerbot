@@ -14,12 +14,16 @@
 
 using namespace std;
 
-CMiscLib::CMiscLib()
-{
-    //code
+string toLower(string str)
+{// Converts a string to lowercase
+	string strReturn;
+	strReturn = str;
+	return strReturn;
 }
 
-void CMiscLib::getCapabilities(string& capabilities)
-{
-    //code
+string toUpper(string str)
+{// Converts a string to uppercase
+	string strReturn;
+	strReturn = str;
+	return strReturn;
 }
