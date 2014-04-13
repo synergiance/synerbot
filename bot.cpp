@@ -720,7 +720,7 @@ void IrcBot::editPrivs(string cmd, string args, string talkto)
             say(talkto, "Invalid user: Null");
         } else {
             cout<<"Error: Impossible return value\n";
-            say(talkto, "Impossible return value, contact bot author")
+            say(talkto, "Impossible return value, contact bot author");
         }
     }
 }
