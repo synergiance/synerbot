@@ -85,6 +85,9 @@ private:
     // User Functions
     void quote(string cmd, string args, string talkto, bool admin);
     void editPrivs(string cmd, string args, string talkto);
+
+    // Utils
+    string whois(string target);
 };
 
 #endif /* IRCBOT_H_ */

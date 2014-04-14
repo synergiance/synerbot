@@ -326,8 +326,8 @@ void IrcBot::msgHandel(string buf)
         break;
     
     // Channel nick list
-    case 353:
-    case 366:
+    case 353: // Lists all nicknames prefixed with their mode
+    case 366: // "End of /NAMES list."
         if (debugMode == 6)
             cout<<"<"<<sender<<"> ("<<code<<") "<<message<<endl;
         break;
@@ -751,4 +751,9 @@ bool IrcBot::extractCommandArgs(string message, string& command, string& args)
         ecaStatus = true;
     }
     return ecaStatus;
+}
+
+string IrcBot::whois(string target)
+{
+    //code
 }
