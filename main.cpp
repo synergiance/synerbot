@@ -53,7 +53,7 @@ int main()
     signal(SIGINT, sigHandler);
     
     // Launch bot
-    bot = new (botmem) IrcBot("ibot.cfg", 1);
+    bot = new (botmem) IrcBot("ibot.cfg", 6);
     bot->start();
     
 

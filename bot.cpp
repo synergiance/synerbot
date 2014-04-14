@@ -328,6 +328,8 @@ void IrcBot::msgHandel(string buf)
     // Channel nick list
     case 353:
     case 366:
+        if (debugMode == 6)
+            cout<<"<"<<sender<<"> ("<<code<<") "<<message<<endl;
         break;
 
     // Channel topic
