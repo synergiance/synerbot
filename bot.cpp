@@ -316,6 +316,7 @@ void IrcBot::msgHandel(string buf)
     case 3:
     case 4:
     case 5:
+    case 42: // Your unique ID (Inspircd)
     case 251:
     case 252:
     case 254:
@@ -336,7 +337,7 @@ void IrcBot::msgHandel(string buf)
 
     // Messages we don't yet handle will display on screen
     default:
-        if (debugMode < 5)
+        if (debugMode != 5 && debugMode != 0)
             cout<<"<"<<sender<<"> ("<<code<<") "<<message<<endl;
     }
     return;
@@ -369,7 +370,9 @@ void IrcBot::AI(string sender, string msg)
                 msg.size() - (channel.size() + 2));
             if (channel.substr(0,1) == "#")
             {// Message is a channel
-                cout<<name<<" said on "<<channel<<": "<<message<<endl;
+                // Only output if debug mode is on
+                if (debugMode == 3)
+                    cout<<name<<" said on "<<channel<<": "<<message<<endl;
 
                 if (message.find(nick + ": ") == 0)
                 {// Got pinged, determine command
@@ -395,7 +398,9 @@ void IrcBot::AI(string sender, string msg)
                     say(channel, "Hi " + name);
             } else
             {// Message is a user
-                cout<<name<<" said to me: "<<message<<endl;
+                // Only output if debug mode is on
+                if (debugMode == 3)
+                    cout<<name<<" said to me: "<<message<<endl;
 
                 extractCommandArgs(message, command, args);
 

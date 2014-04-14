@@ -40,6 +40,7 @@ CPrivleges::~CPrivleges()
 
 bool CPrivleges::loadFile()
 {// Loads all admin strings from file
+    bool bReturn = false;
     // Look for file
     ifstream ifile (privFile.c_str());
     if (ifile)
@@ -56,10 +57,11 @@ bool CPrivleges::loadFile()
         cout<<"Done!\n";
         // Always make sure to close your files
         ifile.close();
+        bReturn = true;
     } else {// File does not exist, create it and write defaults
         cout<<"Could not find "<<privFile<<", continuing with defaults\n";
     }
-    return true;
+    return bReturn;
 }
 
 int CPrivleges::saveFile()
