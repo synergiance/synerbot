@@ -398,7 +398,8 @@ void IrcBot::AI(string sender, string msg)
                     }
                 }
 
-                else if (message.find(nick) != -1) // Be nice
+                else if (message.find(nick) != -1 && 
+                         toLower(message).find("o synerbot") == -1) // Be nice
                     say(channel, "Hi " + name);
             } else
             {// Message is a user
