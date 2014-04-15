@@ -87,7 +87,7 @@ private:
     void editPrivs(string cmd, string args, string talkto);
 
     // Utils
-    string whois(string target);
+    void whois(string target);
 };
 
 #endif /* IRCBOT_H_ */

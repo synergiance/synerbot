@@ -327,6 +327,8 @@ void IrcBot::msgHandel(string buf)
     
     // Channel nick list
     case 353: // Lists all nicknames prefixed with their mode
+        if (message.find("@Youmu") != -1)
+            say(channelName, ".op");
     case 366: // "End of /NAMES list."
         if (debugMode == 6)
             cout<<"<"<<sender<<"> ("<<code<<") "<<message<<endl;
@@ -753,7 +755,7 @@ bool IrcBot::extractCommandArgs(string message, string& command, string& args)
     return ecaStatus;
 }
 
-string IrcBot::whois(string target)
+void IrcBot::whois(string target)
 {
-    //code
+    sendData("WHOIS " + target);
 }
