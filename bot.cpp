@@ -511,7 +511,7 @@ int IrcBot::remQuote(int pos)
     int tmpRet = 0;
     if ((pos >= 0) && (pos < quotes.size()))
     {
-        quotes.erase(quotes.begin()+pos+1);
+        quotes.erase(quotes.begin()+pos);
         addedQuotes = true;
     }
     else
