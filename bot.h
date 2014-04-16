@@ -66,7 +66,7 @@ private:
 
     void msgHandel(string buf);
 
-    int msgParse(string buf, string& sender, string& message);
+    int msgParse(string buf, string& sender, string& message, string& cmd);
 
     void AI(string sender, string msg);
 

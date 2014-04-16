@@ -165,7 +165,7 @@ void IrcBot::start()
         //break if connection closed
         if (numbytes==0)
         {
-            cout << "----------------------CONNECTION CLOSED---------------------------"<< endl;
+            cout << makeBorder("CONNECTION CLOSED")<< endl;
             cout << timeNow() << endl;
 
             break;
@@ -217,7 +217,7 @@ void IrcBot::sendPong(string data)
 }
 
 
-int IrcBot::msgParse(string buf, string& sender, string& message)
+int IrcBot::msgParse(string buf, string& sender, string& message, string& cmd)
 {// Grabs IRC sender, message code, and message
     int tmp, intCode;
     string str = buf;
@@ -244,20 +244,34 @@ int IrcBot::msgParse(string buf, string& sender, string& message)
     sender = str.substr(1, tmp - 2);
     str = str.substr(tmp, str.size() - tmp);
     
+    /* -- Legacy code
     if (str.find("NOTICE AUTH") == 0)
     {
         message = str;
         return -1;
         //break;
     }
+    */
     
     // Parse message code
     intCode = atoi(str.substr(0,3).c_str());
-    str = str.substr(4, str.size() - 4);
-    
-    // Remove receiver
-    tmp = str.find(" ") + 1;
-    message = str.substr(tmp, str.size() - tmp);
+    if (intCode == 0)
+    { // Text IRC message - Communication
+        // Parse out command
+        tmp = str.find(" ") + 1;
+        cmd = str.substr(0, tmp - 2);
+        str = str.substr(tmp, str.size() - tmp);
+    }
+    else
+    { // Numerical IRC message - server messages?
+        // Since all IRC codes are 3 digits, this is really easy
+        str = str.substr(4, str.size() - 4);
+
+        // Remove receiver
+        tmp = str.find(" ") + 1;
+        message = str.substr(tmp, str.size() - tmp);
+        cmd = "";
+    }
     
     return intCode;
 }
@@ -268,15 +282,17 @@ void IrcBot::msgHandel(string buf)
     int code;
     string message;
     string sender;
+    string cmd;
 
     if (debugMode == 6)
         cout<<buf;
     
     // Parse message
-    code = msgParse(buf, sender, message);
+    code = msgParse(buf, sender, message, cmd);
     
     if (debugMode == 5)
-        cout<<"<"<<sender<<"> ("<<code<<") "<<message<<endl;
+        if (code > 0)
+            cout<<"<"<<sender<<"> ("<<code<<") "<<message<<endl;
 
     // This could prove useful: http://tools.ietf.org/html/rfc1459.html
     switch (code)
@@ -284,6 +300,8 @@ void IrcBot::msgHandel(string buf)
 
     // These messages need special treatment
     case -1:
+        if (debugMode == 5)
+            cout<<"PING "<<message<<endl;
         if (sender == "PING")
         {// It's a ping
             sendPong(message);
@@ -294,11 +312,12 @@ void IrcBot::msgHandel(string buf)
                     serverName = sender;
             }
             else
-                cout<<message<<endl;
+                if (debugMode > 0)
+                    cout<<message<<endl;
         }
         break;
 
-    case 376: // MOTD is how we know we're connected
+    case 376: // MOTD Footer is how we know we're connected
         cout<<"Joining "<<channelName<<"\n";
         sendData((char*)"JOIN " + channelName + "\r\n");
     case 375: // MOTD Header
@@ -306,15 +325,15 @@ void IrcBot::msgHandel(string buf)
         break;
 
     case 0: // These messages are tricky and require a separate handler
-        if (debugMode == 21)
-            cout<<"<"<<sender<<"> "<<message<<endl;
+        if (debugMode == 21 || debugMode == 5)
+            cout<<"<"<<sender<<"> ("<<cmd<<") "<<message<<endl;
         AI(sender, message);
         break;
     case 1: // This means we logged in successfully
         cout<<"Connection successful!\n";
         break;
     
-    // No need to log this info
+    // Server connect messages
     case 2: // Server identity (with server type/version)
     case 3: // This server was created <time/date stamp>
     case 4: // Similar to 2
@@ -350,7 +369,7 @@ void IrcBot::msgHandel(string buf)
     return;
 }
 
-void IrcBot::AI(string sender, string msg)
+void IrcBot::AI(string sender, string cmd, string msg)
 {// Deal with humans
     string channel;
     string message;
@@ -365,6 +384,7 @@ void IrcBot::AI(string sender, string msg)
     // Get sender's name
     name = sender.substr(0, sender.find("!"));
     
+    /* -- Should be obsolete
     // join part check
     if (msg.substr(0,1) != ":")
     {
@@ -415,6 +435,54 @@ void IrcBot::AI(string sender, string msg)
                 // Commands go here now, now git
                 commandHandle(command, args, name, isAdmin);
             }
+        }
+    }
+    */
+
+    if (toUpper(cmd) == "PRIVMSG")
+    {// Only actual messages should make it to this point
+        channel = msg.substr(0, msg.find(" "));
+        message = msg.substr(channel.size() + 2,
+            msg.size() - (channel.size() + 2));
+        if (channel.substr(0,1) == "#")
+        {// Message is a channel
+            // Only output if debug mode is on
+            if (debugMode == 3)
+                cout<<name<<" said on "<<channel<<": "<<message<<endl;
+
+            if (message.find(nick + ": ") == 0)
+            {// Got pinged, determine command
+                if (message.size() > nick.size() + 2)
+                {// Now we know there's text to parse after the ping
+                    message = message.substr(nick.size() + 2,
+                        message.size() - (nick.size() + 2));
+                    if (extractCommandArgs(message, command, args))
+                    {
+                        // Print command in console
+                        cout<<name<<" issued command "<<command<<" with "
+                            <<((args.compare("") != 0) ?
+                            ("parameters: " + args)
+                            : "no parameters")<<endl;
+
+                        // Commands go here now, so GIT
+                        commandHandle(command, args, channelName, isAdmin);
+                    }
+                }
+            }
+
+            else if (message.find(nick) != -1 && 
+                     toLower(message).find("o synerbot") == -1) // Be nice
+                say(channel, "Hi " + name);
+        } else
+        {// Message is a user
+            // Only output if debug mode is on
+            if (debugMode == 3)
+                cout<<name<<" said to me: "<<message<<endl;
+
+            extractCommandArgs(message, command, args);
+
+            // Commands go here now, now git
+            commandHandle(command, args, name, isAdmin);
         }
     }
     return;
