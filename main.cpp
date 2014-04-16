@@ -9,6 +9,7 @@
 #include <string>
 #include <signal.h>
 #include <cstdlib>
+#include <cstring>
 #include <new>
 #include <stdio.h>
 #include <errno.h>
