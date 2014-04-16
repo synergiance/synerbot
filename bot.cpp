@@ -268,6 +268,9 @@ void IrcBot::msgHandel(string buf)
     int code;
     string message;
     string sender;
+
+    if (debugMode == 6)
+        cout<<buf;
     
     // Parse message
     code = msgParse(buf, sender, message);
@@ -303,7 +306,7 @@ void IrcBot::msgHandel(string buf)
         break;
 
     case 0: // These messages are tricky and require a separate handler
-        if (debugMode == 4)
+        if (debugMode == 21)
             cout<<"<"<<sender<<"> "<<message<<endl;
         AI(sender, message);
         break;
@@ -330,7 +333,7 @@ void IrcBot::msgHandel(string buf)
         if (message.find("@Youmu") != -1)
             say(channelName, ".op");
     case 366: // "End of /NAMES list."
-        if (debugMode == 6)
+        if (debugMode == 20)
             cout<<"<"<<sender<<"> ("<<code<<") "<<message<<endl;
         break;
 
@@ -341,7 +344,7 @@ void IrcBot::msgHandel(string buf)
 
     // Messages we don't yet handle will display on screen
     default:
-        if (debugMode != 5 && debugMode != 0)
+        if (debugMode > 10)
             cout<<"<"<<sender<<"> ("<<code<<") "<<message<<endl;
     }
     return;
