@@ -259,8 +259,8 @@ int IrcBot::msgParse(string buf, string& sender, string& message, string& cmd)
     { // Text IRC message - Communication
         // Parse out command
         tmp = str.find(" ") + 1;
-        cmd = str.substr(0, tmp - 2);
-        str = str.substr(tmp, str.size() - tmp);
+        cmd = str.substr(0, tmp - 1);
+        message = str.substr(tmp, str.size() - tmp);
     }
     else
     { // Numerical IRC message - server messages?
