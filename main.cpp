@@ -55,12 +55,12 @@ int main(int argc, char* argv[])
     
     for (int c = 1; c < argc; c++)
     {
-        if (argv[c] == "-d")
+        if (strncmp(argv[c], "-d") == 0)
         {
             if (++c < argc)
             {
                 debugMode = atoi(argv[c]);
-                if (debugMode == 0 && argv[c] != "0")
+                if (debugMode == 0 && strncmp(argv[c], "0") != 0)
                 {
                     c--;
                     debugMode = 1;
