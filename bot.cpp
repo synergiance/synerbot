@@ -327,7 +327,7 @@ void IrcBot::msgHandel(string buf)
     case 0: // These messages are tricky and require a separate handler
         if (debugMode == 21 || debugMode == 5)
             cout<<"<"<<sender<<"> ("<<cmd<<") "<<message<<endl;
-        AI(sender, message);
+        AI(sender, cmd, message);
         break;
     case 1: // This means we logged in successfully
         cout<<"Connection successful!\n";
