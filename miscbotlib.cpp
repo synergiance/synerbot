@@ -52,6 +52,8 @@ string makeBorder(string title)
     int borderLength = 40 - title.length() / 2 - 1;
     while (borderLength-- > 0)
         str += '-';
+    str += toUpper(title);
     while (str.length() < 80)
         str += '-';
+    return str;
 }
