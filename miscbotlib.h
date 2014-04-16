@@ -14,3 +14,5 @@ string toLower(string str);
 string toUpper(string str);
 
 void trimWhite(string& text);
+
+string makeBorder(string title);

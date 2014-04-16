@@ -45,3 +45,13 @@ void trimWhite(string& text)
         text.erase(text.end() - 1);
     return;
 }
+
+string makeBorder(string title)
+{
+    string str = "-";
+    int borderLength = 40 - title.length() / 2 - 1;
+    while (borderLength-- > 0)
+        str += '-';
+    while (str.length() < 80)
+        str += '-';
+}
