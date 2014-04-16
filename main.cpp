@@ -18,6 +18,7 @@
 
 #include "bot.h"
 #include "config.h"
+#include "miscbotlib.h"
 
 
 using namespace std;
@@ -44,16 +45,25 @@ void sigHandler(int signum)
     return;
 }
 
-int main()
+int main(int argc, char* argv[])
 {
     // Allocate memory
     char* botmem = new char[sizeof(IrcBot)];
+
+    // Variables
+    int debugMode = 0;
     
+    for (int c = 1; c < argc; c++)
+        if (argv[c] == "-d")
+            if (++c < argc)
+                if (debugMode = atoi(argv[c]) == 0 && argv[c] != "0")
+                    c--;
+
     // Register SIGINT signal
     signal(SIGINT, sigHandler);
     
     // Launch bot
-    bot = new (botmem) IrcBot("ibot.cfg", 5);
+    bot = new (botmem) IrcBot("ibot.cfg", debugMode);
     bot->start();
     
 
