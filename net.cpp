@@ -12,6 +12,17 @@
 
 using namespace std;
 
+NetSocket::NetSocket(string server, string port);
+{// Just prime the pumps with a server address and port
+    svrAddress = server;
+    svrPort = port;
+}
+
+NetSocket::~NetSocket()
+{// This will close our socket when we kill the network class
+    //code
+}
+
 bool NetSocket::sendData(string msg)
 {// String sendData interface
     return sendData((char*)msg.c_str());

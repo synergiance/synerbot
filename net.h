@@ -31,8 +31,16 @@ public:
     bool connect(string nick, string user);
     void disconnect();
 private:
+    // The socket
+    int socket;
+
+    // Variables
+    string svrAddress;
+    string svrPort;
+
     bool sendData(char *msg);
     bool sendData(string msg);
+    bool sendLine(string msg);
     void sendPong(string data);
     void wait();
 };
