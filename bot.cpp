@@ -312,17 +312,17 @@ void IrcBot::msgHandel(string buf)
         break;
     
     // No need to log this info
-    case 2:
-    case 3:
-    case 4:
-    case 5:
+    case 2: // Server identity (with server type/version)
+    case 3: // This server was created <time/date stamp>
+    case 4: // Similar to 2
+    case 5: // Server capabilities
     case 42: // Your unique ID (Inspircd)
-    case 251:
+    case 251: // Network info?
     case 252:
-    case 254:
-    case 255:
-    case 265:
-    case 266:
+    case 254: // I have x channels formed
+    case 255: // I have x clients and y servers
+    case 265: // Current local users
+    case 266: // Current global users
         break;
     
     // Channel nick list
