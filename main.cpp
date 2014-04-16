@@ -54,10 +54,25 @@ int main(int argc, char* argv[])
     int debugMode = 0;
     
     for (int c = 1; c < argc; c++)
+    {
         if (argv[c] == "-d")
+        {
             if (++c < argc)
-                if (debugMode = atoi(argv[c]) == 0 && argv[c] != "0")
+            {
+                debugMode = atoi(argv[c]);
+                if (debugMode == 0 && argv[c] != "0")
+                {
                     c--;
+                    debugMode = 1;
+                }
+            }
+            else
+            {
+                c--;
+                debugMode = 1;
+            }
+        }
+    }
 
     // Register SIGINT signal
     signal(SIGINT, sigHandler);
