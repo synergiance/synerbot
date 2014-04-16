@@ -16,11 +16,11 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/wait.h>
+#include <thread>
 
 #include "bot.h"
 #include "config.h"
 #include "miscbotlib.h"
-
 
 using namespace std;
 
