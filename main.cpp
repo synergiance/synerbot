@@ -64,13 +64,13 @@ int main(int argc, char* argv[])
                 if (debugMode == 0 && strncmp(argv[c],"0",20) != 0)
                 {
                     c--;
-                    debugMode = 1;
+                    debugMode = 5;
                 }
             }
             else
             {
                 c--;
-                debugMode = 1;
+                debugMode = 5;
             }
         }
     }
