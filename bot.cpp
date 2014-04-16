@@ -244,15 +244,6 @@ int IrcBot::msgParse(string buf, string& sender, string& message, string& cmd)
     sender = str.substr(1, tmp - 2);
     str = str.substr(tmp, str.size() - tmp);
     
-    /* -- Legacy code
-    if (str.find("NOTICE AUTH") == 0)
-    {
-        message = str;
-        return -1;
-        //break;
-    }
-    */
-    
     // Parse message code
     intCode = atoi(str.substr(0,3).c_str());
     if (intCode == 0)
@@ -275,7 +266,6 @@ int IrcBot::msgParse(string buf, string& sender, string& message, string& cmd)
     
     return intCode;
 }
-
 
 void IrcBot::msgHandel(string buf)
 {// Do stuff with messages
@@ -383,61 +373,6 @@ void IrcBot::AI(string sender, string cmd, string msg)
     
     // Get sender's name
     name = sender.substr(0, sender.find("!"));
-    
-    /* -- Should be obsolete
-    // join part check
-    if (msg.substr(0,1) != ":")
-    {
-        if (name == nick) ; // IRC modes and stuff
-        else
-        {
-            
-            channel = msg.substr(0, msg.find(" "));
-            message = msg.substr(channel.size() + 2,
-                msg.size() - (channel.size() + 2));
-            if (channel.substr(0,1) == "#")
-            {// Message is a channel
-                // Only output if debug mode is on
-                if (debugMode == 3)
-                    cout<<name<<" said on "<<channel<<": "<<message<<endl;
-
-                if (message.find(nick + ": ") == 0)
-                {// Got pinged, determine command
-                    if (message.size() > nick.size() + 2)
-                    {// Now we know there's text to parse after the ping
-                        message = message.substr(nick.size() + 2,
-                            message.size() - (nick.size() + 2));
-                        if (extractCommandArgs(message, command, args))
-                        {
-                            // Print command in console
-                            cout<<name<<" issued command "<<command<<" with "
-                                <<((args.compare("") != 0) ?
-                                ("parameters: " + args)
-                                : "no parameters")<<endl;
-
-                            // Commands go here now, so GIT
-                            commandHandle(command, args, channelName, isAdmin);
-                        }
-                    }
-                }
-
-                else if (message.find(nick) != -1 && 
-                         toLower(message).find("o synerbot") == -1) // Be nice
-                    say(channel, "Hi " + name);
-            } else
-            {// Message is a user
-                // Only output if debug mode is on
-                if (debugMode == 3)
-                    cout<<name<<" said to me: "<<message<<endl;
-
-                extractCommandArgs(message, command, args);
-
-                // Commands go here now, now git
-                commandHandle(command, args, name, isAdmin);
-            }
-        }
-    }
-    */
 
     if (toUpper(cmd) == "PRIVMSG")
     {// Only actual messages should make it to this point
@@ -469,7 +404,6 @@ void IrcBot::AI(string sender, string cmd, string msg)
                     }
                 }
             }
-
             else if (message.find(nick) != -1 && 
                      toLower(message).find("o synerbot") == -1) // Be nice
                 say(channel, "Hi " + name);
