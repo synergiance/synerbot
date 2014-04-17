@@ -9,6 +9,7 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
+#include <unistd.h>
 
 using namespace std;
 
@@ -20,6 +21,31 @@ NetSocket::NetSocket(string server, string port);
 
 NetSocket::~NetSocket()
 {// This will close our socket when we kill the network class
+    //code
+}
+
+bool NetSocket::connect(string nick, string user)
+{
+    //code
+}
+
+void NetSocket::disconnect(string message)
+{// Tells the thread to hang up the call
+    toThread("net disconnect" + message);
+}
+
+void NetSocket::disconnect()
+{// Tells the thread to hang up the call
+    toThread("net disconnect");
+}
+
+void NetSocket::toThread(string data)
+{// Send some data to the thread
+    //code
+}
+
+void NetSocket::main()
+{// Contains the main loop for the NetSocket class
     //code
 }
 
@@ -51,7 +77,7 @@ void NetSocket::sendPong(string data)
     return;
 }
 
-void NetSocket::wait()
+void NetSocket::wait(bool& isNet, string& data)
 {// This will be doing some net magic
     //code
 }

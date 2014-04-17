@@ -9,6 +9,7 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
+#include <unistd.h>
 
 using namespace std;
 
@@ -29,20 +30,29 @@ public:
 
     // Call Functions
     bool connect(string nick, string user);
+    void disconnect(string message);
     void disconnect();
+
+    // Send data to thread
+    void toThread(string data);
 private:
-    // The socket
-    int socket;
+    // Sockets
+    int socket;  // The network
+    int pNet[2]; // Pipe to program
 
     // Variables
     string svrAddress;
     string svrPort;
+    string botNick;
+    string botUser;
 
     bool sendData(char *msg);
     bool sendData(string msg);
     bool sendLine(string msg);
     void sendPong(string data);
-    void wait();
+    void wait(bool& isNet, string& data);
+
+    void main();
 };
 
 #endif /* NETWORK_H_ */
