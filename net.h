@@ -16,11 +16,6 @@ using namespace std;
 #ifndef NETWORK_H_
 #define NETWORK_H_
 
-class NetShell
-{
-    //code
-};
-
 class NetSocket
 {
 public:
@@ -29,7 +24,7 @@ public:
     virtual ~NetSocket();
 
     // Call Functions
-    bool connect(string nick, string user);
+    int connect(string nick, string user);
     void disconnect(string message);
     void disconnect();
 
@@ -45,6 +40,7 @@ private:
     string svrPort;
     string botNick;
     string botUser;
+    bool isChild;
 
     bool sendData(char *msg);
     bool sendData(string msg);

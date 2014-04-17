@@ -24,9 +24,11 @@ NetSocket::~NetSocket()
     //code
 }
 
-bool NetSocket::connect(string nick, string user)
-{
-    //code
+int NetSocket::connect(string nick, string user)
+{// This will open 
+    int intReturn;
+    intReturn = 0;
+    return intReturn;
 }
 
 void NetSocket::disconnect(string message)
