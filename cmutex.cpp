@@ -28,7 +28,7 @@ void CMutex::push(string str)
     access(true, str);
 }
 
-string CMutex::pull();
+string CMutex::pull()
 {
     string str;
     access(false, str);
@@ -37,15 +37,10 @@ string CMutex::pull();
 
 void CMutex::access(bool adding, string& str)
 {
+    mtx.lock();
     if (adding)
-    {
-        mtx.lock();
         strBuffer.push_back(str);
-        mtx.unlock();
-    }
     else
-    {
-        mtx.lock();
         if (strBuffer.size() > 0)
         {
             str = strBuffer[0];
@@ -53,6 +48,5 @@ void CMutex::access(bool adding, string& str)
         }
         else
             str = "";
-        mtx.unlock();
-    }
+    mtx.unlock();
 }
