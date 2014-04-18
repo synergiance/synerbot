@@ -19,7 +19,21 @@ using namespace std;
 
 class CMutex
 {
-	//stuff
+public:
+    CMutex();
+    
+    // Access array
+    void push(string str);
+    string pull();
+private:
+    // Array
+    vector<string> strBuffer;
+
+    // Mutex
+    mutex mtx;
+
+    // Blocked function
+    void access(bool adding, string& str);
 };
 
 #endif /* CMUTEX_H_ */
