@@ -144,7 +144,7 @@ int CPrivleges::remUsr(int pos)
     int tmpRet = 0;
     if ((pos >= 0) && (pos < admins.size()))
     {
-        admins.erase(admins.begin()+pos+1);
+        admins.erase(admins.begin()+pos);
         addedUsers = true;
         saveFile();
     }

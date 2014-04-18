@@ -25,15 +25,34 @@ CMutex::CMutex()
 
 void CMutex::push(string str)
 {
-    //code
+    access(true, str);
 }
 
 string CMutex::pull();
 {
-    //code
+    string str;
+    access(false, str);
+    return str;
 }
 
 void CMutex::access(bool adding, string& str)
 {
-    //code
+    if (adding)
+    {
+        mtx.lock();
+        strBuffer.push_back(str);
+        mtx.unlock();
+    }
+    else
+    {
+        mtx.lock();
+        if (strBuffer.size() > 0)
+        {
+            str = strBuffer[0];
+            strBuffer.erase(strBuffer.begin());
+        }
+        else
+            str = "";
+        mtx.unlock();
+    }
 }
