@@ -12,6 +12,8 @@
 #include <thread>
 #include <mutex>
 #include <unistd.h>
+#include <condition_variable>
+#include <chrono>
 
 // Local includes
 #include "cmutex.h"
@@ -24,23 +26,35 @@ CMutex::CMutex()
 }
 
 void CMutex::push(string str)
-{
+{// Pushes some data to the mutex buffer
     access(true, str);
 }
 
-string CMutex::pull()
-{
-    string str;
-    access(false, str);
-    return str;
+bool CMutex::pull(string& str, int timeout) // Milliseconds
+{// Blocking function that conditionally blocks
+// Returns true if buffer is not empty
+    if (timeout >= 0)
+    {
+        unique_lock<mutex> lck(mtx);
+        if (timeout > 0)
+            cv.wait_for(lck,chrono::milliseconds(timeout));
+        else
+            cv.wait(lck);
+    }
+    return access(false, str);
 }
 
-void CMutex::access(bool adding, string& str)
-{
+bool CMutex::access(bool adding, string& str)
+{// Our mutex locked function, returns true if the buffer is not empty
+    bool bReturn = false;
     mtx.lock();
     if (adding)
+    {
         strBuffer.push_back(str);
+        bReturn = true;
+    }
     else
+    {
         if (strBuffer.size() > 0)
         {
             str = strBuffer[0];
@@ -48,5 +62,9 @@ void CMutex::access(bool adding, string& str)
         }
         else
             str = "";
+        if (strBuffer.size() > 0)
+            bReturn = true;
+    }
     mtx.unlock();
+    return bReturn;
 }

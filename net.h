@@ -5,12 +5,17 @@
  *      By: Tim Gerety
  */
 
+// Global Includes
 #include <string.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <unistd.h>
 
+// Local Includes
+#include "cmutex.h"
+
+// Obligatory namespace call
 using namespace std;
 
 #ifndef NETWORK_H_

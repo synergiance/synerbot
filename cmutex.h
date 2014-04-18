@@ -11,6 +11,7 @@
 #include <thread>
 #include <mutex>
 #include <unistd.h>
+#include <condition_variable>
 
 using namespace std;
 
@@ -21,19 +22,20 @@ class CMutex
 {
 public:
     CMutex();
-    
+
     // Access array
     void push(string str);
-    string pull();
+    bool pull(string& str, int timeout);
 private:
     // Array
     vector<string> strBuffer;
 
     // Mutex
     mutex mtx;
+    condition_variable cv;
 
     // Blocked function
-    void access(bool adding, string& str);
+    bool access(bool adding, string& str);
 };
 
 #endif /* CMUTEX_H_ */
