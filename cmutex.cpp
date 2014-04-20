@@ -27,7 +27,9 @@ CMutex::CMutex()
 
 void CMutex::push(string str)
 {// Pushes some data to the mutex buffer
+    unique_lock<mutex> lck(mtx);
     access(true, str);
+    cv.notify_all();
 }
 
 bool CMutex::pull(string& str, int timeout) // Milliseconds
