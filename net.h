@@ -31,15 +31,15 @@ public:
     virtual ~CNetSocket();
 
     // Call Functions
-    void connect(string nick, string user);
-    void disconnect(string message);
-    void disconnect();
+    void botConnect(string nick, string user);
+    void botDisconnect(string message);
+    void botDisconnect();
 
     // Send data to thread
     void toThread(string data);
 private:
     // Sockets
-    int socket;  // The network
+    int sockfd;  // The network
     int pNet[2]; // Pipe to program
 
     // Working classes

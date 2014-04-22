@@ -14,6 +14,9 @@
 #include <thread>
 #include <mutex>
 #include <stdlib.h>
+#include <netdb.h>
+#include <arpa/inet.h>
+#include <netinet/in.h>
 
 // Local Includes
 #include "net.h"
@@ -35,9 +38,9 @@ CNetSocket::~CNetSocket()
     //code
 }
 
-void CNetSocket::connect(string nick, string user)
+void CNetSocket::botConnect(string nick, string user)
 {// This will open a socket and start the thread
-    if (accessConnected())
+    if (!accessConnected())
     {// Ignore any requests while connected, can only connect once
         botNick = nick;
         botUser = user;
@@ -46,16 +49,16 @@ void CNetSocket::connect(string nick, string user)
     }
 }
 
-void CNetSocket::disconnect(string message)
+void CNetSocket::botDisconnect(string message)
 {// Tells the thread to hang up the call with specified message
     if (accessConnected())
     {
-        toThread("net disconnect" + message);
+        toThread("net disconnect " + message);
         netThread.join();
     }
 }
 
-void CNetSocket::disconnect()
+void CNetSocket::botDisconnect()
 {// Tells the thread to hang up the call
     if (accessConnected())
     {
@@ -71,7 +74,19 @@ void CNetSocket::toThread(string data)
 
 void CNetSocket::main()
 {// Contains the main loop for the CNetSocket class
-    //code
+    struct addrinfo hints, *res;
+
+    // Set up our hints variable
+    memset(&hints, 0, sizeof hints); // Clear hints out with memset
+    hints.ai_family = AF_UNSPEC; // IPv4 or IPv6
+    hints.ai_socktype = SOCK_STREAM; // Use stream socket
+
+    // Connect to the server
+    getaddrinfo(svrAddress.c_str(), svrPort.c_str(), &hints, &res);
+    sockfd = socket(res->ai_family, res->ai_socktype, res->ai_protocol);
+    connect(sockfd, res->ai_addr, res->ai_addrlen);
+
+    // INCOMPLETE
 }
 
 bool CNetSocket::sendData(string msg)
@@ -82,7 +97,7 @@ bool CNetSocket::sendData(string msg)
 bool CNetSocket::sendData(char *msg)
 {//Send some data (deprecated)
     int len = strlen(msg);
-    int bytes_sent = send(socket,msg,len,0);
+    int bytes_sent = send(sockfd,msg,len,0);
 
     if (bytes_sent == 0)
         return false;
