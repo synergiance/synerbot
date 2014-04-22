@@ -11,6 +11,9 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <unistd.h>
+#include <thread>
+#include <mutex>
+#include <stdlib.h>
 
 // Local Includes
 #include "net.h"
@@ -18,53 +21,68 @@
 
 using namespace std;
 
-NetSocket::NetSocket(string server, string port);
+CNetSocket::CNetSocket(string server, string port, CMutex& theQ)
 {// Just prime the pumps with a server address and port
     svrAddress = server;
     svrPort = port;
+    pipe(pNet);
+    MessageQueue = &theQ;
+    accessConnected(false);
 }
 
-NetSocket::~NetSocket()
+CNetSocket::~CNetSocket()
 {// This will close our socket when we kill the network class
     //code
 }
 
-int NetSocket::connect(string nick, string user)
-{// This will open 
-    int intReturn;
-    intReturn = 0;
-    return intReturn;
+void CNetSocket::connect(string nick, string user)
+{// This will open a socket and start the thread
+    if (accessConnected())
+    {// Ignore any requests while connected, can only connect once
+        botNick = nick;
+        botUser = user;
+        if (netThread.joinable()) netThread.join();
+        netThread = thread(&CNetSocket::main, this);
+    }
 }
 
-void NetSocket::disconnect(string message)
+void CNetSocket::disconnect(string message)
+{// Tells the thread to hang up the call with specified message
+    if (accessConnected())
+    {
+        toThread("net disconnect" + message);
+        netThread.join();
+    }
+}
+
+void CNetSocket::disconnect()
 {// Tells the thread to hang up the call
-    toThread("net disconnect" + message);
+    if (accessConnected())
+    {
+        toThread("net disconnect");
+        netThread.join();
+    }
 }
 
-void NetSocket::disconnect()
-{// Tells the thread to hang up the call
-    toThread("net disconnect");
-}
-
-void NetSocket::toThread(string data)
+void CNetSocket::toThread(string data)
 {// Send some data to the thread
     //code
 }
 
-void NetSocket::main()
-{// Contains the main loop for the NetSocket class
+void CNetSocket::main()
+{// Contains the main loop for the CNetSocket class
     //code
 }
 
-bool NetSocket::sendData(string msg)
+bool CNetSocket::sendData(string msg)
 {// String sendData interface
     return sendData((char*)msg.c_str());
 }
 
-bool NetSocket::sendData(char *msg)
+bool CNetSocket::sendData(char *msg)
 {//Send some data (deprecated)
     int len = strlen(msg);
-    int bytes_sent = send(s,msg,len,0);
+    int bytes_sent = send(socket,msg,len,0);
 
     if (bytes_sent == 0)
         return false;
@@ -72,7 +90,7 @@ bool NetSocket::sendData(char *msg)
         return true;
 }
 
-void NetSocket::sendPong(string data)
+void CNetSocket::sendPong(string data)
 {/* Pings must be replied with pongs or the connection will be
   * closed. See http://www.irchelp.org/irchelp/rfc/chapter4.html
   * for details
@@ -84,7 +102,35 @@ void NetSocket::sendPong(string data)
     return;
 }
 
-void NetSocket::wait(bool& isNet, string& data)
+void CNetSocket::wait(bool& isNet, string& data)
 {// This will be doing some net magic
     //code
+}
+
+bool CNetSocket::accessConnected(int val)
+{// Allows access to a mutex blocked boolean
+    bool bReturn = true;
+    mtxConnected.lock();
+    if (val >= 0)
+        bReturn = isConnected;
+    else
+        if (val == 0)
+            isConnected = false;
+        else
+            isConnected = true;
+    mtxConnected.unlock();
+    return bReturn;
+}
+
+bool CNetSocket::accessConnected()
+{// Overloaded function
+    return accessConnected(-1);
+}
+
+void CNetSocket::accessConnected(bool val)
+{// Overloaded function
+    if (val)
+        accessConnected(1);
+    else
+        accessConnected(0);
 }

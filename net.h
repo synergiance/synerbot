@@ -11,6 +11,8 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <unistd.h>
+#include <mutex>
+#include <thread>
 
 // Local Includes
 #include "cmutex.h"
@@ -21,15 +23,15 @@ using namespace std;
 #ifndef NETWORK_H_
 #define NETWORK_H_
 
-class NetSocket
+class CNetSocket
 {
 public:
     // Class Functions
-    NetSocket(string server, string port);
-    virtual ~NetSocket();
+    CNetSocket(string server, string port, CMutex& theQ);
+    virtual ~CNetSocket();
 
     // Call Functions
-    int connect(string nick, string user);
+    void connect(string nick, string user);
     void disconnect(string message);
     void disconnect();
 
@@ -40,12 +42,22 @@ private:
     int socket;  // The network
     int pNet[2]; // Pipe to program
 
+    // Working classes
+    CMutex* MessageQueue;
+    thread netThread;
+
     // Variables
     string svrAddress;
     string svrPort;
     string botNick;
     string botUser;
-    bool isChild;
+
+    bool isConnected; mutex mtxConnected;
+
+
+    bool accessConnected(int val);
+    bool accessConnected();
+    void accessConnected(bool val);
 
     bool sendData(char *msg);
     bool sendData(string msg);
