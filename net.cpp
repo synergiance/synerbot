@@ -79,6 +79,9 @@ void CNetSocket::main()
     bool keepGoing = false;
     string disconMessage;
 
+    int numbytes;
+    char buf[MAXDATASIZE];
+
     if (tmp == -1) // We didn't manage to connect
         MessageQueue->push("GLOBAL DISCONNECTED");
     else if (tmp == 0) // Socket connected fine
@@ -91,6 +94,7 @@ void CNetSocket::main()
         //code
     }
 
+    // Disconnect before we close
     if (disconMessage.compare("") != 0)
         sendLine("QUIT :" + disconMessage);
     close(sockfd);
