@@ -10,7 +10,7 @@ ibot: $(OBJ)
 main.o: main.cpp
 	$(CC) $(CFLAGS) main.cpp
 
-%.o: %.c %.h
+%.o: %.cpp %.h
 	$(CC) $(CFLAGS) -o $@ $<
 
 bin:
