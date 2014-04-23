@@ -28,7 +28,7 @@ using namespace std;
 
 #define MAXDATASIZE 100
 
-string CNetSocket::strDisconnected = "GLOBAL DISCONNECTED"
+string CNetSocket::strDisconnected = "GLOBAL DISCONNECTED";
 
 CNetSocket::CNetSocket(string server, string port, CMutex& theQ)
 {// Just prime the pumps with a server address and port
