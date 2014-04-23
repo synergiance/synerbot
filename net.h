@@ -59,6 +59,9 @@ private:
     bool accessConnected();
     void accessConnected(bool val);
 
+    int activateSocket();
+    void killSocket();
+
     bool sendData(char *msg);
     bool sendData(string msg);
     bool sendLine(string msg);

@@ -17,6 +17,7 @@
 #include <netdb.h>
 #include <arpa/inet.h>
 #include <netinet/in.h>
+#include <sstream>
 
 // Local Includes
 #include "net.h"
@@ -74,19 +75,33 @@ void CNetSocket::toThread(string data)
 
 void CNetSocket::main()
 {// Contains the main loop for the CNetSocket class
-    struct addrinfo hints, *res;
+    int tmp = activateSocket();
+    bool keepGoing = false;
+    string disconMessage;
 
-    // Set up our hints variable
-    memset(&hints, 0, sizeof hints); // Clear hints out with memset
-    hints.ai_family = AF_UNSPEC; // IPv4 or IPv6
-    hints.ai_socktype = SOCK_STREAM; // Use stream socket
+    if (tmp == -1) // We didn't manage to connect
+        MessageQueue->push("GLOBAL DISCONNECTED");
+    else if (tmp == 0) // Socket connected fine
+        keepGoing = true;
+    else // We may or may not want this special case
+        MessageQueue->push("GLOBAL DISCONNECTED");
 
-    // Connect to the server
-    getaddrinfo(svrAddress.c_str(), svrPort.c_str(), &hints, &res);
-    sockfd = socket(res->ai_family, res->ai_socktype, res->ai_protocol);
-    connect(sockfd, res->ai_addr, res->ai_addrlen);
+    while (keepGoing)
+    {// Main loop
+        //code
+    }
 
-    // INCOMPLETE
+    if (disconMessage.compare("") != 0)
+        sendLine("QUIT :" + disconMessage);
+    close(sockfd);
+    MessageQueue->push("GLOBAL DISCONNECTED");
+}
+
+bool sendLine(string msg)
+{
+    stringstream ss;
+    ss<<msg<<"\r\n";
+    sendData((char*)ss.str().c_str());
 }
 
 bool CNetSocket::sendData(string msg)
@@ -148,4 +163,26 @@ void CNetSocket::accessConnected(bool val)
         accessConnected(1);
     else
         accessConnected(0);
+}
+
+int CNetSocket::activateSocket()
+{// Start the network and return 0 if everything is fine
+    struct addrinfo hints, *res; int s = 0;
+
+    // Set up our hints variable
+    memset(&hints, 0, sizeof hints); // Clear hints out with memset
+    hints.ai_family = AF_UNSPEC; // IPv4 or IPv6
+    hints.ai_socktype = SOCK_STREAM; // Use stream socket
+
+    // Connect to the server
+    s = getaddrinfo(svrAddress.c_str(), svrPort.c_str(), &hints, &res);
+    if (s != 0) return -3;
+    sockfd = socket(res->ai_family, res->ai_socktype, res->ai_protocol);
+    if (sockfd == -1) return -2;
+    s = connect(sockfd, res->ai_addr, res->ai_addrlen);
+    if (s == -1) { close(sockfd); return -1; }
+
+    freeaddrinfo(res);
+
+    return 0;
 }
