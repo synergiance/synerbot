@@ -57,3 +57,27 @@ string makeBorder(string title)
         str += '-';
     return str;
 }
+
+bool getFirstWord(string message, string& first, string& rest)
+{// This method separates a word from the rest of a string
+    bool ecaStatus = false;
+    int tmp; string str = message;
+    trimWhite(str);
+    tmp = str.find(" ");
+    if (str.compare("") != 0 && tmp != 0)
+    {// Make sure string is not blank
+        if (tmp == -1)
+        {// Only one word
+            first = str;
+            rest = "";
+        }
+        else
+        {// Multiple words
+            first = str.substr(0, tmp++);
+            rest = str.substr(tmp, str.size() - tmp);
+            trimWhite(rest);
+        }
+        ecaStatus = true;
+    }
+    return ecaStatus;
+}

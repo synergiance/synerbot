@@ -22,6 +22,7 @@
 // Local Includes
 #include "net.h"
 #include "cmutex.h"
+#include "miscbotlib.h"
 
 using namespace std;
 
@@ -80,6 +81,8 @@ void CNetSocket::main()
     int tmp = activateSocket();
     bool keepGoing = false;
     string disconMessage;
+    string netBuffer;
+    string pipeBuffer;
 
     int numbytes;
     char buf[MAXDATASIZE];
@@ -93,7 +96,14 @@ void CNetSocket::main()
 
     while (keepGoing)
     {// Main loop
-        //code
+        bool isNet; string str;
+        wait(isNet, str);
+        if (isNet)
+            netBuffer += str;
+        else
+            pipeBuffer += str;
+
+        //code 
     }
 
     // Disconnect before we close
@@ -104,7 +114,7 @@ void CNetSocket::main()
 }
 
 bool CNetSocket::sendLine(string msg)
-{
+{// For people who are too lazy to put the CRLF chars on *raises hand*
     stringstream ss;
     ss<<msg<<"\r\n";
     sendData((char*)ss.str().c_str());
@@ -134,13 +144,14 @@ void CNetSocket::sendPong(string data)
     if (data == "")
         sendData((char*)"PONG\r\n");
     else
-        sendData("PONG " + data + "\n");
+        sendData("PONG " + data + "\r\n");
     return;
 }
 
 void CNetSocket::wait(bool& isNet, string& data)
 {// This will be doing some net magic
-    //code
+    int numbytes;
+    char buf[MAXDATASIZE];
 }
 
 bool CNetSocket::accessConnected(int val)
@@ -191,4 +202,40 @@ int CNetSocket::activateSocket()
     freeaddrinfo(res);
 
     return 0;
+}
+
+void CNetSocket::handleMessage(string data)
+{// At this point all the network fragmentation is gone
+// See: http://tools.ietf.org/html/rfc1459.html
+// See: https://tools.ietf.org/html/rfc2812
+
+    // Variables
+    string sender, command, message, str;
+    int code = 0;
+
+    // Let's grab the first word
+    if (!getFirstWord(data, sender, message)) return;
+
+    // Ping them back
+    if (toUpper(sender).compare("PING") == 0)
+        { sendPong(message); return; }
+
+    // Grab second word
+    if (!getFirstWord(message, command, str)) return;
+
+    // Grab numerical code
+    code = atoi(command.c_str());
+
+    // Check numerical
+    if (code > 0) // Use numerical handler
+        handleNumber(code, str);
+    else // Send to main thread for processing
+        MessageQueue->push("RAW " + data);
+
+    return;
+}
+
+void CNetSocket::handleNumber(int code, string message)
+{
+    //code
 }

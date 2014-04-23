@@ -69,6 +69,9 @@ private:
     void wait(bool& isNet, string& data);
 
     void main();
+
+    void handleMessage(string data);
+    void handleNumber(int code, string message);
 };
 
 #endif /* NETWORK_H_ */
