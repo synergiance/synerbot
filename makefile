@@ -24,5 +24,10 @@ miscbotlib.o: miscbotlib.cpp miscbotlib.h
 bin:
 	mkdir -p bin
 
-clean:
-	rm -rf *o ibot
+.PHONY: clean cleanobj
+
+clean: cleanobj
+	rm -rf ibot
+
+cleanobj:
+	rm -rf *.o
