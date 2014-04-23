@@ -28,6 +28,8 @@ using namespace std;
 
 #define MAXDATASIZE 100
 
+string CNetSocket::strDisconnected = "GLOBAL DISCONNECTED"
+
 CNetSocket::CNetSocket(string server, string port, CMutex& theQ)
 {// Just prime the pumps with a server address and port
     svrAddress = server;
@@ -88,11 +90,11 @@ void CNetSocket::main()
     char buf[MAXDATASIZE];
 
     if (tmp == -1) // We didn't manage to connect
-        MessageQueue->push("GLOBAL DISCONNECTED");
+        MessageQueue->push(strDisconnected);
     else if (tmp == 0) // Socket connected fine
         keepGoing = true;
     else // We may or may not want this special case
-        MessageQueue->push("GLOBAL DISCONNECTED");
+        MessageQueue->push(strDisconnected);
 
     while (keepGoing)
     {// Main loop
@@ -110,7 +112,7 @@ void CNetSocket::main()
     if (disconMessage.compare("") != 0)
         sendLine("QUIT :" + disconMessage);
     close(sockfd);
-    MessageQueue->push("GLOBAL DISCONNECTED");
+    MessageQueue->push(strDisconnected);
 }
 
 bool CNetSocket::sendLine(string msg)

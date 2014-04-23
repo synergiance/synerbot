@@ -54,6 +54,8 @@ private:
 
     bool isConnected; mutex mtxConnected;
 
+    // Static Variables
+    static string strDisconnected;
 
     bool accessConnected(int val);
     bool accessConnected();
