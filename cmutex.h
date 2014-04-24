@@ -31,7 +31,7 @@ private:
     vector<string> strBuffer;
 
     // Mutex
-    mutex mtx;
+    mutex mtx1, mtx2;
     condition_variable cv;
 
     // Blocked function
