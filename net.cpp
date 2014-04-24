@@ -352,11 +352,15 @@ void CNetSocket::handleMessage(string data)
     string sender, command, message, str;
     int code = 0;
 
+    cout<<"Test 1\n";
+
     // For debugging purposes
     if (debugMode == 6) MessageQueue->push("GLOBAL COUT " + data);
 
     // Let's grab the first word
     if (!getFirstWord(data, sender, message)) return;
+
+    cout<<"Test 2\n";
 
     // Ping them back
     if (toUpper(sender).compare("PING") == 0)
@@ -365,14 +369,20 @@ void CNetSocket::handleMessage(string data)
     // Grab second word
     if (!getFirstWord(message, command, str)) return;
 
+    cout<<"Test 3\n";
+
     // Grab numerical code
     code = atoi(command.c_str());
+
+    cout<<"Test 4\n";
 
     // Check numerical
     if (code > 0) // Use numerical handler
         handleNumber(sender, code, str);
     else // Send to main thread for processing
         MessageQueue->push("RAW " + data);
+
+    cout<<"Test 5\n";
 
     return;
 }
