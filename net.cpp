@@ -157,7 +157,7 @@ void CNetSocket::main()
             if (str.find("\r\n") == -1 || str.size() < 3) continue;
             str = str.substr(0, str.size() - 2);
             if (debugMode == 9) cout<<"PIPE: "<<str<<endl;
-            if (debugMode == 10)
+            if (debugMode == 10 || debugMode == 12)
                 MessageQueue->push("GLOBAL COUT PIPE: " + str);
             if (!pipeHandle(str)) keepGoing = false;
         }
@@ -330,18 +330,20 @@ bool CNetSocket::pipeHandle(string message)
 
     // Filters
     if (!getFirstWord(message, cmd, str)) return true;
-    if (debugMode == 11)
+    if (debugMode == 11 || debugMode == 12)
         MessageQueue->push("GLOBAL COUT NET: PIPE HANDLER LAUNCHED");
     if (toLower(cmd).compare("net") != 0) return true;
     if (!getFirstWord(str, cmd, args)) return true;
 
-    if (debugMode == 11)
+    if (debugMode == 11 || debugMode == 12)
         MessageQueue->push("GLOBAL COUT NET: " + toUpper(cmd));
 
     if (toLower(cmd).compare("disconnect") == 0)
     {// Disconnect from server
         if (args.compare("") != 0)
             disconMessage = args;
+        if (debugMode == 12)
+            cout<<"NET: Disconnect message: "<<disconMessage<<endl;
         return false;
     }
 

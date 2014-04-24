@@ -71,7 +71,7 @@ IrcBot::IrcBot(string cfg, int bDebug)
     loadQuotes(quoteFile);
 
     // Set other modules
-    if (debugMode == 8)
+    if (debugMode == 8 || debugMode == 12)
         MessageQueue = new (msgmem) CMutex(true);
     else
         MessageQueue = new (msgmem) CMutex();
