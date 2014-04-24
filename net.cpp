@@ -152,11 +152,12 @@ void CNetSocket::main()
         {// Separate messages in the pipe
             found++;
             str = strPipe.substr(0, found);
+            if (debugMode == 8) cout<<str<<endl;
             strPipe = strPipe.substr(found, strPipe.size() - found);
             found = strPipe.find('\n');
             if (str.find("\r\n") == -1 || str.size() < 3) continue;
             str = str.substr(0, str.size() - 2);
-            //cout<<"PIPE: "<<str<<endl;
+            if (debugMode == 9) cout<<"PIPE: "<<str<<endl;
             if (!pipeHandle(str)) keepGoing = false;
         }
 
@@ -165,13 +166,13 @@ void CNetSocket::main()
         {// Separate messages in the socket
             found++;
             str = strNet.substr(0, found);
+            if (debugMode == 8) cout<<str<<endl;
             strNet = strNet.substr(found, strNet.size() - found);
             found = strNet.find('\n');
             if (str.find("\r\n") == -1 || str.size() < 3) continue;
             str = str.substr(0, str.size() - 2);
-            //cout<<"NET: "<<str<<endl;
+            if (debugMode == 9) cout<<"NET: "<<str<<endl;
             handleMessage(str);
-            //cout<<"check\n";
         }
     }
     cout<<"Disconnect\n";
