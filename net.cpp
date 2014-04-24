@@ -77,11 +77,13 @@ void CNetSocket::botConnect(string nick, string user, string realName)
 {// This will open a socket and start the thread
     if (!accessConnected())
     {// Ignore any requests while connected, can only connect once
-        botNick = nick;
-        botUser = user;
+        botNick = nick; cout<<"Nick = "<<botNick<<endl;
+        botUser = user; cout<<"User = "<<botUser<<endl;
         botRealName = realName;
         if (netThread.joinable()) netThread.join();
+        cout<<"Creating thread...\n";
         netThread = thread(&CNetSocket::main, this);
+        cout<<"Thread created!\n";
     }
 }
 
@@ -118,6 +120,8 @@ void CNetSocket::main()
 
     int numbytes;
     char buf[MAXDATASIZE];
+
+    cout<<"THREAD: I'm alive\n";
 
     if (tmp == -1) // We didn't manage to connect
         MessageQueue->push(strDisconnected);
