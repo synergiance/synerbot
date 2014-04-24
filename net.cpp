@@ -73,12 +73,13 @@ bool CNetSocket::setDisconnectMessage(string message)
     return true;
 }
 
-void CNetSocket::botConnect(string nick, string user)
+void CNetSocket::botConnect(string nick, string user, string realName)
 {// This will open a socket and start the thread
     if (!accessConnected())
     {// Ignore any requests while connected, can only connect once
         botNick = nick;
         botUser = user;
+        botRealName = realName;
         if (netThread.joinable()) netThread.join();
         netThread = thread(&CNetSocket::main, this);
     }
@@ -125,10 +126,14 @@ void CNetSocket::main()
     else // We may or may not want this special case
         MessageQueue->push(strDisconnected);
 
+    // Send username info
+    sendData("NICK " + botNick + "\r\n");
+    sendData("USER " + botUser + " 8 * :" + botRealName + "\r\n");
+
     while (keepGoing)
     {// Main loop
         bool bNet, bPipe; string strNet, strPipe, str; int found;
-        wait(bNet, bPipe, strNet, strPipe);
+        if (!wait(bNet, bPipe, strNet, strPipe)) keepGoing = false;
         if (bNet)
             netBuffer += strNet;
         if (bPipe)
@@ -203,6 +208,7 @@ bool CNetSocket::wait(bool& bNet, bool& bPipe, string& strNet, string& strPipe)
 {// Wait on both the network and the pipe at once
     int numbytes;
     char buf[MAXDATASIZE];
+    bool bReturn;
 
     // Stuff for select/pselect
     fd_set rfds; // Read file descriptor set
@@ -227,11 +233,12 @@ bool CNetSocket::wait(bool& bNet, bool& bPipe, string& strNet, string& strPipe)
     retval = pselect(mfd, &rfds, NULL, NULL, &tv, NULL);
 
     if (retval == -1)
-        return false;
+        bReturn = false;
     else if (retval == 0)
-        return true;
+        bReturn = true;
     else
     {// Read available sockets
+        bReturn = true;
         if (FD_ISSET(pNet[0], &rfds))
         {// Network
             numbytes = read(pNet[0], buf, MAXDATASIZE - 1);
@@ -247,7 +254,7 @@ bool CNetSocket::wait(bool& bNet, bool& bPipe, string& strNet, string& strPipe)
             bNet = true;
         }
     }
-    return true;
+    return bReturn;
 }
 
 bool CNetSocket::accessConnected(int val)
@@ -377,11 +384,11 @@ void CNetSocket::handleNumber(string sender, int code, string message)
     {
 
     case 1: // This means we logged in successfully
-        MessageQueue->push("NUM CONNECTED");
+        MessageQueue->push("GLOBAL CONNECTED");
         break;
 
     case 376: // MOTD Footer is how we know we're connected
-        MessageQueue->push("NUM MOTD");
+        MessageQueue->push("GLOBAL MOTD");
     case 375: // MOTD Header
     case 372: // MOTD Content
         break;
@@ -402,7 +409,7 @@ void CNetSocket::handleNumber(string sender, int code, string message)
     
     // Channel nick list
     case 353: // Lists all nicknames prefixed with their mode
-        MessageQueue->push("NUM NICKLIST " + data);
+        MessageQueue->push("GLOBAL NICKLIST " + data);
     case 366: // "End of /NAMES list."
         break;
 

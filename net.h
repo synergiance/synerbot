@@ -32,7 +32,7 @@ public:
     virtual ~CNetSocket();
 
     // Call Functions
-    void botConnect(string nick, string user);
+    void botConnect(string nick, string user, string realName);
     void botDisconnect(string message);
     void botDisconnect();
 
@@ -56,6 +56,7 @@ private:
     string svrPort;
     string botNick;
     string botUser;
+    string botRealName;
     string disconMessage;
 
     bool isConnected; mutex mtxConnected;

@@ -1,6 +1,6 @@
 CC=g++
 CFLAGS=-c -std=c++11
-OBJ=main.o bot.o config.o privleges.o miscbotlib.o
+OBJ=main.o bot.o config.o privleges.o miscbotlib.o cmutex.o net.o
 
 all: ibot
 

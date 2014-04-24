@@ -11,6 +11,8 @@
 #include "config.h"
 #include "privleges.h"
 #include "miscbotlib.h"
+#include "net.h"
+#include "cmutex.h"
 
 // Global Includes
 #include <iostream>
@@ -46,6 +48,8 @@ IrcBot::IrcBot(string cfg, int bDebug)
     // Allocate memory
     char* bcfgint = new char[sizeof(CConfig)];
     char* bprmint = new char[sizeof(CPrivleges)];
+    char* netmem = new char[sizeof(CNetSocket)];
+    char* msgmem = new char[sizeof(CMutex)];
 
     // Set modules
     botConfig = new (bcfgint) CConfig(cfg);
@@ -65,17 +69,23 @@ IrcBot::IrcBot(string cfg, int bDebug)
     quoteFile = "quotes.txt";
     addedQuotes = false;
     loadQuotes(quoteFile);
+
+    // Set other modules
+    MessageQueue = new (msgmem) CMutex();
+    botSock = new (netmem) CNetSocket(server, port, *MessageQueue, bDebug);
 }
 
 IrcBot::~IrcBot()
 {
-    sendData((char*)"QUIT :Watch out for them, they're coming for you!\r\n");
-    close (s);
+    //sendData((char*)"QUIT :Watch out for them, they're coming for you!\r\n");
+    //close (s);
+    botSock->botDisconnect();
     saveQuotes(quoteFile);
 }
 
 void IrcBot::start()
 {
+    /*
     struct addrinfo hints, *servinfo;
 
     //Setup run with no errors
@@ -171,6 +181,31 @@ void IrcBot::start()
             break;
         }
     }
+    */
+    bool keepRunning = true;
+
+    // Initialize a random seed
+    srand(time(NULL));
+
+    botSock->botConnect(nick, usr, realName);
+
+    string str;
+
+    while (keepRunning)
+    {// Main loop
+        str = ""; // Reset string just in case
+        if (MessageQueue->pull(str, 5))
+        {
+            string cmd, msg;
+            if (!getFirstWord(str, cmd, msg)) continue;
+            if (msg.compare("") == 0) continue;
+            if (toUpper(cmd).compare("RAW") == 0)
+                msgHandel(msg);
+            if (toUpper(cmd).compare("GLOBAL") == 0)
+                if (!globalHandle(msg)) keepRunning = false;
+        }
+    }
+    saveQuotes(quoteFile);
 }
 
 
@@ -188,12 +223,14 @@ char * IrcBot::timeNow()
 
 bool IrcBot::sendData(string msg)
 {// String sendData interface
-    return sendData((char*)msg.c_str());
+    //return sendData((char*)msg.c_str());
+    botSock->toThread("send " + msg);
 }
 
 
 bool IrcBot::sendData(char *msg)
 {//Send some data (deprecated)
+    /*
     int len = strlen(msg);
     int bytes_sent = send(s,msg,len,0);
 
@@ -201,6 +238,7 @@ bool IrcBot::sendData(char *msg)
         return false;
     else
         return true;
+    */;
 }
 
 
@@ -216,6 +254,20 @@ void IrcBot::sendPong(string data)
     return;
 }
 
+
+bool IrcBot::globalHandle(string cmd)
+{// Global stuff
+    string command, message;
+    if (!getFirstWord(cmd, command, message)) return true;
+    if (toUpper(command).compare("DISCONNECT") == 0)
+    { botSock->botDisconnect(); return false; }
+    if (toUpper(command).compare("DISCONNECTED") == 0) return false;
+    if (toUpper(command).compare("MOTD") == 0)
+    {
+        cout<<"Joining "<<channelName<<"\n";
+        sendData("JOIN " + channelName + "\r\n");
+    }
+}
 
 int IrcBot::msgParse(string buf, string& sender, string& message, string& cmd)
 {// Grabs IRC sender, message code, and message

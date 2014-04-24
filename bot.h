@@ -11,6 +11,8 @@
 
 #include "config.h"
 #include "privleges.h"
+#include "net.h"
+#include "cmutex.h"
 
 using namespace std;
 
@@ -44,6 +46,8 @@ private:
 
     CConfig* botConfig;
     CPrivleges* botPriv;
+    CNetSocket* botSock;
+    CMutex* MessageQueue;
 
     // Important static values
     static long atoimax;
@@ -64,6 +68,7 @@ private:
 
     void sendPong(string data);
 
+    bool globalHandle(string cmd);
     void msgHandel(string buf);
 
     int msgParse(string buf, string& sender, string& message, string& cmd);
