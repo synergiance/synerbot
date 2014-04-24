@@ -53,7 +53,7 @@ bool CMutex::access(bool adding, string& str)
     bool bReturn = false;
     cout<<"MUTEX: Locking\n";
     mtx.lock();
-    cout<<"MUTEX: Locked\n"
+    cout<<"MUTEX: Locked\n";
     if (adding)
     {
         cout<<"Adding\n";
