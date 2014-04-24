@@ -173,7 +173,7 @@ bool CNetSocket::sendLine(string msg)
 {// For people who are too lazy to put the CRLF chars on *raises hand*
     stringstream ss;
     ss<<msg<<"\r\n";
-    sendData((char*)ss.str().c_str());
+    return sendData((char*)ss.str().c_str());
 }
 
 bool CNetSocket::sendData(string msg)

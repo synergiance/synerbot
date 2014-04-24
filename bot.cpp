@@ -225,6 +225,7 @@ bool IrcBot::sendData(string msg)
 {// String sendData interface
     //return sendData((char*)msg.c_str());
     botSock->toThread("send " + msg);
+    return true;
 }
 
 
@@ -238,7 +239,8 @@ bool IrcBot::sendData(char *msg)
         return false;
     else
         return true;
-    */;
+    */
+    return true;
 }
 
 
@@ -266,6 +268,7 @@ bool IrcBot::globalHandle(string cmd)
     {
         cout<<"Joining "<<channelName<<"\n";
         sendData("JOIN " + channelName + "\r\n");
+        return true;
     }
 }
 
