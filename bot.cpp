@@ -196,9 +196,12 @@ void IrcBot::start()
 
     while (keepRunning)
     {// Main loop
+        bool moreBuffer; // If there's more buffer in the buffer
         str = ""; // Reset string just in case
-        if (MessageQueue->pull(str, 0))
-        {
+        // Prime the pump with a first message queue call
+        moreBuffer = MessageQueue->pull(str, 0);
+        do
+        { // We want this to run at least once
             string cmd, msg;
             if (!getFirstWord(str, cmd, msg)) continue;
             if (msg.compare("") == 0) continue;
@@ -206,7 +209,8 @@ void IrcBot::start()
                 msgHandel(msg);
             if (toUpper(cmd).compare("GLOBAL") == 0)
                 if (!globalHandle(msg)) keepRunning = false;
-        }
+            if (moreBuffer) moreBuffer = MessageQueue->pull(str, -1);
+        } while (moreBuffer);
     }
     saveQuotes(quoteFile);
 }
