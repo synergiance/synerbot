@@ -36,6 +36,7 @@ void CMutex::push(string str)
 bool CMutex::pull(string& str, int timeout) // Milliseconds
 {// Blocking function that conditionally blocks
 // Returns true if buffer is not empty
+    cout<<"Before before remove\n";
     if (timeout >= 0)
     {
         unique_lock<mutex> lck(mtx);
