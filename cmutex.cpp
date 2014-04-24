@@ -28,6 +28,7 @@ CMutex::CMutex()
 void CMutex::push(string str)
 {// Pushes some data to the mutex buffer
     unique_lock<mutex> lck(mtx);
+    cout<<"Before Add Mutex\n";
     access(true, str);
     cv.notify_all();
 }
@@ -53,15 +54,16 @@ bool CMutex::access(bool adding, string& str)
     mtx.lock();
     if (adding)
     {
-        cout<<"Adding "<<str<<endl;
+        cout<<"Adding\n";
         strBuffer.push_back(str);
-        cout<<"Done\n";
         bReturn = true;
     }
     else
     {
+        cout<<"Checking\n";
         if (strBuffer.size() > 0)
         {
+            cout<<"Removing\n";
             str = strBuffer[0];
             strBuffer.erase(strBuffer.begin());
         }
