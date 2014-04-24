@@ -35,7 +35,7 @@ void sigHandler(int signum)
         case 2:
             cout<<"\nDetected ctrl+c, exiting...\n";
             bot->stop();
-            //exit(signum);
+            exit(signum);
             break;
 
         // Mistake
