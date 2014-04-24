@@ -155,7 +155,7 @@ void CNetSocket::main()
             found = strPipe.find('\n');
             if (str.find("\r\n") == -1 || str.size() < 3) continue;
             str = str.substr(0, str.size() - 2);
-            cout<<"PIPE: "<<str<<endl;
+            //cout<<"PIPE: "<<str<<endl;
             if (!pipeHandle(str)) keepGoing = false;
         }
 
@@ -167,9 +167,9 @@ void CNetSocket::main()
             found = strNet.find('\n');
             if (str.find("\r\n") == -1 || str.size() < 3) continue;
             str = str.substr(0, str.size() - 2);
-            cout<<"NET: "<<str<<endl;
+            //cout<<"NET: "<<str<<endl;
             handleMessage(str);
-            cout<<"check\n";
+            //cout<<"check\n";
         }
     }
     cout<<"Disconnect\n";
