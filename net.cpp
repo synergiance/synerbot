@@ -330,12 +330,12 @@ bool CNetSocket::pipeHandle(string message)
 
     // Filters
     if (!getFirstWord(message, cmd, str)) return true;
-    if (debugMode = 11)
+    if (debugMode == 11)
         MessageQueue->push("GLOBAL COUT NET: PIPE HANDLER LAUNCHED\n");
     if (toLower(cmd).compare("net") != 0) return true;
     if (!getFirstWord(str, cmd, args)) return true;
 
-    if (debugMode = 11)
+    if (debugMode == 11)
         MessageQueue->push("GLOBAL COUT NET: " + toUpper(cmd) + "\n");
 
     if (toLower(cmd).compare("disconnect") == 0)
