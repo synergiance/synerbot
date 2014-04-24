@@ -169,6 +169,7 @@ void CNetSocket::main()
             str = str.substr(0, str.size() - 2);
             cout<<"NET: "<<str<<endl;
             handleMessage(str);
+            cout<<"check\n";
         }
     }
     cout<<"Disconnect\n";
