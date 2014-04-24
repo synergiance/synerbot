@@ -266,7 +266,7 @@ bool CNetSocket::accessConnected(int val)
 {// Allows access to a mutex blocked boolean
     bool bReturn = true;
     mtxConnected.lock();
-    if (val >= 0)
+    if (val < 0)
         bReturn = isConnected;
     else
         if (val == 0)
