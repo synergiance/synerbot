@@ -72,7 +72,6 @@ IrcBot::IrcBot(string cfg, int bDebug)
 
     // Set other modules
     MessageQueue = new (msgmem) CMutex();
-    cout<<"Creating network class\n";
     botSock = new (netmem) CNetSocket(server, port, *MessageQueue, bDebug);
 }
 
@@ -270,6 +269,7 @@ bool IrcBot::globalHandle(string cmd)
         cout<<"Joining "<<channelName<<"\n";
         sendData("JOIN " + channelName + "\r\n");
     }
+    if (toUpper(command).compare("COUT") == 0) cout<<message<<endl;
     return true;
 }
 

@@ -57,7 +57,6 @@ void CNetSocket::setup()
 {// Prime defaults
     pipe(pNet);
     accessConnected(false);
-    cout<<"Network setup complete\n";
 }
 
 CNetSocket::~CNetSocket()
@@ -78,13 +77,12 @@ void CNetSocket::botConnect(string nick, string user, string realName)
 {// This will open a socket and start the thread
     if (!accessConnected())
     {// Ignore any requests while connected, can only connect once
-        botNick = nick; cout<<"Nick = "<<botNick<<endl;
-        botUser = user; cout<<"User = "<<botUser<<endl;
+        botNick = nick;
+        botUser = user;
         botRealName = realName;
         if (netThread.joinable()) netThread.join();
-        cout<<"Creating thread...\n";
+        cout<<"Starting network...\n";
         netThread = thread(&CNetSocket::main, this);
-        cout<<"Thread created!\n";
     }
 }
 
@@ -346,7 +344,7 @@ void CNetSocket::handleMessage(string data)
     int code = 0;
 
     // For debugging purposes
-    if (debugMode == 6) MessageQueue->push("COUT " + data);
+    if (debugMode == 6) MessageQueue->push("GLOBAL COUT " + data);
 
     // Let's grab the first word
     if (!getFirstWord(data, sender, message)) return;
@@ -381,7 +379,7 @@ void CNetSocket::handleNumber(string sender, int code, string message)
     if (debugMode == 5)
     {// For debugging purposes
         stringstream ss;
-        ss<<"COUT ("<<code<<") "<<data;
+        ss<<"GLOBAL COUT ("<<code<<") "<<data;
         MessageQueue->push(ss.str());
     }
 
@@ -428,7 +426,7 @@ void CNetSocket::handleNumber(string sender, int code, string message)
         if (debugMode == 4)
         {// For debugging purposes
             stringstream ss;
-            ss<<"COUT ("<<code<<") "<<data;
+            ss<<"GLOBAL COUT ("<<code<<") "<<data;
             MessageQueue->push(ss.str());
         }
         break;
