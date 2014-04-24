@@ -58,6 +58,7 @@ private:
     vector<string> bufquotes;
 
     bool addedQuotes;
+    volatile sig_atomic_t stopping = 0;
 
     // Functions
     char * timeNow();

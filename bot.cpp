@@ -82,7 +82,7 @@ IrcBot::~IrcBot()
 {
     //sendData((char*)"QUIT :Watch out for them, they're coming for you!\r\n");
     //close (s);
-    stop();
+    botSock->botDisconnect();
     saveQuotes(quoteFile);
 }
 
@@ -90,7 +90,8 @@ void IrcBot::stop()
 {
     //sendData((char*)"QUIT :Watch out for them, they're coming for you!\r\n");
     //close (s);
-    botSock->botDisconnect();
+    stopping = 1;
+    //botSock->botDisconnect();
 }
 
 void IrcBot::start()
@@ -210,6 +211,7 @@ void IrcBot::start()
         do
         { // We want this to run at least once
             string cmd, msg;
+            if (stopping == 1) botSock->botDisconnect();
             if (!getFirstWord(str, cmd, msg)) continue;
             if (msg.compare("") == 0) continue;
             if (toUpper(cmd).compare("RAW") == 0)

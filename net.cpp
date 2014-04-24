@@ -91,6 +91,7 @@ void CNetSocket::botDisconnect(string message)
     if (accessConnected())
     {
         toThread("net disconnect " + message);
+        cout<<"Disconnecting...\n";
         if (netThread.joinable()) netThread.join();
     }
 }
