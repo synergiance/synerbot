@@ -30,6 +30,8 @@ private:
     // Array
     vector<string> strBuffer;
 
+    bool debugMode;
+
     // Mutex
     mutex mtx1, mtx2;
     condition_variable cv;

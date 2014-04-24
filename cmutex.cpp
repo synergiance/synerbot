@@ -25,6 +25,12 @@ CMutex::CMutex()
     strBuffer.clear();
 }
 
+CMutex::CMutex(bool debug)
+{
+    strBuffer.clear();
+    debugMode = debug;
+}
+
 void CMutex::push(string str)
 {// Pushes some data to the mutex buffer
     unique_lock<mutex> lck(mtx2);
@@ -71,6 +77,8 @@ bool CMutex::access(bool adding, string& str)
             //cout<<"Removing\n";
             str = strBuffer[0];
             strBuffer.erase(strBuffer.begin());
+            if (debugMode)
+                cout<<"Buffer size is now: "<<strBuffer.size()<<endl;
         }
         else
             str = "";

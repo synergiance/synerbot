@@ -71,7 +71,10 @@ IrcBot::IrcBot(string cfg, int bDebug)
     loadQuotes(quoteFile);
 
     // Set other modules
-    MessageQueue = new (msgmem) CMutex();
+    if (debugMode == 8)
+        MessageQueue = new (msgmem) CMutex(true);
+    else
+        MessageQueue = new (msgmem) CMutex();
     botSock = new (netmem) CNetSocket(server, port, *MessageQueue, bDebug);
 }
 
