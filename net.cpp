@@ -13,11 +13,14 @@
 #include <unistd.h>
 #include <thread>
 #include <mutex>
+#include <stdio.h>
 #include <stdlib.h>
 #include <netdb.h>
 #include <arpa/inet.h>
 #include <netinet/in.h>
 #include <sstream>
+#include <sys/select.h>
+#include <sys/time.h>
 
 // Local Includes
 #include "net.h"
@@ -34,14 +37,40 @@ CNetSocket::CNetSocket(string server, string port, CMutex& theQ)
 {// Just prime the pumps with a server address and port
     svrAddress = server;
     svrPort = port;
-    pipe(pNet);
+    debugMode = 0;
     MessageQueue = &theQ;
+    disconMessage = "Watch out for them, they're coming for you!";
+    setup();
+}
+
+CNetSocket::CNetSocket(string server, string port, CMutex& theQ, int debug)
+{// Just prime the pumps with a server address and port
+    svrAddress = server;
+    svrPort = port;
+    debugMode = debug;
+    MessageQueue = &theQ;
+    disconMessage = "Watch out for them, they're coming for you!";
+    setup();
+}
+
+void CNetSocket::setup()
+{// Prime defaults
+    pipe(pNet);
     accessConnected(false);
 }
 
 CNetSocket::~CNetSocket()
 {// This will close our socket when we kill the network class
-    //code
+    botDisconnect();
+}
+
+bool CNetSocket::setDisconnectMessage(string message)
+{
+    if (accessConnected())
+        return false;
+    else
+        disconMessage = message;
+    return true;
 }
 
 void CNetSocket::botConnect(string nick, string user)
@@ -75,14 +104,14 @@ void CNetSocket::botDisconnect()
 
 void CNetSocket::toThread(string data)
 {// Send some data to the thread
-    //code
+    string str = data + "\r\n";
+    write(pNet[1], str.c_str(), str.size() + 1);
 }
 
 void CNetSocket::main()
 {// Contains the main loop for the CNetSocket class
     int tmp = activateSocket();
     bool keepGoing = false;
-    string disconMessage;
     string netBuffer;
     string pipeBuffer;
 
@@ -98,14 +127,34 @@ void CNetSocket::main()
 
     while (keepGoing)
     {// Main loop
-        bool isNet; string str;
-        wait(isNet, str);
-        if (isNet)
-            netBuffer += str;
-        else
-            pipeBuffer += str;
+        bool bNet, bPipe; string strNet, strPipe, str; int found;
+        wait(bNet, bPipe, strNet, strPipe);
+        if (bNet)
+            netBuffer += strNet;
+        if (bPipe)
+            pipeBuffer += strPipe;
 
-        //code 
+        found = strPipe.find('\n');
+        while (found != -1)
+        {// Separate messages in the pipe
+            found++;
+            str = strPipe.substr(0, found);
+            found = strPipe.find('\n');
+            if (str.find("\r\n") == -1 || str.size() < 3) continue;
+            str = str.substr(0, str.size() - 2);
+            if (!pipeHandle(str)) keepGoing = false;
+        }
+
+        found = strNet.find('\n');
+        while (found != -1)
+        {// Separate messages in the socket
+            found++;
+            str = strNet.substr(0, found);
+            found = strNet.find('\n');
+            if (str.find("\r\n") == -1 || str.size() < 3) continue;
+            str = str.substr(0, str.size() - 2);
+            handleMessage(str);
+        }
     }
 
     // Disconnect before we close
@@ -150,10 +199,55 @@ void CNetSocket::sendPong(string data)
     return;
 }
 
-void CNetSocket::wait(bool& isNet, string& data)
-{// This will be doing some net magic
+bool CNetSocket::wait(bool& bNet, bool& bPipe, string& strNet, string& strPipe)
+{// Wait on both the network and the pipe at once
     int numbytes;
     char buf[MAXDATASIZE];
+
+    // Stuff for select/pselect
+    fd_set rfds; // Read file descriptor set
+    struct timespec tv; // Timeout
+    int retval; // Just a return value
+    int mfd; // The highest fd
+
+    FD_ZERO(&rfds); // Zero out the descriptor set
+    FD_SET(pNet[0], &rfds); // Add pipe to descriptor set
+    FD_SET(sockfd, &rfds); // Add network to descriptor set
+
+    // Get higher file descriptor
+    if (sockfd > pNet[0])
+        mfd = sockfd + 1;
+    else
+        mfd = pNet[0] + 1;
+
+    // Set to 1/100th of a second
+    tv.tv_sec = 0;
+    tv.tv_nsec = 10000;
+
+    retval = pselect(mfd, &rfds, NULL, NULL, &tv, NULL);
+
+    if (retval == -1)
+        return false;
+    else if (retval == 0)
+        return true;
+    else
+    {// Read available sockets
+        if (FD_ISSET(pNet[0], &rfds))
+        {// Network
+            numbytes = read(pNet[0], buf, MAXDATASIZE - 1);
+            buf[numbytes] = '\0';
+            strPipe = buf;
+            bPipe = true;
+        }
+        if (FD_ISSET(sockfd, &rfds))
+        {// Pipe
+            numbytes = recv(sockfd, buf, MAXDATASIZE - 1, 0);
+            buf[numbytes] = '\0';
+            strNet = buf;
+            bNet = true;
+        }
+    }
+    return true;
 }
 
 bool CNetSocket::accessConnected(int val)
@@ -206,6 +300,30 @@ int CNetSocket::activateSocket()
     return 0;
 }
 
+bool CNetSocket::pipeHandle(string message)
+{// Handles anything that comes into the pipe
+    string cmd, args, str;
+
+    // Filters
+    if (!getFirstWord(message, cmd, str)) return true;
+    if (toLower(cmd).compare("net") != 0) return true;
+    if (!getFirstWord(str, cmd, args)) return true;
+
+    if (toLower(cmd).compare("disconnect") == 0)
+    {// Disconnect from server
+        if (args.compare("") != 0)
+            disconMessage = args;
+        return false;
+    }
+
+    // Send a message
+    if (toLower(cmd).compare("send") == 0)
+        if (args.compare("") != 0)
+            sendLine(args);
+
+    return true;
+}
+
 void CNetSocket::handleMessage(string data)
 {// At this point all the network fragmentation is gone
 // See: http://tools.ietf.org/html/rfc1459.html
@@ -214,6 +332,9 @@ void CNetSocket::handleMessage(string data)
     // Variables
     string sender, command, message, str;
     int code = 0;
+
+    // For debugging purposes
+    if (debugMode == 6) MessageQueue->push("COUT " + data);
 
     // Let's grab the first word
     if (!getFirstWord(data, sender, message)) return;
@@ -230,14 +351,75 @@ void CNetSocket::handleMessage(string data)
 
     // Check numerical
     if (code > 0) // Use numerical handler
-        handleNumber(code, str);
+        handleNumber(sender, code, str);
     else // Send to main thread for processing
         MessageQueue->push("RAW " + data);
 
     return;
 }
 
-void CNetSocket::handleNumber(int code, string message)
+void CNetSocket::handleNumber(string sender, int code, string message)
 {
-    //code
+    // Variables
+    string receiver, data;
+
+    // Let's get our other pieces or information
+    getFirstWord(message, receiver, data);
+
+    if (debugMode == 5)
+    {// For debugging purposes
+        stringstream ss;
+        ss<<"COUT ("<<code<<") "<<data;
+        MessageQueue->push(ss.str());
+    }
+
+    switch (code)
+    {
+
+    case 1: // This means we logged in successfully
+        MessageQueue->push("NUM CONNECTED");
+        break;
+
+    case 376: // MOTD Footer is how we know we're connected
+        MessageQueue->push("NUM MOTD");
+    case 375: // MOTD Header
+    case 372: // MOTD Content
+        break;
+    
+    // Server connect messages
+    case 2: // Server identity (with server type/version)
+    case 3: // This server was created <time/date stamp>
+    case 4: // Similar to 2
+    case 5: // Server capabilities
+    case 42: // Your unique ID (Inspircd)
+    case 251: // Network info?
+    case 252:
+    case 254: // I have x channels formed
+    case 255: // I have x clients and y servers
+    case 265: // Current local users
+    case 266: // Current global users
+        break;
+    
+    // Channel nick list
+    case 353: // Lists all nicknames prefixed with their mode
+        MessageQueue->push("NUM NICKLIST " + data);
+    case 366: // "End of /NAMES list."
+        break;
+
+    // Channel topic
+    case 332: // Topic
+    case 333: // User who set topic
+        break;
+
+    // Messages we don't yet handle will display on screen
+    default:
+        if (debugMode == 4)
+        {// For debugging purposes
+            stringstream ss;
+            ss<<"COUT ("<<code<<") "<<data;
+            MessageQueue->push(ss.str());
+        }
+        break;
+    }
+    return;
 }

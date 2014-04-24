@@ -28,6 +28,7 @@ class CNetSocket
 public:
     // Class Functions
     CNetSocket(string server, string port, CMutex& theQ);
+    CNetSocket(string server, string port, CMutex& theQ, int debug);
     virtual ~CNetSocket();
 
     // Call Functions
@@ -37,10 +38,14 @@ public:
 
     // Send data to thread
     void toThread(string data);
+
+    bool setDisconnectMessage(string message);
 private:
     // Sockets
     int sockfd;  // The network
     int pNet[2]; // Pipe to program
+
+    int debugMode;
 
     // Working classes
     CMutex* MessageQueue;
@@ -51,6 +56,7 @@ private:
     string svrPort;
     string botNick;
     string botUser;
+    string disconMessage;
 
     bool isConnected; mutex mtxConnected;
 
@@ -68,12 +74,16 @@ private:
     bool sendData(string msg);
     bool sendLine(string msg);
     void sendPong(string data);
-    void wait(bool& isNet, string& data);
+    bool wait(bool& bNet, bool& bPipe, string& strNet, string& strPipe);
+
+    bool pipeHandle(string message);
 
     void main();
 
+    void setup();
+
     void handleMessage(string data);
-    void handleNumber(int code, string message);
+    void handleNumber(string sender, int code, string message);
 };
 
 #endif /* NETWORK_H_ */
