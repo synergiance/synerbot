@@ -56,19 +56,19 @@ bool CMutex::access(bool adding, string& str)
     bool bReturn = false;
     //cout<<"MUTEX: Locking\n";
     mtx1.lock();
-    cout<<"MUTEX: Locked\n";
+    //cout<<"MUTEX: Locked\n";
     if (adding)
     {
-        cout<<"Adding\n";
+        //cout<<"Adding\n";
         strBuffer.push_back(str);
         bReturn = true;
     }
     else
     {
-        cout<<"Checking\n";
+        //cout<<"Checking\n";
         if (strBuffer.size() > 0)
         {
-            cout<<"Removing\n";
+            //cout<<"Removing\n";
             str = strBuffer[0];
             strBuffer.erase(strBuffer.begin());
         }
@@ -77,7 +77,7 @@ bool CMutex::access(bool adding, string& str)
         if (strBuffer.size() > 0)
             bReturn = true;
     }
-    cout<<"MUTEX: Unlocking\n";
+    //cout<<"MUTEX: Unlocking\n";
     mtx1.unlock();
     //cout<<"MUTEX: Unlocked\n";
     return bReturn;

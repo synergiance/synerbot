@@ -152,6 +152,7 @@ void CNetSocket::main()
         {// Separate messages in the pipe
             found++;
             str = strPipe.substr(0, found);
+            strPipe = strPipe.substr(found, strPipe.size() - found);
             found = strPipe.find('\n');
             if (str.find("\r\n") == -1 || str.size() < 3) continue;
             str = str.substr(0, str.size() - 2);
@@ -164,6 +165,7 @@ void CNetSocket::main()
         {// Separate messages in the socket
             found++;
             str = strNet.substr(0, found);
+            strNet = strNet.substr(found, strNet.size() - found);
             found = strNet.find('\n');
             if (str.find("\r\n") == -1 || str.size() < 3) continue;
             str = str.substr(0, str.size() - 2);
