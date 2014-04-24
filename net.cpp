@@ -145,6 +145,8 @@ void CNetSocket::main()
         if (bPipe)
             pipeBuffer += strPipe;
 
+        if (!keepGoing) cout<<"Net disconnect";
+        
         found = strPipe.find('\n');
         while (found != -1)
         {// Separate messages in the pipe
