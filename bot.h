@@ -28,6 +28,7 @@ public:
     bool setup;
 
     void start();
+    void stop();
 
 private:
     int s; //the socket descriptor
@@ -60,8 +61,6 @@ private:
 
     // Functions
     char * timeNow();
-
-    void loadConfig(string file);
 
     bool sendData(char *msg);
     bool sendData(string msg);
