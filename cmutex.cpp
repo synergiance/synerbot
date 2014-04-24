@@ -44,14 +44,16 @@ bool CMutex::pull(string& str, int timeout) // Milliseconds
         else
             cv.wait(lck);
     }
+    cout<<"Before Remove Mutex\n";
     return access(false, str);
 }
 
 bool CMutex::access(bool adding, string& str)
 {// Our mutex locked function, returns true if the buffer is not empty
     bool bReturn = false;
-    //cout<<"MUTEX: Locking\n";
+    cout<<"MUTEX: Locking\n";
     mtx.lock();
+    cout<<"MUTEX: Locked\n"
     if (adding)
     {
         cout<<"Adding\n";
@@ -72,7 +74,8 @@ bool CMutex::access(bool adding, string& str)
         if (strBuffer.size() > 0)
             bReturn = true;
     }
+    cout<<"MUTEX: Unlocking\n";
     mtx.unlock();
-    //cout<<"MUTEX: Unlocking\n";
+    cout<<"MUTEX: Unlocked\n";
     return bReturn;
 }
