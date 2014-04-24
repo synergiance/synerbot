@@ -152,7 +152,7 @@ void CNetSocket::main()
         {// Separate messages in the pipe
             found++;
             str = strPipe.substr(0, found);
-            if (debugMode == 8) cout<<str<<endl;
+            if (debugMode == 8) cout<<strPipe<<endl;
             strPipe = strPipe.substr(found, strPipe.size() - found);
             found = strPipe.find('\n');
             if (str.find("\r\n") == -1 || str.size() < 3) continue;
@@ -166,7 +166,7 @@ void CNetSocket::main()
         {// Separate messages in the socket
             found++;
             str = strNet.substr(0, found);
-            if (debugMode == 8) cout<<str<<endl;
+            if (debugMode == 8) cout<<strNet<<endl;
             strNet = strNet.substr(found, strNet.size() - found);
             found = strNet.find('\n');
             if (str.find("\r\n") == -1 || str.size() < 3) continue;
