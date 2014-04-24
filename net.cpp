@@ -145,8 +145,8 @@ void CNetSocket::main()
         if (bPipe)
             pipeBuffer += strPipe;
 
-        if (!keepGoing) cout<<"Net disconnect";
-        
+        if (!keepGoing) cout<<"Net disconnect\n";
+
         found = strPipe.find('\n');
         while (found != -1)
         {// Separate messages in the pipe
@@ -240,7 +240,11 @@ bool CNetSocket::wait(bool& bNet, bool& bPipe, string& strNet, string& strPipe)
     tv.tv_sec = 0;
     tv.tv_nsec = 10000;
 
+    cout<<"Before pselect\n";
+
     retval = pselect(mfd, &rfds, NULL, NULL, &tv, NULL);
+
+    cout<<"After pselect\n";
 
     if (retval == -1)
         bReturn = false;
