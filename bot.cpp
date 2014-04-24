@@ -82,8 +82,15 @@ IrcBot::~IrcBot()
 {
     //sendData((char*)"QUIT :Watch out for them, they're coming for you!\r\n");
     //close (s);
-    botSock->botDisconnect();
+    stop();
     saveQuotes(quoteFile);
+}
+
+void IrcBot::stop()
+{
+    //sendData((char*)"QUIT :Watch out for them, they're coming for you!\r\n");
+    //close (s);
+    botSock->botDisconnect();
 }
 
 void IrcBot::start()
