@@ -39,7 +39,9 @@ bool CMutex::pull(string& str, int timeout) // Milliseconds
     cout<<"Before before remove\n";
     if (timeout >= 0)
     {
+        cout<<"Before Unique lock\n";
         unique_lock<mutex> lck(mtx2);
+        cout<<"After Unique lock\n";
         if (timeout > 0)
             cv.wait_for(lck,chrono::milliseconds(timeout));
         else
