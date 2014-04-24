@@ -231,7 +231,7 @@ char * IrcBot::timeNow()
 bool IrcBot::sendData(string msg)
 {// String sendData interface
     //return sendData((char*)msg.c_str());
-    botSock->toThread("send " + msg);
+    botSock->toThread("net send " + msg);
     return true;
 }
 
