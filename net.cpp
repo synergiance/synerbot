@@ -147,28 +147,28 @@ void CNetSocket::main()
 
         if (!keepGoing) cout<<"Net disconnect\n";
 
-        found = strPipe.find('\n');
+        found = pipeBuffer.find('\n');
         while (found != -1)
         {// Separate messages in the pipe
             found++;
-            str = strPipe.substr(0, found);
-            if (debugMode == 8) cout<<strPipe<<endl;
-            strPipe = strPipe.substr(found, strPipe.size() - found);
-            found = strPipe.find('\n');
+            str = pipeBuffer.substr(0, found);
+            if (debugMode == 8) cout<<pipeBuffer<<endl;
+            pipeBuffer = pipeBuffer.substr(found, pipeBuffer.size() - found);
+            found = pipeBuffer.find('\n');
             if (str.find("\r\n") == -1 || str.size() < 3) continue;
             str = str.substr(0, str.size() - 2);
             if (debugMode == 9) cout<<"PIPE: "<<str<<endl;
             if (!pipeHandle(str)) keepGoing = false;
         }
 
-        found = strNet.find('\n');
+        found = netBuffer.find('\n');
         while (found != -1)
         {// Separate messages in the socket
             found++;
-            str = strNet.substr(0, found);
-            if (debugMode == 8) cout<<strNet<<endl;
-            strNet = strNet.substr(found, strNet.size() - found);
-            found = strNet.find('\n');
+            str = netBuffer.substr(0, found);
+            if (debugMode == 8) cout<<netBuffer<<endl;
+            netBuffer = netBuffer.substr(found, netBuffer.size() - found);
+            found = netBuffer.find('\n');
             if (str.find("\r\n") == -1 || str.size() < 3) continue;
             str = str.substr(0, str.size() - 2);
             if (debugMode == 9) cout<<"NET: "<<str<<endl;
