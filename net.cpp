@@ -57,6 +57,7 @@ void CNetSocket::setup()
 {// Prime defaults
     pipe(pNet);
     accessConnected(false);
+    cout<<"Network setup complete\n";
 }
 
 CNetSocket::~CNetSocket()
@@ -92,7 +93,7 @@ void CNetSocket::botDisconnect(string message)
     if (accessConnected())
     {
         toThread("net disconnect " + message);
-        netThread.join();
+        if (netThread.joinable()) netThread.join();
     }
 }
 
@@ -101,7 +102,7 @@ void CNetSocket::botDisconnect()
     if (accessConnected())
     {
         toThread("net disconnect");
-        netThread.join();
+        if (netThread.joinable()) netThread.join();
     }
 }
 

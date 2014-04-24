@@ -72,6 +72,7 @@ IrcBot::IrcBot(string cfg, int bDebug)
 
     // Set other modules
     MessageQueue = new (msgmem) CMutex();
+    cout<<"Creating network class\n";
     botSock = new (netmem) CNetSocket(server, port, *MessageQueue, bDebug);
 }
 
