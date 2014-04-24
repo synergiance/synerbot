@@ -194,7 +194,7 @@ void IrcBot::start()
     while (keepRunning)
     {// Main loop
         str = ""; // Reset string just in case
-        if (MessageQueue->pull(str, 5))
+        if (MessageQueue->pull(str, 0))
         {
             string cmd, msg;
             if (!getFirstWord(str, cmd, msg)) continue;
