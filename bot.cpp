@@ -268,8 +268,8 @@ bool IrcBot::globalHandle(string cmd)
     {
         cout<<"Joining "<<channelName<<"\n";
         sendData("JOIN " + channelName + "\r\n");
-        return true;
     }
+    return true;
 }
 
 int IrcBot::msgParse(string buf, string& sender, string& message, string& cmd)
