@@ -69,6 +69,9 @@ bool CMutex::access(bool adding, string& str)
         //cout<<"Adding\n";
         strBuffer.push_back(str);
         bReturn = true;
+        if (debugMode)
+            cout<<"Adding: "<<str<<endl
+                <<"Buffer size: "<<strBuffer.size()<<endl;
     }
     else
     {
@@ -79,7 +82,8 @@ bool CMutex::access(bool adding, string& str)
             str = strBuffer[0];
             strBuffer.erase(strBuffer.begin());
             if (debugMode)
-                cout<<"Buffer size is now: "<<strBuffer.size()<<endl;
+                cout<<"Pulling: "<<str<<endl
+                    <<"Buffer size: "<<strBuffer.size()<<endl;
         }
         else
             str = "";
