@@ -22,6 +22,7 @@ class CMutex
 {
 public:
     CMutex();
+    CMutex(bool debug);
 
     // Access array
     void push(string str);

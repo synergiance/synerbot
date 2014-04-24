@@ -23,6 +23,7 @@ using namespace std;
 CMutex::CMutex()
 {
     strBuffer.clear();
+    debugMode = false;
 }
 
 CMutex::CMutex(bool debug)
