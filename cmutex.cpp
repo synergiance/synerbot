@@ -27,7 +27,7 @@ CMutex::CMutex()
 
 void CMutex::push(string str)
 {// Pushes some data to the mutex buffer
-    unique_lock<mutex> lck(mtx);
+    unique_lock<mutex> lck(mtx2);
     cout<<"Before Add Mutex\n";
     access(true, str);
     cv.notify_all();
@@ -39,7 +39,7 @@ bool CMutex::pull(string& str, int timeout) // Milliseconds
     cout<<"Before before remove\n";
     if (timeout >= 0)
     {
-        unique_lock<mutex> lck(mtx);
+        unique_lock<mutex> lck(mtx2);
         if (timeout > 0)
             cv.wait_for(lck,chrono::milliseconds(timeout));
         else
@@ -53,7 +53,7 @@ bool CMutex::access(bool adding, string& str)
 {// Our mutex locked function, returns true if the buffer is not empty
     bool bReturn = false;
     cout<<"MUTEX: Locking\n";
-    mtx.lock();
+    mtx1.lock();
     cout<<"MUTEX: Locked\n";
     if (adding)
     {
@@ -76,7 +76,7 @@ bool CMutex::access(bool adding, string& str)
             bReturn = true;
     }
     cout<<"MUTEX: Unlocking\n";
-    mtx.unlock();
+    mtx1.unlock();
     cout<<"MUTEX: Unlocked\n";
     return bReturn;
 }
