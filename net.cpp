@@ -129,6 +129,8 @@ void CNetSocket::main()
     else // We may or may not want this special case
         MessageQueue->push(strDisconnected);
 
+    cout<<"Net status: "<<tmp<<endl;
+
     // Send username info
     sendData("NICK " + botNick + "\r\n");
     sendData("USER " + botUser + " 8 * :" + botRealName + "\r\n");
@@ -150,6 +152,7 @@ void CNetSocket::main()
             found = strPipe.find('\n');
             if (str.find("\r\n") == -1 || str.size() < 3) continue;
             str = str.substr(0, str.size() - 2);
+            cout<<"PIPE: "<<str<<endl;
             if (!pipeHandle(str)) keepGoing = false;
         }
 
@@ -161,6 +164,7 @@ void CNetSocket::main()
             found = strNet.find('\n');
             if (str.find("\r\n") == -1 || str.size() < 3) continue;
             str = str.substr(0, str.size() - 2);
+            cout<<"NET: "<<str<<endl;
             handleMessage(str);
         }
     }
