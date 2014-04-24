@@ -388,10 +388,12 @@ void CNetSocket::handleNumber(string sender, int code, string message)
 
     case 1: // This means we logged in successfully
         MessageQueue->push("GLOBAL CONNECTED");
+        cout<<"Connected\n";
         break;
 
     case 376: // MOTD Footer is how we know we're connected
         MessageQueue->push("GLOBAL MOTD");
+        cout<<"MOTD footer\n";
     case 375: // MOTD Header
     case 372: // MOTD Content
         break;
