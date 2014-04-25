@@ -45,6 +45,8 @@ IrcBot::IrcBot(string cfg, int bDebug)
 {
     debugMode = bDebug;
 
+    stopping = 0;
+
     // Allocate memory
     char* bcfgint = new char[sizeof(CConfig)];
     char* bprmint = new char[sizeof(CPrivleges)];
@@ -91,6 +93,7 @@ void IrcBot::stop()
     //sendData((char*)"QUIT :Watch out for them, they're coming for you!\r\n");
     //close (s);
     stopping = 1;
+    cout<<"Set stop flag\n";
     //botSock->botDisconnect();
 }
 
