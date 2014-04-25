@@ -58,7 +58,7 @@ private:
     vector<string> bufquotes;
 
     bool addedQuotes;
-    bool stopping;
+    volatile bool stopping;
 
     // Functions
     char * timeNow();
