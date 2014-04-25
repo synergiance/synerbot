@@ -210,19 +210,20 @@ void IrcBot::start()
 
         // Prime the pump with a first message queue call
         moreBuffer = MessageQueue->pull(str, 200);
+        if (debugMode == 13) cout<<"MAIN PROCESSING: "<<str<<endl;
         do
         { // We want this to run at least once
             string cmd, msg;
             if (stopping) botSock->botDisconnect();
             if (!getFirstWord(str, cmd, msg)) continue;
             if (msg.compare("") == 0) continue;
-            if (debugMode == 13) cout<<"MAIN PROCESSING: "<<str<<endl;
             if (toUpper(cmd).compare("RAW") == 0)
                 msgHandel(msg);
             if (toUpper(cmd).compare("GLOBAL") == 0)
                 if (!globalHandle(msg)) keepRunning = false;
             str = ""; // Reset string just in case
             if (moreBuffer) moreBuffer = MessageQueue->pull(str, -1);
+            if (debugMode == 13) cout<<"MAIN PROCESSING: "<<str<<endl;
         } while (moreBuffer);
     }
     saveQuotes(quoteFile);
