@@ -97,8 +97,6 @@ void CNetSocket::botDisconnect(string message)
 
 void CNetSocket::botDisconnect()
 {// Tells the thread to hang up the call
-    cout<<"This should be stopping the thread\n";
-    cout<<"accessConnected returns: "<<accessConnected()<<endl;
     if (accessConnected())
     {
         toThread("net disconnect");
