@@ -92,8 +92,9 @@ void IrcBot::stop()
 {
     //sendData((char*)"QUIT :Watch out for them, they're coming for you!\r\n");
     //close (s);
+    cout<<"Setting stop flag: "<<stopping<<endl;
     stopping = true;
-    cout<<"Set stop flag\n";
+    cout<<"Set stop flag: "<<stopping<<endl;
     //botSock->botDisconnect();
 }
 
@@ -215,6 +216,7 @@ void IrcBot::start()
         { // We want this to run at least once
             string cmd, msg;
             if (stopping) botSock->botDisconnect();
+            cout<<"Reading stopping: "<<stopping<<endl;
             if (!getFirstWord(str, cmd, msg)) continue;
             if (msg.compare("") == 0) continue;
             if (toUpper(cmd).compare("RAW") == 0)
