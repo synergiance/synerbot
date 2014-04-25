@@ -181,7 +181,7 @@ void CNetSocket::main()
             handleMessage(str);
         }
     }
-    cout<<"Disconnect\n";
+    MessageQueue->push("GLOBAL COUT Disconnecting...");
 
     // Disconnect before we close
     if (disconMessage.compare("") != 0)

@@ -33,7 +33,7 @@ void sigHandler(int signum)
     {
         // SIGINT
         case 2:
-            cout<<"\nDetected ctrl+c, exiting...\n";
+            cout<<"\nDetected ctrl+c\n";
             bot->stop();
             //exit(signum);
             break;
