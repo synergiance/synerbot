@@ -209,7 +209,7 @@ void IrcBot::start()
         bool moreBuffer; // If there's more buffer in the buffer
 
         // Prime the pump with a first message queue call
-        moreBuffer = MessageQueue->pull(str, 50);
+        moreBuffer = MessageQueue->pull(str, 200);
         do
         { // We want this to run at least once
             string cmd, msg;
