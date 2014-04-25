@@ -430,6 +430,7 @@ void CNetSocket::handleNumber(string sender, int code, string message)
         //cout<<"Connected\n";
         break;
 
+    case 422: // MOTD file missing
     case 376: // MOTD Footer is how we know we're connected
         MessageQueue->push("GLOBAL MOTD");
         //cout<<"MOTD footer\n";
@@ -444,7 +445,7 @@ void CNetSocket::handleNumber(string sender, int code, string message)
     case 5: // Server capabilities
     case 42: // Your unique ID (Inspircd)
     case 251: // Network info?
-    case 252:
+    case 252: // operators online
     case 254: // I have x channels formed
     case 255: // I have x clients and y servers
     case 265: // Current local users
