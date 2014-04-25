@@ -214,12 +214,12 @@ void IrcBot::start()
         do
         { // We want this to run at least once
             string cmd, msg;
-            cout<<"MAIN CHECK PROCESSING (1)\n";
+            if (debugMode == 13) cout<<"MAIN CHECK PROCESSING (1)\n";
             if (stopping) botSock->botDisconnect();
             if (!getFirstWord(str, cmd, msg)) continue;
-            cout<<"MAIN CHECK PROCESSING (2)\n";
+            if (debugMode == 13) cout<<"MAIN CHECK PROCESSING (2)\n";
             if (msg.compare("") == 0) continue;
-            cout<<"MAIN CHECK PROCESSING (3)\n";
+            if (debugMode == 13) cout<<"MAIN CHECK PROCESSING (3)\n";
             if (toUpper(cmd).compare("RAW") == 0)
                 msgHandel(msg);
             if (toUpper(cmd).compare("GLOBAL") == 0)
