@@ -45,7 +45,7 @@ IrcBot::IrcBot(string cfg, int bDebug)
 {
     debugMode = bDebug;
 
-    stopping = 0;
+    stopping = false;
 
     // Allocate memory
     char* bcfgint = new char[sizeof(CConfig)];
@@ -92,7 +92,7 @@ void IrcBot::stop()
 {
     //sendData((char*)"QUIT :Watch out for them, they're coming for you!\r\n");
     //close (s);
-    stopping = 1;
+    stopping = true;
     cout<<"Set stop flag\n";
     //botSock->botDisconnect();
 }
@@ -214,7 +214,7 @@ void IrcBot::start()
         do
         { // We want this to run at least once
             string cmd, msg;
-            if (stopping == 1) botSock->botDisconnect();
+            if (stopping) botSock->botDisconnect();
             if (!getFirstWord(str, cmd, msg)) continue;
             if (msg.compare("") == 0) continue;
             if (toUpper(cmd).compare("RAW") == 0)
