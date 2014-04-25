@@ -211,7 +211,7 @@ void IrcBot::start()
         if (moreBuffer)
             moreBuffer = MessageQueue->pull(str, -1);
         else
-            moreBuffer = MessageQueue->pull(str, 200);
+            moreBuffer = MessageQueue->pull(str, 500);
 
         if (stopping) botSock->botDisconnect();
         if (!getFirstWord(str, cmd, msg)) continue;
