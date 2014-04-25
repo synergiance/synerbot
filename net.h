@@ -59,7 +59,7 @@ private:
     string botRealName;
     string disconMessage;
 
-    bool isConnected; mutex mtxConnected;
+    volatile bool isConnected; mutex mtxConnected;
 
     // Static Variables
     static string strDisconnected;

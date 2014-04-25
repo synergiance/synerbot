@@ -136,6 +136,8 @@ void CNetSocket::main()
 
     cout<<"Net status: "<<tmp<<endl;
 
+    accessConnected(true);
+
     // Send username info
     sendData("NICK " + botNick + "\r\n");
     sendData("USER " + botUser + " 8 * :" + botRealName + "\r\n");
@@ -300,10 +302,12 @@ bool CNetSocket::accessConnected()
 
 void CNetSocket::accessConnected(bool val)
 {// Overloaded function
+    cout<<"Setting isConnected to: "<<val<<endl;
     if (val)
         accessConnected(1);
     else
         accessConnected(0);
+    cout<<"isConnected is now: "<<isConnected<<endl;
 }
 
 int CNetSocket::activateSocket()
