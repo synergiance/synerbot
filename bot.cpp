@@ -195,40 +195,31 @@ void IrcBot::start()
         }
     }
     */
-    bool keepRunning = true;
+    bool keepRunning = true, moreBuffer = false;
 
     // Initialize a random seed
     srand(time(NULL));
 
     botSock->botConnect(nick, usr, realName);
 
-    string str;
+    string str, cmd, msg;
 
     while (keepRunning)
     {// Main loop
-        bool moreBuffer; // If there's more buffer in the buffer
-        string cmd, msg;
+        str = ""; cmd = ""; msg = "";
 
-        // Prime the pump with a first message queue call
-        moreBuffer = MessageQueue->pull(str, 200);
-        if (debugMode == 13) cout<<"MAIN PROCESSING (1): "<<str<<endl;
-        do
-        { // We want this to run at least once
-            cmd = ""; msg = "";
-            if (debugMode == 13) cout<<"MAIN CHECK PROCESSING (1)\n";
-            if (stopping) botSock->botDisconnect();
-            if (!getFirstWord(str, cmd, msg)) continue;
-            if (debugMode == 13) cout<<"MAIN CHECK PROCESSING (2)\n";
-            if (msg.compare("") == 0) continue;
-            if (debugMode == 13) cout<<"MAIN CHECK PROCESSING (3)\n";
-            if (toUpper(cmd).compare("RAW") == 0)
-                msgHandel(msg);
-            if (toUpper(cmd).compare("GLOBAL") == 0)
-                if (!globalHandle(msg)) keepRunning = false;
-            str = ""; // Reset string just in case
-            if (moreBuffer) moreBuffer = MessageQueue->pull(str, -1);
-            if (debugMode == 13) cout<<"MAIN PROCESSING (2): "<<str<<endl;
-        } while (moreBuffer);
+        if (moreBuffer)
+            moreBuffer = MessageQueue->pull(str, -1);
+        else
+            moreBuffer = MessageQueue->pull(str, 200);
+        
+        if (stopping) botSock->botDisconnect();
+        if (!getFirstWord(str, cmd, msg)) continue;
+        if (msg.compare("") == 0) continue;
+        if (toUpper(cmd).compare("RAW") == 0)
+            msgHandel(msg);
+        if (toUpper(cmd).compare("GLOBAL") == 0)
+            if (!globalHandle(msg)) keepRunning = false;
     }
     saveQuotes(quoteFile);
 }

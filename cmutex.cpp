@@ -92,7 +92,6 @@ bool CMutex::access(bool adding, string& str)
     }
     //cout<<"MUTEX: Unlocking\n";
     mtx1.unlock();
-    if (debugMode) cout<<"Check string: "<<str<<endl;
     //cout<<"MUTEX: Unlocked\n";
     return bReturn;
 }
