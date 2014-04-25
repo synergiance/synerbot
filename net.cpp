@@ -120,6 +120,13 @@ void CNetSocket::main()
     int numbytes;
     char buf[MAXDATASIZE];
 
+    if (debugMode == 14)
+    {
+        stringstream ss;
+        ss<<"GLOBAL COUT Net Status: "<<tmp;
+        MessageQueue->push(ss.str());
+    }
+
     if (tmp == -1) // We didn't manage to connect
         MessageQueue->push(strDisconnected);
     else if (tmp == 0) // Socket connected fine
