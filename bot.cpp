@@ -73,7 +73,7 @@ IrcBot::IrcBot(string cfg, int bDebug)
     loadQuotes(quoteFile);
 
     // Set other modules
-    if (debugMode == 8 || debugMode == 12)
+    if (debugMode == 8 || debugMode == 13)
         MessageQueue = new (msgmem) CMutex(true);
     else
         MessageQueue = new (msgmem) CMutex();
@@ -279,6 +279,7 @@ void IrcBot::sendPong(string data)
 bool IrcBot::globalHandle(string cmd)
 {// Global stuff
     string command, message;
+    if (debugMode == 13) cout<<"GLOBAL HANDLER COMMAND: "<<cmd<<endl;
     if (!getFirstWord(cmd, command, message)) return true;
     if (toUpper(command).compare("DISCONNECT") == 0)
     { botSock->botDisconnect(); return false; }

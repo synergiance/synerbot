@@ -88,8 +88,6 @@ void CNetSocket::botConnect(string nick, string user, string realName)
 
 void CNetSocket::botDisconnect(string message)
 {// Tells the thread to hang up the call with specified message
-    cout<<"This should be stopping the thread\n";
-    cout<<"accessConnected returns: "<<accessConnected()<<endl;
     if (accessConnected())
     {
         toThread("net disconnect " + message);
@@ -190,6 +188,7 @@ void CNetSocket::main()
         sendLine("QUIT :" + disconMessage);
     close(sockfd);
     MessageQueue->push(strDisconnected);
+    accessConnected(false);
 }
 
 bool CNetSocket::sendLine(string msg)
@@ -302,12 +301,10 @@ bool CNetSocket::accessConnected()
 
 void CNetSocket::accessConnected(bool val)
 {// Overloaded function
-    cout<<"Setting isConnected to: "<<val<<endl;
     if (val)
         accessConnected(1);
     else
         accessConnected(0);
-    cout<<"isConnected is now: "<<isConnected<<endl;
 }
 
 int CNetSocket::activateSocket()
