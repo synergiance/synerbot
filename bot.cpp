@@ -213,11 +213,7 @@ void IrcBot::start()
         do
         { // We want this to run at least once
             string cmd, msg;
-            if (stopping)
-            {
-                cout<<"Thread should be stopping\n";
-                botSock->botDisconnect();
-            }
+            if (stopping) botSock->botDisconnect();
             if (!getFirstWord(str, cmd, msg)) continue;
             if (msg.compare("") == 0) continue;
             if (toUpper(cmd).compare("RAW") == 0)
