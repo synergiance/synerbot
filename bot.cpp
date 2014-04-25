@@ -214,9 +214,9 @@ void IrcBot::start()
         { // We want this to run at least once
             string cmd, msg;
             if (stopping) botSock->botDisconnect();
-            if (debugMode == 13) cout<<"MAIN PROCESSING: "<<str<<endl;
             if (!getFirstWord(str, cmd, msg)) continue;
             if (msg.compare("") == 0) continue;
+            if (debugMode == 13) cout<<"MAIN PROCESSING: "<<str<<endl;
             if (toUpper(cmd).compare("RAW") == 0)
                 msgHandel(msg);
             if (toUpper(cmd).compare("GLOBAL") == 0)
