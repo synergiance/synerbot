@@ -207,13 +207,14 @@ void IrcBot::start()
     while (keepRunning)
     {// Main loop
         bool moreBuffer; // If there's more buffer in the buffer
+        string cmd, msg;
 
         // Prime the pump with a first message queue call
         moreBuffer = MessageQueue->pull(str, 200);
         if (debugMode == 13) cout<<"MAIN PROCESSING (1): "<<str<<endl;
         do
         { // We want this to run at least once
-            string cmd, msg;
+            cmd = ""; msg = "";
             if (debugMode == 13) cout<<"MAIN CHECK PROCESSING (1)\n";
             if (stopping) botSock->botDisconnect();
             if (!getFirstWord(str, cmd, msg)) continue;
