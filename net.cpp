@@ -318,10 +318,13 @@ int CNetSocket::activateSocket()
 
     // Connect to the server
     s = getaddrinfo(svrAddress.c_str(), svrPort.c_str(), &hints, &res);
+    if (debugMode == 14) MessageQueue->push("GLOBAL COUT NET Acquired Address");
     if (s != 0) return -3;
     sockfd = socket(res->ai_family, res->ai_socktype, res->ai_protocol);
+    if (debugMode == 14) MessageQueue->push("GLOBAL COUT NET Created Socket");
     if (sockfd == -1) return -2;
     s = connect(sockfd, res->ai_addr, res->ai_addrlen);
+    if (debugMode == 14) MessageQueue->push("GLOBAL COUT NET Connect Success");
     if (s == -1) { close(sockfd); return -1; }
 
     freeaddrinfo(res);
