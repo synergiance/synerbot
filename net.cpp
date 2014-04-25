@@ -120,17 +120,12 @@ void CNetSocket::main()
     int numbytes;
     char buf[MAXDATASIZE];
 
-    //MessageQueue->push("GLOBAL COUT THREAD: I'm alive!");
-    cout<<"THREAD: I'm alive\n";
-
     if (tmp == -1) // We didn't manage to connect
         MessageQueue->push(strDisconnected);
     else if (tmp == 0) // Socket connected fine
         keepGoing = true;
     else // We may or may not want this special case
         MessageQueue->push(strDisconnected);
-
-    cout<<"Net status: "<<tmp<<endl;
 
     accessConnected(true);
 

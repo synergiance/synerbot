@@ -284,6 +284,7 @@ bool IrcBot::globalHandle(string cmd)
     if (toUpper(command).compare("DISCONNECT") == 0)
     { botSock->botDisconnect(); return false; }
     if (toUpper(command).compare("DISCONNECTED") == 0) return false;
+    if (toUpper(command).compare("COMMECTED") == 0) cout<<"Connected!\n";
     if (toUpper(command).compare("MOTD") == 0)
     {
         cout<<"Joining "<<channelName<<"\n";
