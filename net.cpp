@@ -248,9 +248,9 @@ bool CNetSocket::wait(bool& bNet, bool& bPipe, string& strNet, string& strPipe)
     else
         mfd = pNet[0] + 1;
 
-    // Set to 1/100th of a second
+    // Set to 1/10th of a second
     tv.tv_sec = 0;
-    tv.tv_nsec = 10000;
+    tv.tv_nsec = 100000;
 
     retval = pselect(mfd, &rfds, NULL, NULL, &tv, NULL);
 
