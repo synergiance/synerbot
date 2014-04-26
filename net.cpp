@@ -91,8 +91,8 @@ void CNetSocket::botDisconnect(string message)
     if (accessConnected())
     {
         toThread("net disconnect " + message);
-        if (netThread.joinable()) netThread.join();
     }
+    if (netThread.joinable()) netThread.join();
 }
 
 void CNetSocket::botDisconnect()
@@ -100,8 +100,8 @@ void CNetSocket::botDisconnect()
     if (accessConnected())
     {
         toThread("net disconnect");
-        if (netThread.joinable()) netThread.join();
     }
+    if (netThread.joinable()) netThread.join();
 }
 
 void CNetSocket::toThread(string data)
@@ -148,6 +148,9 @@ void CNetSocket::main()
             netBuffer += strNet;
         if (bPipe)
             pipeBuffer += strPipe;
+
+        if (bNet && strNet.compare(""))
+            MessageQueue->push("GLOBAL NULLNET");
 
         if (!keepGoing) cout<<"Net disconnect\n";
 
@@ -207,6 +210,13 @@ bool CNetSocket::sendData(char *msg)
 {//Send some data (deprecated)
     int len = strlen(msg);
     int bytes_sent = send(sockfd,msg,len,0);
+
+    if (debugMode == 15)
+    {
+        stringstream ss;
+        ss<<"GLOBAL COUT Sending ("<<bytes_sent<<"): "<<msg;
+        MessageQueue->push(ss.str());
+    }
 
     if (bytes_sent == 0)
         return false;
