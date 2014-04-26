@@ -480,12 +480,12 @@ void IrcBot::AI(string sender, string cmd, string msg)
                     }
                 }
             } else // Be nice
-                say(channel, "Hi " + name);
+                if (message.find(nick) != -1) say(channel, "Hi " + name);
         } else
         {// Message is a user
             // Only output if debug mode is on
             if (debugMode == 3)
-                cout<<name<<" issued command "<<command<<" in a PM with "
+                cout<<name<<" issued command \""<<command<<"\" in a PM with "
                     <<((args.compare("") != 0) ? ("parameters: " + args)
                     : "no parameters")<<endl;
 
