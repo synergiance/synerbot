@@ -469,8 +469,8 @@ void IrcBot::AI(string sender, string cmd, string msg)
                     {
                         // Print command in console
                         if (debugMode == 3)
-                            cout<<name<<" issued command "<<command
-                                <<" on channel "<<channel<<" with"
+                            cout<<name<<" issued command \""<<command
+                                <<"\" on channel "<<channel<<" with"
                                 <<((args.compare("") != 0)
                                 ? (" parameters: " + args)
                                 : " no parameters")<<endl;
@@ -483,13 +483,13 @@ void IrcBot::AI(string sender, string cmd, string msg)
                 if (message.find(nick) != -1) say(channel, "Hi " + name);
         } else
         {// Message is a user
+            extractCommandArgs(message, command, args);
+
             // Only output if debug mode is on
             if (debugMode == 3)
                 cout<<name<<" issued command \""<<command<<"\" in a PM with "
                     <<((args.compare("") != 0) ? ("parameters: " + args)
                     : "no parameters")<<endl;
-
-            extractCommandArgs(message, command, args);
 
             // Commands go here now, now git
             commandHandle(command, args, name, isAdmin);
