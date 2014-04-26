@@ -468,10 +468,12 @@ void IrcBot::AI(string sender, string cmd, string msg)
                     if (extractCommandArgs(message, command, args))
                     {
                         // Print command in console
-                        cout<<name<<" issued command "<<command<<" with "
-                            <<((args.compare("") != 0) ?
-                            ("parameters: " + args)
-                            : "no parameters")<<endl;
+                        if (debugMode == 3)
+                            cout<<name<<" issued command "<<command
+                                <<" on  channel "<<channel<<" with"
+                                <<((args.compare("") != 0)
+                                ? (" parameters: " + args)
+                                : " no parameters")<<endl;
 
                         // Commands go here now, so GIT
                         commandHandle(command, args, channelName, isAdmin);
@@ -485,7 +487,9 @@ void IrcBot::AI(string sender, string cmd, string msg)
         {// Message is a user
             // Only output if debug mode is on
             if (debugMode == 3)
-                cout<<name<<" said to me: "<<message<<endl;
+                cout<<name<<" issued command "<<command<<" in a PM with "
+                    <<((args.compare("") != 0) ? ("parameters: " + args)
+                    : "no parameters")<<endl;
 
             extractCommandArgs(message, command, args);
 
