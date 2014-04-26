@@ -470,7 +470,7 @@ void IrcBot::AI(string sender, string cmd, string msg)
                         // Print command in console
                         if (debugMode == 3)
                             cout<<name<<" issued command "<<command
-                                <<" on  channel "<<channel<<" with"
+                                <<" on channel "<<channel<<" with"
                                 <<((args.compare("") != 0)
                                 ? (" parameters: " + args)
                                 : " no parameters")<<endl;
