@@ -479,9 +479,8 @@ void IrcBot::AI(string sender, string cmd, string msg)
                         commandHandle(command, args, channelName, isAdmin);
                     }
                 }
-            }
-            // Be nice
-            say(channel, "Hi " + name);
+            } else // Be nice
+                say(channel, "Hi " + name);
         } else
         {// Message is a user
             // Only output if debug mode is on
