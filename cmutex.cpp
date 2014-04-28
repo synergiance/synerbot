@@ -42,13 +42,13 @@ void CMutex::push(string str)
 bool CMutex::pull(string& str)
 {// Nonblocking pull
 // Returns true if buffer is not empty
-    return pull(str, -1, 0)
+    return pull(str, -1, 0);
 }
 
 bool CMutex::pull(string& str, int timeout) // Milliseconds
 {// Blocking function that conditionally blocks
 // Returns true if buffer is not empty
-    return pull(str, timeout, 0)
+    return pull(str, timeout, 0);
 }
 
 bool CMutex::pull(string& str, int timeout, int delay)
