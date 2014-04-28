@@ -1,11 +1,11 @@
 CC=g++
-CFLAGS=-c -std=c++11
+CFLAGS=-c -std=c++11 -ggdb
 OBJ=main.o bot.o config.o privleges.o miscbotlib.o cmutex.o net.o
 
 all: ibot
 
 ibot: $(OBJ)
-	$(CC) $(OBJ) -o ibot
+	$(CC) $(OBJ) -ggdb -o ibot
 
 main.o: main.cpp
 	$(CC) $(CFLAGS) main.cpp
