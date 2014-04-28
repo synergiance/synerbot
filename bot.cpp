@@ -404,7 +404,7 @@ void IrcBot::AI(string sender, string cmd, string msg)
 void IrcBot::say(string target, string message)
 {
     cout<<"Saying ("<<target<<"): " + message<<endl;
-    sendData("PRIVMSG " + target + " :" + message + "\r\n");
+    sendData("PRIVMSG " + target + " :" + message);
     return;
 }
 
@@ -412,7 +412,7 @@ void IrcBot::action(string target, string message)
 {
     string a = "\x01";
     cout<<"Action ("<<target<<"): " + message<<endl;
-    sendData("PRIVMSG " + target + " :" + a + "ACTION " + message + a + "\r\n");
+    sendData("PRIVMSG " + target + " :" + a + "ACTION " + message + a);
     return;
 }
 
