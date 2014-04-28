@@ -74,7 +74,7 @@ int main(int argc, char* argv[])
             }
         }
         if (strncmp(argv[c], "-v", 20) == 0)
-            verbosity = true;
+            verbose = true;
     }
 
     // Register SIGINT signal
