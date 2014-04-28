@@ -26,7 +26,9 @@ public:
 
     // Access array
     void push(string str);
+    bool pull(string& str);
     bool pull(string& str, int timeout);
+    bool pull(string& str, int timeout, int delay);
 private:
     // Array
     vector<string> strBuffer;

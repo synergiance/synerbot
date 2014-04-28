@@ -39,9 +39,23 @@ void CMutex::push(string str)
     cv.notify_all();
 }
 
+bool CMutex::pull(string& str)
+{// Nonblocking pull
+// Returns true if buffer is not empty
+    return pull(str, -1, 0)
+}
+
 bool CMutex::pull(string& str, int timeout) // Milliseconds
 {// Blocking function that conditionally blocks
 // Returns true if buffer is not empty
+    return pull(str, timeout, 0)
+}
+
+bool CMutex::pull(string& str, int timeout, int delay)
+{// Blocking function that conditionally blocks
+// Returns true if buffer is not empty
+// timeout is in milliseconds
+// delay is in microseconds
     if (timeout >= 0)
     {
         unique_lock<mutex> lck(mtx2);
@@ -50,6 +64,7 @@ bool CMutex::pull(string& str, int timeout) // Milliseconds
         else
             cv.wait(lck);
     }
+    if (delay > 0) usleep(delay);
     return access(false, str);
 }
 
