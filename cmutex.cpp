@@ -28,7 +28,9 @@ CMutex::CMutex()
 
 CMutex::CMutex(bool debug)
 {
+    cout<<"Vector clearing\n";
     strBuffer.clear();
+    cout<<"Vector cleared\n";
     debugMode = debug;
 }
 
