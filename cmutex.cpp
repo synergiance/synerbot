@@ -35,6 +35,7 @@ CMutex::CMutex(bool debug)
 void CMutex::push(string str)
 {// Pushes some data to the mutex buffer
     unique_lock<mutex> lck(mtx2);
+    if (debugMode) cout<<"Adding to buffer\n";
     access(true, str);
     cv.notify_all();
 }
@@ -50,7 +51,6 @@ bool CMutex::pull(string& str, int timeout) // Milliseconds
         else
             cv.wait(lck);
     }
-    if (debugMode) cout<<"Accessing buffer after "<<timeout<<"ms\n";
     return access(false, str);
 }
 
