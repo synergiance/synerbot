@@ -117,6 +117,7 @@ void CNetSocket::toThread(string data)
     //string str = data + "\r\n";
     //write(pNet[1], str.c_str(), str.size() + 1);
     //usleep(20); // Needs 20 microseconds or the pipe will get clogged
+    cout<<"Adding shit to pipe\n";
     PipeQueue->push(data);
 }
 
@@ -125,19 +126,24 @@ void CNetSocket::bufMain()
     string str, buf;
     bool keepRunning = true, moreBuffer = false;
 
+    cout<<"Buf running\n:;"
+
     while (keepRunning || moreBuffer)
     {// Stuff as many messages as you can into a single pipe send
         str = "";
+        cout<<"Waiting on info\n";
         if (moreBuffer)
             moreBuffer = PipeQueue->pull(str, -1);
         else
             moreBuffer = PipeQueue->pull(str, 1000);
-        if (str.compare("")) continue;
+        cout<<"Got info\n";
+        if (str.compare("") == 0) continue;
         if (toLower(str).find("net disconnect") == 0) keepRunning = false;
-        str += buf + "\r\n";
+        cout<<"Adding to buffer";
+        buf += str + "\r\n";
         if (!moreBuffer)
         {
-            write(pNet[1], str.c_str(), str.size() + 1);
+            write(pNet[1], buf.c_str(), buf.size() + 1);
             usleep(100); // Needs some cool down time or the pipe will clog
         }
     }
