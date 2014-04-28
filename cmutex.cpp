@@ -50,6 +50,7 @@ bool CMutex::pull(string& str, int timeout) // Milliseconds
         else
             cv.wait(lck);
     }
+    if (debugMode) cout<<"Accessing buffer after "<<timeout<<"ms\n";
     return access(false, str);
 }
 
