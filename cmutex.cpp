@@ -57,9 +57,9 @@ bool CMutex::access(bool adding, string& str)
 {// Our mutex locked function, returns true if the buffer is not empty
     bool bReturn = false;
     mtx1.lock();
-    if (debugMode) cout<<"before access\n";
     if (adding)
     {
+        if (debugMode) cout<<"before add\n";
         strBuffer.push_back(str);
         bReturn = true;
         if (debugMode)
@@ -70,6 +70,7 @@ bool CMutex::access(bool adding, string& str)
     {
         if (strBuffer.size() > 0)
         {
+            if (debugMode) cout<<"before rem\n";
             str = strBuffer[0];
             strBuffer.erase(strBuffer.begin());
             if (debugMode)
@@ -81,7 +82,6 @@ bool CMutex::access(bool adding, string& str)
         if (strBuffer.size() > 0)
             bReturn = true;
     }
-    if (debugMode) cout<<"after access\n";
     mtx1.unlock();
     return bReturn;
 }
