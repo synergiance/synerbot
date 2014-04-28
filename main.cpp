@@ -52,7 +52,7 @@ int main(int argc, char* argv[])
     char* botmem = new char[sizeof(IrcBot)];
 
     // Variables
-    int debugMode = 0;
+    int debugMode = 0; bool verbose = false;
     
     for (int c = 1; c < argc; c++)
     {
@@ -73,13 +73,15 @@ int main(int argc, char* argv[])
                 debugMode = 5;
             }
         }
+        if (strncmp(argv[c], "-v", 20) == 0)
+            verbosity = true;
     }
 
     // Register SIGINT signal
     signal(SIGINT, sigHandler);
     
     // Launch bot
-    bot = new (botmem) IrcBot("ibot.cfg", debugMode);
+    bot = new (botmem) IrcBot("ibot.cfg", debugMode, verbose);
     bot->start();
     
 

@@ -125,8 +125,6 @@ void CNetSocket::bufMain()
     string str, buf;
     bool keepRunning = true, moreBuffer = false;
 
-    cout<<"Buf running\n";
-
     while (keepRunning || moreBuffer)
     {// Stuff as many messages as you can into a single pipe send
         str = "";

@@ -41,9 +41,10 @@ using namespace std;
 
 long IrcBot::atoimax = 101702100412530687;
 
-IrcBot::IrcBot(string cfg, int bDebug)
+IrcBot::IrcBot(string cfg, int bDebug, bool bVerbose)
 {
     debugMode = bDebug;
+    verboseMode = bVerbose;
 
     stopping = false;
 
@@ -359,7 +360,7 @@ void IrcBot::AI(string sender, string cmd, string msg)
         if (channel.substr(0,1) == "#")
         {// Message is a channel
             // Only output if debug mode is on
-            if (debugMode == 3)
+            if (verboseMode)
                 cout<<name<<" said on "<<channel<<": "<<message<<endl;
 
             if (message.find(nick + ": ") == 0)
@@ -371,7 +372,7 @@ void IrcBot::AI(string sender, string cmd, string msg)
                     if (extractCommandArgs(message, command, args))
                     {
                         // Print command in console
-                        if (debugMode == 3)
+                        if (verboseMode)
                             cout<<name<<" issued command \""<<command
                                 <<"\" on channel "<<channel<<" with"
                                 <<((args.compare("") != 0)
@@ -389,7 +390,7 @@ void IrcBot::AI(string sender, string cmd, string msg)
             extractCommandArgs(message, command, args);
 
             // Only output if debug mode is on
-            if (debugMode == 3)
+            if (verboseMode)
                 cout<<name<<" issued command \""<<command<<"\" in a PM with "
                     <<((args.compare("") != 0) ? ("parameters: " + args)
                     : "no parameters")<<endl;
@@ -403,7 +404,7 @@ void IrcBot::AI(string sender, string cmd, string msg)
 
 void IrcBot::say(string target, string message)
 {
-    cout<<"Saying ("<<target<<"): " + message<<endl;
+    if (verboseMode) cout<<"Saying ("<<target<<"): " + message<<endl;
     sendData("PRIVMSG " + target + " :" + message);
     return;
 }
@@ -411,7 +412,7 @@ void IrcBot::say(string target, string message)
 void IrcBot::action(string target, string message)
 {
     string a = "\x01";
-    cout<<"Action ("<<target<<"): " + message<<endl;
+    if (verboseMode) cout<<"Action ("<<target<<"): " + message<<endl;
     sendData("PRIVMSG " + target + " :" + a + "ACTION " + message + a);
     return;
 }
@@ -544,42 +545,42 @@ void IrcBot::quote(string cmd, string args, string talkto, bool admin)
     {
         if ((args.compare("show") == 0) && admin)
         {
-            cout<<"Help Show command used\n";
+            if (verboseMode) cout<<"Help Show command used\n";
             say(talkto, "QUOTE SHOW:");
             say(talkto, "Shows the specified quote");
             say(talkto, "Usage: quote show <number>");
         }
         else if ((args.compare("remove") == 0) && admin)
         {
-            cout<<"Help Remove command used\n";
+            if (verboseMode) cout<<"Help Remove command used\n";
             say(talkto, "QUOTE REMOVE:");
             say(talkto, "Removes the specified quote");
             say(talkto, "Usage: quote remove <number>");
         }
         else if (args.compare("add") == 0)
         {
-            cout<<"Help Add command used\n";
+            if (verboseMode) cout<<"Help Add command used\n";
             say(talkto, "QUOTE ADD:");
             say(talkto, "Adds a new quote to the bot");
             say(talkto, "Usage: quote add <quote>");
         }
         else if (args.compare("num") == 0)
         {
-            cout<<"Help Num command used\n";
+            if (verboseMode) cout<<"Help Num command used\n";
             say(talkto, "QUOTE NUM:");
             say(talkto, "Returns the amount of quotes");
             say(talkto, "Usage: quote num");
         }
         else if (args.compare("help") == 0)
         {
-            cout<<"Help Help command used (quote)\n";
+            if (verboseMode) cout<<"Help Help command used (quote)\n";
             say(talkto, "QUOTE HELP:");
             say(talkto, "Shows help on this command");
             say(talkto, "Usage: quote help [<topic>]");
         }
         else
         {
-            cout<<"Help command used (Quote)\n";
+            if (verboseMode) cout<<"Help command used (Quote)\n";
             say(talkto, "QUOTE:");
             say(talkto, "Recites a quote at random");
             say(talkto, "Usage: quote");
@@ -592,19 +593,19 @@ void IrcBot::quote(string cmd, string args, string talkto, bool admin)
         tmpq = addQuote(args);
         if (tmpq == -1)
         {
-            cout<<"Quote already exists:\n"<<args<<endl;
+            if (verboseMode) cout<<"Quote already exists:\n"<<args<<endl;
             say(talkto, "Quote already exists");
         } else if (tmpq == 0) {
-            cout<<"Adding quote:\n"<<args<<endl;
+            if (verboseMode) cout<<"Adding quote:\n"<<args<<endl;
             say(talkto, "Quote added");
         } else {
-            cout<<"Quote null\n";
+            if (verboseMode) cout<<"Quote null\n";
             say(talkto, "Invalid quote: Null");
         }
     }
     else if (cmd.compare("num") == 0)
     {
-        cout<<"There are "<<quotes.size()<<" quotes loaded\n";
+        if (verboseMode) cout<<"There are "<<quotes.size()<<" quotes loaded\n";
         stringstream ss;
         ss<<"I have "<<quotes.size()<<" quotes loaded";
         say(talkto, ss.str());
@@ -619,12 +620,12 @@ void IrcBot::quote(string cmd, string args, string talkto, bool admin)
             {
                 if (cmd.compare("show") == 0)
                 {
-                    cout<<"Reciting quote "<<intTmp<<endl;
+                    if (verboseMode) cout<<"Reciting quote "<<intTmp<<endl;
                     say(talkto, quotes[intTmp]);
                 }
                 if (cmd.compare("remove") == 0)
                 {
-                    cout<<"Removing quote "<<intTmp<<endl;
+                    if (verboseMode) cout<<"Removing quote "<<intTmp<<endl;
                     remQuote(intTmp);
                     say(talkto, "Quote successfully removed");
                 }
@@ -632,7 +633,8 @@ void IrcBot::quote(string cmd, string args, string talkto, bool admin)
             else
             {
                 stringstream ss;
-                cout<<"Value entered is greater than number of quotes\n";
+                if (verboseMode)
+                    cout<<"Value entered is greater than number of quotes\n";
                 ss<<"There are only "<<quotes.size()<<" quotes in database"
                   <<", please enter a value less than "<<quotes.size();
                 say(talkto, ss.str());
@@ -640,29 +642,30 @@ void IrcBot::quote(string cmd, string args, string talkto, bool admin)
         }
         else if (intTmp < 0)
         {
-            cout<<"Value entered was not positive: "<<intTmp<<endl;
+            if (verboseMode)
+                cout<<"Value entered was not positive: "<<intTmp<<endl;
             say(talkto, "Please enter a number greater than zero");
         }
         else if (args.compare("0") == 0)
         {
-            cout<<"Value entered was 0\n";
+            if (verboseMode) cout<<"Value entered was 0\n";
             say(talkto, "Please enter a number greater than zero");
         }
         else if (args.compare("101702100412530688") == 0)
         {
-            cout<<"easter egg\n";
+            if (verboseMode) cout<<"easter egg\n";
             say(talkto, "Let's try a number less than that");
         }
         else
         {
-            cout<<"No number detected\n";
+            if (verboseMode) cout<<"No number detected\n";
             say(talkto, "Usage: quote " + cmd + " <number>");
         }
     }
     else if (cmd.compare("") == 0 || cmd.compare("say") == 0)
     {
         if (quotes.size() > 0) {
-            cout<<"Selecting random quote\n";
+            if (verboseMode) cout<<"Selecting random quote\n";
             say(talkto, quotes[rand() % quotes.size()]);
         }
         else
@@ -683,13 +686,13 @@ void IrcBot::editPrivs(string cmd, string args, string talkto)
         tmpq = botPriv->addUsr(args);
         if (tmpq == -1)
         {
-            cout<<"User privlege already exists: "<<args<<endl;
+            if (verboseMode) cout<<"User privlege already exists: "<<args<<endl;
             say(talkto, "User privlege already exists");
         } else if (tmpq == 0) {
-            cout<<"Adding user: "<<args<<endl;
+            if (verboseMode) cout<<"Adding user: "<<args<<endl;
             say(talkto, "User privleges added");
         } else {
-            cout<<"Null string: User privlege\n";
+            if (verboseMode) cout<<"Null string: User privlege\n";
             say(talkto, "Invalid user: Null");
         }
     }
@@ -699,19 +702,19 @@ void IrcBot::editPrivs(string cmd, string args, string talkto)
         tmpq = botPriv->remUsr(args);
         if (tmpq == -1)
         {
-            cout<<"Off by 1 error: User privleges";
+            if (verboseMode) cout<<"Off by 1 error: User privleges";
             say(talkto, "Contact bot author");
         } else if (tmpq == 0) {
-            cout<<"Removing user privlege: "<<args<<endl;
+            if (verboseMode) cout<<"Removing user privlege: "<<args<<endl;
             say(talkto, "User privleges removed");
         } else if (tmpq == -2) {
-            cout<<"User privlege does not exist: "<<args<<endl;
+            if (verboseMode) cout<<"User privlege does not exist: "<<args<<endl;
             say(talkto, "User does not have privleges");
         } else if (tmpq == -3) {
-            cout<<"Null string: User privlege\n";
+            if (verboseMode) cout<<"Null string: User privlege\n";
             say(talkto, "Invalid user: Null");
         } else {
-            cout<<"Error: Impossible return value\n";
+            if (verboseMode) cout<<"Error: Impossible return value\n";
             say(talkto, "Impossible return value, contact bot author");
         }
     }

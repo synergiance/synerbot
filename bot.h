@@ -22,7 +22,7 @@ using namespace std;
 class IrcBot
 {
 public:
-    IrcBot(string cfg, int bDebug);
+    IrcBot(string cfg, int bDebug, bool bVerbose);
     virtual ~IrcBot();
 
     bool setup;
@@ -57,7 +57,7 @@ private:
     vector<string> quotes;
     vector<string> bufquotes;
 
-    bool addedQuotes;
+    bool addedQuotes, verboseMode;
     volatile bool stopping;
 
     // Functions
