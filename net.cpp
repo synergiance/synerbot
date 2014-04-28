@@ -55,7 +55,7 @@ CNetSocket::CNetSocket(string server, string port, CMutex& theQ, int debug)
 
 void CNetSocket::setup()
 {// Prime defaults
-    //pipe(pNet);
+    pipe(pNet);
     accessConnected(false);
 }
 
@@ -82,9 +82,7 @@ void CNetSocket::botConnect(string nick, string user, string realName)
         botRealName = realName;
         if (netThread.joinable()) netThread.join();
         cout<<"Starting network...\n";
-        pipe(pNet);
         netThread = thread(&CNetSocket::main, this);
-        close(pNet[0]);
     }
 }
 
@@ -94,7 +92,7 @@ void CNetSocket::botDisconnect(string message)
     {
         toThread("net disconnect " + message);
     }
-    if (netThread.joinable()) { netThread.join(); close(pNet[1]); }
+    if (netThread.joinable()) netThread.join();
 }
 
 void CNetSocket::botDisconnect()
@@ -103,7 +101,7 @@ void CNetSocket::botDisconnect()
     {
         toThread("net disconnect");
     }
-    if (netThread.joinable()) { netThread.join(); close(pNet[1]); }
+    if (netThread.joinable()) netThread.join();
 }
 
 void CNetSocket::toThread(string data)
@@ -121,8 +119,6 @@ void CNetSocket::main()
 
     int numbytes;
     char buf[MAXDATASIZE];
-
-    close(pNet[1]);
 
     if (debugMode == 14)
     {
@@ -196,7 +192,7 @@ void CNetSocket::main()
     // Disconnect before we close
     if (disconMessage.compare("") != 0)
         sendLine("QUIT :" + disconMessage);
-    close(sockfd); close(pNet[0]);
+    close(sockfd);
     MessageQueue->push(strDisconnected);
     accessConnected(false);
 }
