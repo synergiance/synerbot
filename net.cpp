@@ -188,8 +188,12 @@ void CNetSocket::main()
         if (bPipe)
             pipeBuffer += strPipe;
 
+        /*
+
         if (bNet && strNet.compare(""))
             MessageQueue->push("GLOBAL NULLNET");
+
+        */
 
         if (!keepGoing) cout<<"Net disconnect\n";
 
