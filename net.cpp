@@ -133,7 +133,7 @@ void CNetSocket::bufMain()
         if (moreBuffer)
             moreBuffer = PipeQueue->pull(str); // No timeout or delay
         else
-            moreBuffer = PipeQueue->pull(str, 1000, 10);
+            moreBuffer = PipeQueue->pull(str, 200, 10);
         if (str.compare("") == 0) continue;
         if (toLower(str).find("net disconnect") == 0) keepRunning = false;
         buf += str + "\r\n";
