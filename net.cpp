@@ -115,7 +115,7 @@ void CNetSocket::main()
 {// Contains the main loop for the CNetSocket class
     int tmp = activateSocket();
     bool keepGoing = false;
-    string netBuffer pipeBuffer;
+    string netBuffer, pipeBuffer;
     bool bNet, bPipe;
 
     int numbytes;
