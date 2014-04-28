@@ -72,7 +72,14 @@ bool CMutex::access(bool adding, string& str)
         {
             if (debugMode) cout<<"before rem\n";
             str = strBuffer[0];
+            try
+            {
             strBuffer.erase(strBuffer.begin());
+            }
+            catch (const std::length_error& le)
+            {
+                cerr<<"Length Error"<<le.what()<<endl;
+            }
             if (debugMode)
                 cout<<"Pulling: "<<str<<endl
                     <<"Buffer size: "<<strBuffer.size()<<endl;
