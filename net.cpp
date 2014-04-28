@@ -56,7 +56,7 @@ CNetSocket::CNetSocket(string server, string port, CMutex& theQ, int debug)
 void CNetSocket::setup()
 {// Prime defaults
     char* bfrmem = new char[sizeof(CMutex)];
-    if (debugMode == 17)
+    if (debugMode == 17 || debugMode == 18)
         PipeQueue = new (bfrmem) CMutex(true);
     else
         PipeQueue = new (bfrmem) CMutex();
@@ -139,6 +139,7 @@ void CNetSocket::bufMain()
         buf += str + "\r\n";
         if (!moreBuffer && buf.compare("") != 0)
         {
+            if (debugMode == 18) cout<<"Writing to pipe:\n"
             write(pNet[1], buf.c_str(), buf.size() + 1); buf = "";
             usleep(100); // Needs some cool down time or the pipe will clog
         }
