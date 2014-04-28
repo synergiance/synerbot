@@ -62,15 +62,13 @@ bool CMutex::access(bool adding, string& str)
         if (debugMode) cout<<"Adding: "<<str<<endl;
         strBuffer.push_back(str);
         bReturn = true;
-        if (debugMode)
-            cout<<"Adding: "<<str<<endl
-                <<"Buffer size: "<<strBuffer.size()<<endl;
+        if (debugMode) cout<<"Buffer size: "<<strBuffer.size()<<endl;
     }
     else
     {
         if (strBuffer.size() > 0)
         {
-            if (debugMode) cout<<"before rem\n";
+            if (debugMode) cout<<"Pulling next\n";
             str = strBuffer[0];
             try
             {
@@ -81,11 +79,13 @@ bool CMutex::access(bool adding, string& str)
                 cerr<<"Length Error"<<e.what()<<endl;
             }
             if (debugMode)
-                cout<<"Pulling: "<<str<<endl
+                cout<<"Pulled: "<<str<<endl
                     <<"Buffer size: "<<strBuffer.size()<<endl;
         }
         else
-            str = "";
+        {
+            str = ""; if (debugMode) cout<<"Pulled nothing, buffer clear\n";
+        }
         if (strBuffer.size() > 0)
             bReturn = true;
     }
