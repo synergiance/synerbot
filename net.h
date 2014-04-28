@@ -48,8 +48,8 @@ private:
     int debugMode;
 
     // Working classes
-    CMutex* MessageQueue;
-    thread netThread;
+    CMutex *MessageQueue, *PipeQueue;
+    thread netThread, bufThread;
 
     // Variables
     string svrAddress;
@@ -80,6 +80,8 @@ private:
     bool pipeHandle(string message);
 
     void main();
+
+    void bufMain();
 
     void setup();
 

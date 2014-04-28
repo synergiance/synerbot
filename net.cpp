@@ -55,6 +55,11 @@ CNetSocket::CNetSocket(string server, string port, CMutex& theQ, int debug)
 
 void CNetSocket::setup()
 {// Prime defaults
+    char* bfrmem = new char[sizeof(CMutex)];
+    if (debugMode == 17)
+        PipeQueue = new (bfrmem) CMutex(true);
+    else
+        PipeQueue = new (bfrmem) CMutex();
     pipe(pNet);
     accessConnected(false);
 }
@@ -83,6 +88,7 @@ void CNetSocket::botConnect(string nick, string user, string realName)
         if (netThread.joinable()) netThread.join();
         cout<<"Starting network...\n";
         netThread = thread(&CNetSocket::main, this);
+        bufThread = thread(&CNetSocket::bufMain, this);
     }
 }
 
@@ -93,6 +99,7 @@ void CNetSocket::botDisconnect(string message)
         toThread("net disconnect " + message);
     }
     if (netThread.joinable()) netThread.join();
+    if (bufThread.joinable()) bufThread.join();
 }
 
 void CNetSocket::botDisconnect()
@@ -102,13 +109,38 @@ void CNetSocket::botDisconnect()
         toThread("net disconnect");
     }
     if (netThread.joinable()) netThread.join();
+    if (bufThread.joinable()) bufThread.join();
 }
 
 void CNetSocket::toThread(string data)
 {// Send some data to the thread
-    string str = data + "\r\n";
-    write(pNet[1], str.c_str(), str.size() + 1);
-    usleep(20);
+    //string str = data + "\r\n";
+    //write(pNet[1], str.c_str(), str.size() + 1);
+    //usleep(20); // Needs 20 microseconds or the pipe will get clogged
+    PipeQueue->push(data);
+}
+
+void CNetSocket::bufMain()
+{// This is a thread that will manage the pipe buffer
+    string str, buf;
+    bool keepRunning = true, moreBuffer = false;
+
+    while (keepRunning || moreBuffer)
+    {// Stuff as many messages as you can into a single pipe send
+        str = "";
+        if (moreBuffer)
+            moreBuffer = MessageQueue->pull(str, -1);
+        else
+            moreBuffer = MessageQueue->pull(str, 1000);
+        if (str.compare("")) continue;
+        if (toLower(str).find("net disconnect") == 0) keepRunning = false;
+        str += buf + "\r\n";
+        if (!moreBuffer)
+        {
+            write(pNet[1], str.c_str(), str.size() + 1);
+            usleep(100); // Needs some cool down time or the pipe will clog
+        }
+    }
 }
 
 void CNetSocket::main()
@@ -150,9 +182,6 @@ void CNetSocket::main()
             netBuffer += strNet;
         if (bPipe)
             pipeBuffer += strPipe;
-
-        if (debugMode == 17 && bPipe)
-            MessageQueue->push("GLOBAL COUT PIPE DATA:\n" + strPipe);
 
         if (bNet && strNet.compare(""))
             MessageQueue->push("GLOBAL NULLNET");
