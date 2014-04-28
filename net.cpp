@@ -115,8 +115,8 @@ void CNetSocket::main()
 {// Contains the main loop for the CNetSocket class
     int tmp = activateSocket();
     bool keepGoing = false;
-    string netBuffer;
-    string pipeBuffer;
+    string netBuffer pipeBuffer;
+    bool bNet, bPipe;
 
     int numbytes;
     char buf[MAXDATASIZE];
@@ -143,7 +143,8 @@ void CNetSocket::main()
 
     while (keepGoing)
     {// Main loop
-        bool bNet, bPipe; string strNet, strPipe, str; int found;
+        string strNet, strPipe, str; int found;
+        bNet = false; bPipe = false;
         if (!wait(bNet, bPipe, strNet, strPipe)) keepGoing = false;
         if (bNet)
             netBuffer += strNet;
