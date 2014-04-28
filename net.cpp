@@ -150,7 +150,7 @@ void CNetSocket::main()
             pipeBuffer += strPipe;
 
         if (debugMode == 17 && bPipe)
-            MessageQueue->push("GLOBAL COUT PIPE DATA:\n" + strPipe)
+            MessageQueue->push("GLOBAL COUT PIPE DATA:\n" + strPipe);
 
         if (bNet && strNet.compare(""))
             MessageQueue->push("GLOBAL NULLNET");
