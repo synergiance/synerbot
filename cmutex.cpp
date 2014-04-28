@@ -59,17 +59,12 @@ bool CMutex::access(bool adding, string& str)
     mtx1.lock();
     if (adding)
     {
-        if (debugMode) cout<<"maximum vector size: "<<strBuffer.max_size()<<endl;
-        if (str.compare("") == 0)
-            bReturn = false;
-        else
-        {
-            strBuffer.push_back(str);
-            bReturn = true;
-            if (debugMode)
-                cout<<"Adding: "<<str<<endl
-                    <<"Buffer size: "<<strBuffer.size()<<endl;
-        }
+        if (debugMode) cout<<"Adding: "str<<endl;
+        strBuffer.push_back(str);
+        bReturn = true;
+        if (debugMode)
+            cout<<"Adding: "<<str<<endl
+                <<"Buffer size: "<<strBuffer.size()<<endl;
     }
     else
     {
