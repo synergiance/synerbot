@@ -59,7 +59,7 @@ bool CMutex::access(bool adding, string& str)
     mtx1.lock();
     if (adding)
     {
-        if (debugMode) cout<<"Adding: "str<<endl;
+        if (debugMode) cout<<"Adding: "<<str<<endl;
         strBuffer.push_back(str);
         bReturn = true;
         if (debugMode)
