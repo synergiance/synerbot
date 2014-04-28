@@ -108,7 +108,7 @@ void CNetSocket::toThread(string data)
 {// Send some data to the thread
     string str = data + "\r\n";
     write(pNet[1], str.c_str(), str.size() + 1);
-    usleep(10000);
+    usleep(1000);
 }
 
 void CNetSocket::main()
