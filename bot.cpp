@@ -583,6 +583,7 @@ void IrcBot::quote(string cmd, string args, string talkto, bool admin)
             say(talkto, "QUOTE:");
             say(talkto, "Recites a quote at random");
             say(talkto, "Usage: quote");
+            say(talkto, "Subcommands: show, remove, add, num, help");
         }
     }
     else if (cmd.compare("add") == 0)
