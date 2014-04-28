@@ -35,7 +35,6 @@ CMutex::CMutex(bool debug)
 void CMutex::push(string str)
 {// Pushes some data to the mutex buffer
     unique_lock<mutex> lck(mtx2);
-    if (debugMode) cout<<"Adding to buffer\n";
     access(true, str);
     cv.notify_all();
 }
@@ -58,6 +57,7 @@ bool CMutex::access(bool adding, string& str)
 {// Our mutex locked function, returns true if the buffer is not empty
     bool bReturn = false;
     mtx1.lock();
+    if (debugMode) cout<<"before access\n";
     if (adding)
     {
         strBuffer.push_back(str);
@@ -81,6 +81,7 @@ bool CMutex::access(bool adding, string& str)
         if (strBuffer.size() > 0)
             bReturn = true;
     }
+    if (debugMode) cout<<"after access\n";
     mtx1.unlock();
     return bReturn;
 }

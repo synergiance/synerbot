@@ -117,7 +117,6 @@ void CNetSocket::toThread(string data)
     //string str = data + "\r\n";
     //write(pNet[1], str.c_str(), str.size() + 1);
     //usleep(20); // Needs 20 microseconds or the pipe will get clogged
-    cout<<"Adding shit to pipe\n";
     PipeQueue->push(data);
 }
 
