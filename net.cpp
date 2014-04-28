@@ -280,14 +280,14 @@ bool CNetSocket::wait(bool& bNet, bool& bPipe, string& strNet, string& strPipe)
             buf[numbytes] = '\0';
             strPipe = buf;
             bPipe = true;
-        }
+        } else bPipe = false;
         if (FD_ISSET(sockfd, &rfds))
         {// Pipe
             numbytes = recv(sockfd, buf, MAXDATASIZE - 1, 0);
             buf[numbytes] = '\0';
             strNet = buf;
             bNet = true;
-        }
+        } else bNet = false;
     }
     return bReturn;
 }
