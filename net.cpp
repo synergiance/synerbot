@@ -130,19 +130,16 @@ void CNetSocket::bufMain()
     while (keepRunning || moreBuffer)
     {// Stuff as many messages as you can into a single pipe send
         str = "";
-        cout<<"Waiting on info\n";
         if (moreBuffer)
             moreBuffer = PipeQueue->pull(str, -1);
         else
             moreBuffer = PipeQueue->pull(str, 1000);
-        cout<<"Got info\n";
         if (str.compare("") == 0) continue;
         if (toLower(str).find("net disconnect") == 0) keepRunning = false;
-        cout<<"Adding to buffer";
         buf += str + "\r\n";
-        if (!moreBuffer)
+        if (!moreBuffer && buf.compare("") != 0)
         {
-            write(pNet[1], buf.c_str(), buf.size() + 1);
+            write(pNet[1], buf.c_str(), buf.size() + 1); buf = "";
             usleep(100); // Needs some cool down time or the pipe will clog
         }
     }
@@ -188,12 +185,8 @@ void CNetSocket::main()
         if (bPipe)
             pipeBuffer += strPipe;
 
-        /*
-
         if (bNet && strNet.compare(""))
             MessageQueue->push("GLOBAL NULLNET");
-
-        */
 
         if (!keepGoing) cout<<"Net disconnect\n";
 
