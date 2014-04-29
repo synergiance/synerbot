@@ -610,7 +610,9 @@ void IrcBot::quote(string cmd, string args, string talkto, bool admin)
         ss<<"I have "<<quotes.size()<<" quotes loaded";
         say(talkto, ss.str());
     }
-    else if (admin && ((cmd.compare("show") == 0) || (cmd.compare("remove") == 0)))
+    else if (admin && ((cmd.compare("show") == 0)
+                    || (cmd.compare("remove") == 0)
+                    || (cmd.compare("rem") == 0)))
     {
         int intTmp = atoi(args.c_str());
         if (intTmp > 0)
@@ -662,7 +664,9 @@ void IrcBot::quote(string cmd, string args, string talkto, bool admin)
             say(talkto, "Usage: quote " + cmd + " <number>");
         }
     }
-    else if ((cmd.compare("show") == 0) || (cmd.compare("remove") == 0))
+    else if ((cmd.compare("show") == 0)
+          || (cmd.compare("remove") == 0)
+          || (cmd.compare("rem") == 0))
     {
         if (verboseMode) cout<<"Unauthorized access to "<<cmd<<endl;
         say(talkto, "You are not authorized to use that command");
