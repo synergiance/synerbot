@@ -662,6 +662,11 @@ void IrcBot::quote(string cmd, string args, string talkto, bool admin)
             say(talkto, "Usage: quote " + cmd + " <number>");
         }
     }
+    else if ((cmd.compare("show") == 0) || (cmd.compare("remove") == 0))
+    {
+        if (verboseMode) cout<<"Unauthorized access to "<<cmd<<endl;
+        say(talkto, "You are not authorized to use that command");
+    }
     else if (cmd.compare("") == 0 || cmd.compare("say") == 0)
     {
         if (quotes.size() > 0) {
