@@ -682,7 +682,7 @@ void IrcBot::quote(string cmd, string args, string talkto, bool admin)
     }
     else
     {
-        cout<<"Issuing help on quote\n";
+        if (verboseMode) cout<<"Issuing help on quote\n";
         // Need to expand here
     }
 }
