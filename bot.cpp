@@ -363,7 +363,7 @@ void IrcBot::AI(string sender, string cmd, string msg)
             if (verboseMode)
                 cout<<name<<" said on "<<channel<<": "<<message<<endl;
 
-            if (message.find(nick + ": ") == 0)
+            if (message.find(nick + ": ") == 0 || message.find(nick + ", ") == 0)
             {// Got pinged, determine command
                 if (message.size() > nick.size() + 2)
                 {// Now we know there's text to parse after the ping
