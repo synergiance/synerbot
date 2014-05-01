@@ -68,7 +68,7 @@ bool CMutex::pull(string& str, int timeout, int delay)
                 cv.wait_for(lck,chrono::milliseconds(timeout));
             else
                 cv.wait(lck);
-        }
+        } else cout<<".";
     }
     if (delay > 0) usleep(delay);
     moreQuotes = access(false, str);
