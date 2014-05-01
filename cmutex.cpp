@@ -68,6 +68,7 @@ bool CMutex::pull(string& str, int timeout, int delay)
                 cv.wait_for(lck,chrono::milliseconds(timeout));
             else
                 cv.wait(lck);
+            cout<<".";
         }
     }
     if (delay > 0) usleep(delay);
