@@ -124,6 +124,7 @@ void CNetSocket::bufMain()
 {// This is a thread that will manage the pipe buffer
     string str, buf;
     bool keepRunning = true, moreBuffer = false;
+    int delay = 5;
 
     while (keepRunning || moreBuffer)
     {// Stuff as many messages as you can into a single pipe send
@@ -131,8 +132,10 @@ void CNetSocket::bufMain()
         if (moreBuffer)
             moreBuffer = PipeQueue->pull(str); // No timeout or delay
         else
-            moreBuffer = PipeQueue->pull(str, 200, 10);
+            moreBuffer = PipeQueue->pull(str, delay++ * 10, 10);
+        if (delay > 500) delay = 500;
         if (str.compare("") == 0) continue;
+        delay -= 5; if (delay < 5) delay = 5;
         if (toLower(str).find("net disconnect") == 0) keepRunning = false;
         buf += str + "\r\n";
         if (!moreBuffer && buf.compare("") != 0)
