@@ -151,9 +151,6 @@ void CNetSocket::main()
     string netBuffer, pipeBuffer;
     bool bNet, bPipe;
 
-    int numbytes;
-    char buf[MAXDATASIZE];
-
     if (debugMode == 14)
     {
         stringstream ss;
@@ -196,7 +193,7 @@ void CNetSocket::main()
             str = pipeBuffer.substr(0, found);
             pipeBuffer = pipeBuffer.substr(found, pipeBuffer.size() - found);
             found = pipeBuffer.find('\n');
-            if (str.find("\r\n") == -1 || str.size() < 3) continue;
+            if (str.find("\r\n") == string::npos || str.size() < 3) continue;
             str = str.substr(0, str.size() - 2);
             if (debugMode == 9) cout<<"PIPE: "<<str<<endl;
             if (debugMode == 10 || debugMode == 12)
@@ -211,7 +208,7 @@ void CNetSocket::main()
             str = netBuffer.substr(0, found);
             netBuffer = netBuffer.substr(found, netBuffer.size() - found);
             found = netBuffer.find('\n');
-            if (str.find("\r\n") == -1 || str.size() < 3) continue;
+            if (str.find("\r\n") == string::npos || str.size() < 3) continue;
             str = str.substr(0, str.size() - 2);
             if (debugMode == 9) cout<<"NET: "<<str<<endl;
             if (debugMode == 10)

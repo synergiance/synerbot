@@ -40,7 +40,8 @@ void CConfig::loadConfig()
         while (getline(ifile, strBuffer))
         {// Read a line
             tmp = strBuffer.find("=");
-            if (tmp > -1 && (tmp + 1) < strBuffer.length())
+            unsigned int uTmp = tmp;
+            if (tmp > -1 && (uTmp + 1) < strBuffer.length())
             {// Determine validity
                 tmpstr = strBuffer.substr(0,tmp); tmp++;
                 tmpstr2 = strBuffer.substr(tmp, strBuffer.length() - tmp);
@@ -71,7 +72,7 @@ void CConfig::loadConfig()
     writeFillConfig();
 }
 
-void CConfig::writeFillConfig()
+bool CConfig::writeFillConfig()
 {// Saves config to file and fills in missing defaults
     bool bSuccess;
 
@@ -109,6 +110,7 @@ void CConfig::writeFillConfig()
         cout<<"Error writing file\n";
         bSuccess = false;
     }
+    return bSuccess;
 }
 
 // Configuration access methods

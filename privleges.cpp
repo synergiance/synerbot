@@ -95,7 +95,7 @@ bool CPrivleges::checkUsr(string usr)
     if (admins.size() == 0)
         bReturn = (toLower(usr).find(defAdmin) == 0);
     else
-        for (int index = 0; bReturn == false && index<admins.size(); ++index)
+        for (unsigned int index=0; bReturn==false&&index<admins.size(); ++index)
             bReturn = (toLower(usr).find(admins[index]) == 0);
     return bReturn;
 }
@@ -108,7 +108,9 @@ int CPrivleges::addUsr(string usr)
     if (usr.compare("") != 0)
     {// Check to see the user exists
         if (admins.size() > 0)
-            for (int index = 0; (index<admins.size() && (alreadyTaken == false)); ++index)
+            for (unsigned int index = 0;
+                    (index<admins.size() && (alreadyTaken == false));
+                    ++index)
                 if (usr.compare(admins.at(index)) == 0)
                     alreadyTaken = true;
         if (alreadyTaken == false)
@@ -130,7 +132,9 @@ int CPrivleges::remUsr(string usr)
     usr = toLower(usr);
     if (usr.compare("") != 0)
     {
-        for (int index = 0; (intReturn == -2 && index<admins.size()); ++index)
+        for (unsigned int index = 0;
+                (intReturn == -2 && index<admins.size());
+                ++index)
             if (usr.compare(admins[index]) == 0)
                 intReturn = remUsr(index);
     }
@@ -141,8 +145,8 @@ int CPrivleges::remUsr(string usr)
 
 int CPrivleges::remUsr(int pos)
 {// Removes user at 0 based index, returns -1 if index is out of bounds
-    int tmpRet = 0;
-    if ((pos >= 0) && (pos < admins.size()))
+    int tmpRet = 0; unsigned int uPos = pos;
+    if ((pos >= 0) && (uPos < admins.size()))
     {
         admins.erase(admins.begin()+pos);
         addedUsers = true;

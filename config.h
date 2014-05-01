@@ -42,7 +42,7 @@ private:
     string port;
 
     void loadConfig();
-    void writeFillConfig();
+    bool writeFillConfig();
 };
 
 #endif /* CONFIG_H_ */

@@ -317,7 +317,7 @@ void IrcBot::msgHandel(string buf)
     
     // Channel nick list
     case 353: // Lists all nicknames prefixed with their mode
-        if (message.find("@Youmu") != -1)
+        if (message.find("@Youmu") != string::npos)
             say(channelName, ".op");
     case 366: // "End of /NAMES list."
         if (debugMode == 20)
@@ -344,7 +344,6 @@ void IrcBot::AI(string sender, string cmd, string msg)
     string name;
     string command;
     string args;
-    int tmp;
 
     // Test privleges
     bool isAdmin = botPriv->checkUsr(sender);
@@ -384,7 +383,8 @@ void IrcBot::AI(string sender, string cmd, string msg)
                     }
                 }
             } else // Be nice
-                if (message.find(nick) != -1) say(channel, "Hi " + name);
+                if (message.find(nick) != string::npos)
+                    say(channel, "Hi " + name);
         } else
         {// Message is a user
             extractCommandArgs(message, command, args);
@@ -488,8 +488,8 @@ int IrcBot::addQuote(string quote)
 
 int IrcBot::remQuote(int pos)
 {// Removes quote at 0 based index, returns -1 if index is out of bounds
-    int tmpRet = 0;
-    if ((pos >= 0) && (pos < quotes.size()))
+    int tmpRet = 0; unsigned int uPos = pos;
+    if ((pos >= 0) && (uPos < quotes.size()))
     {
         quotes.erase(quotes.begin()+pos);
         addedQuotes = true;
@@ -617,8 +617,8 @@ void IrcBot::quote(string cmd, string args, string talkto, bool admin)
         int intTmp = atoi(args.c_str());
         if (intTmp > 0)
         {
-            intTmp--;
-            if (intTmp < quotes.size())
+            intTmp--; unsigned int uIntTmp = intTmp;
+            if (uIntTmp < quotes.size())
             {
                 if (cmd.compare("show") == 0)
                 {

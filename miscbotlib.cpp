@@ -18,7 +18,7 @@ using namespace std;
 string toLower(string str)
 {// Converts a string to lowercase
     string strReturn;
-    for (int index = 0; index<str.length(); index++)
+    for (unsigned int index = 0; index<str.length(); index++)
         if (isalpha(str[index]))
             strReturn += tolower(str[index]);
         else
@@ -29,7 +29,7 @@ string toLower(string str)
 string toUpper(string str)
 {// Converts a string to uppercase
     string strReturn;
-    for (int index = 0; index<str.length(); index++)
+    for (unsigned int index = 0; index<str.length(); index++)
         if (isalpha(str[index]))
             strReturn += toupper(str[index]);
         else
