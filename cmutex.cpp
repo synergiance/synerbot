@@ -84,12 +84,10 @@ bool CMutex::access(bool adding, string& str)
         try
         {
             strBuffer.push_back(str);
-            bReturn = true;
         }
         catch (const exception& e)
         {
             cerr<<"Error: "<<e.what()<<endl;
-            bReturn = false;
         }
         if (debugMode) cout<<"Buffer size: "<<strBuffer.size()<<endl;
     }
@@ -115,9 +113,9 @@ bool CMutex::access(bool adding, string& str)
         {
             str = ""; if (debugMode) cout<<"Pulled nothing, buffer clear\n";
         }
-        if (strBuffer.size() > 0)
-            bReturn = true;
     }
+    if (strBuffer.size() > 0)
+        bReturn = true;
     mtx1.unlock();
     return bReturn;
 }
