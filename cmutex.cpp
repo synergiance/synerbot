@@ -39,7 +39,6 @@ void CMutex::push(string str)
 {// Pushes some data to the mutex buffer
     unique_lock<mutex> lck(mtx2);
     moreQuotes = access(true, str);
-    cout<<"MoreQuotes status: "<<moreQuotes<<endl;
     cv.notify_all();
 }
 
@@ -72,7 +71,8 @@ bool CMutex::pull(string& str, int timeout, int delay)
         }
     }
     if (delay > 0) usleep(delay);
-    return access(false, str);
+    moreQuotes = access(false, str);
+    return moreQuotes;
 }
 
 bool CMutex::access(bool adding, string& str)
