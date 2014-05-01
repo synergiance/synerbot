@@ -135,7 +135,7 @@ void CNetSocket::bufMain()
             moreBuffer = PipeQueue->pull(str, delay++ * 10, 10);
         if (delay > 500) delay = 500;
         if (str.compare("") == 0) continue;
-        delay -= 5; if (delay < 5) delay = 5;
+        delay /= 4; if (delay < 5) delay = 5;
         if (toLower(str).find("net disconnect") == 0) keepRunning = false;
         buf += str + "\r\n";
         if (!moreBuffer && buf.compare("") != 0)
