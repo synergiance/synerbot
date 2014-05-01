@@ -12,6 +12,7 @@
 #include <mutex>
 #include <unistd.h>
 #include <condition_variable>
+#include <atomic>
 
 using namespace std;
 
@@ -34,6 +35,7 @@ private:
     vector<string> strBuffer;
 
     bool debugMode;
+    atomic_bool moreQuotes;
 
     // Mutex
     mutex mtx1, mtx2;

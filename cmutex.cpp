@@ -14,6 +14,7 @@
 #include <unistd.h>
 #include <condition_variable>
 #include <chrono>
+#include <atomic>
 
 // Local includes
 #include "cmutex.h"
@@ -24,18 +25,20 @@ CMutex::CMutex()
 {
     strBuffer.clear();
     debugMode = false;
+    moreQuotes = false;
 }
 
 CMutex::CMutex(bool debug)
 {
     strBuffer.clear();
     debugMode = debug;
+    moreQuotes = false;
 }
 
 void CMutex::push(string str)
 {// Pushes some data to the mutex buffer
     unique_lock<mutex> lck(mtx2);
-    access(true, str);
+    moreQuotes = access(true, str);
     cv.notify_all();
 }
 
@@ -58,11 +61,14 @@ bool CMutex::pull(string& str, int timeout, int delay)
 // delay is in microseconds
     if (timeout >= 0)
     {
-        unique_lock<mutex> lck(mtx2);
-        if (timeout > 0)
-            cv.wait_for(lck,chrono::milliseconds(timeout));
-        else
-            cv.wait(lck);
+        if (!moreQuotes)
+        {
+            unique_lock<mutex> lck(mtx2);
+            if (timeout > 0)
+                cv.wait_for(lck,chrono::milliseconds(timeout));
+            else
+                cv.wait(lck);
+        }
     }
     if (delay > 0) usleep(delay);
     return access(false, str);
@@ -75,8 +81,16 @@ bool CMutex::access(bool adding, string& str)
     if (adding)
     {
         if (debugMode) cout<<"Adding: "<<str<<endl;
-        strBuffer.push_back(str);
-        bReturn = true;
+        try
+        {
+            strBuffer.push_back(str);
+            bReturn = true;
+        }
+        catch (const exception& e)
+        {
+            cerr<<"Error: "<<e.what()<<endl;
+            bReturn = false;
+        }
         if (debugMode) cout<<"Buffer size: "<<strBuffer.size()<<endl;
     }
     else
@@ -91,7 +105,7 @@ bool CMutex::access(bool adding, string& str)
             }
             catch (const exception& e)
             {
-                cerr<<"Length Error"<<e.what()<<endl;
+                cerr<<"Error: "<<e.what()<<endl;
             }
             if (debugMode)
                 cout<<"Pulled: "<<str<<endl
