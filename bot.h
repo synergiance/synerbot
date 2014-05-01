@@ -31,8 +31,6 @@ public:
     void stop();
 
 private:
-    int s; //the socket descriptor
-
     // Config variables
     int debugMode;
     string nick;
