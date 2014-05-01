@@ -47,17 +47,23 @@ void CConfig::loadConfig()
                 tmpstr2 = strBuffer.substr(tmp, strBuffer.length() - tmp);
                 if (nick.compare("") == 0 && tmpstr.compare("Nick") == 0)
                     nick = tmpstr2;
-                else if ((usr.compare("") == 0) && (tmpstr.compare("Username") == 0))
+                else if ((usr.compare("") == 0) &&
+                         (tmpstr.compare("Username") == 0))
                     usr = tmpstr2;
-                else if (realName.compare("") == 0 && tmpstr.compare("Description") == 0)
+                else if (realName.compare("") == 0 &&
+                         tmpstr.compare("Description") == 0)
                     realName = tmpstr2;
-                else if (server.compare("") == 0 && tmpstr.compare("Server") == 0)
+                else if (server.compare("") == 0 &&
+                         tmpstr.compare("Server") == 0)
                     server = tmpstr2;
-                else if (serverName.compare("") == 0 && tmpstr.compare("ServerName") == 0)
+                else if (serverName.compare("") == 0 &&
+                         tmpstr.compare("ServerName") == 0)
                     serverName = tmpstr2;
-                else if (port.compare("") == 0 && tmpstr.compare("Port") == 0)
+                else if (port.compare("") == 0 &&
+                         tmpstr.compare("Port") == 0)
                     port = tmpstr2;
-                else if (channelName.compare("") == 0 && tmpstr.compare("Channel") == 0)
+                else if (channelName.compare("") == 0 &&
+                         tmpstr.compare("Channel") == 0)
                     channelName = tmpstr2;
                 else
                     cout<<"Unknown config setting: "<<tmpstr<<endl;

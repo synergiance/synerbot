@@ -479,7 +479,9 @@ int IrcBot::addQuote(string quote)
     if (quote.compare("") != 0)
     {// Check to see the quote exists
         if (quotes.size() > 0)
-            for (long index = 0; (index<(long)quotes.size() && (alreadyTaken == false)); ++index)
+            for (long index = 0;
+                        (index<(long)quotes.size() && (alreadyTaken == false));
+                        ++index)
                 if (quote.compare(quotes.at(index)) == 0)
                     alreadyTaken = true;
         if (alreadyTaken == false)
