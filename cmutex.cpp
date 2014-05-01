@@ -39,6 +39,7 @@ void CMutex::push(string str)
 {// Pushes some data to the mutex buffer
     unique_lock<mutex> lck(mtx2);
     moreQuotes = access(true, str);
+    cout<<"MoreQuotes status: "<<moreQuotes<<endl;
     cv.notify_all();
 }
 
@@ -61,7 +62,7 @@ bool CMutex::pull(string& str, int timeout, int delay)
 // delay is in microseconds
     if (timeout >= 0)
     {
-        if (!moreQuotes)
+        //if (!moreQuotes)
         {
             unique_lock<mutex> lck(mtx2);
             if (timeout > 0)
@@ -69,7 +70,6 @@ bool CMutex::pull(string& str, int timeout, int delay)
             else
                 cv.wait(lck);
         }
-        else cout<<".";
     }
     if (delay > 0) usleep(delay);
     return access(false, str);
