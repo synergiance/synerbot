@@ -61,7 +61,7 @@ bool CMutex::pull(string& str, int timeout, int delay)
 // delay is in microseconds
     if (timeout >= 0)
     {
-        //if (!moreQuotes)
+        if (!moreQuotes)
         {
             unique_lock<mutex> lck(mtx2);
             if (timeout > 0)
