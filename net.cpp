@@ -293,7 +293,7 @@ bool CNetSocket::wait(bool& bNet, bool& bPipe, string& strNet, string& strPipe)
     else
         mfd = pNet[0] + 1;
 
-    // Set to 1/10th of a second
+    // Set to 1 second
     tv.tv_sec = 1;
     tv.tv_nsec = 0;
 
