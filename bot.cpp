@@ -34,6 +34,7 @@
 #include <fstream>
 #include <cstdlib>
 #include <sstream>
+#include <random> // Convert all rand() to random
 
 using namespace std;
 
@@ -46,6 +47,8 @@ IrcBot::IrcBot(string cfg, int bDebug, bool bVerbose)
     debugMode = bDebug;
     verboseMode = bVerbose;
 
+    unsigned rndseed = chrono::system_clock::now().time_since_epoch().count();
+
     stopping = false;
 
     // Allocate memory
@@ -53,10 +56,13 @@ IrcBot::IrcBot(string cfg, int bDebug, bool bVerbose)
     char* bprmint = new char[sizeof(CPrivleges)];
     char* netmem = new char[sizeof(CNetSocket)];
     char* msgmem = new char[sizeof(CMutex)];
+    char* rndmem = new char[sizeof(mt19937)];
 
     // Set modules
     botConfig = new (bcfgint) CConfig(cfg);
     botPriv = new (bprmint) CPrivleges();
+
+    rnd = new (rndmem) mt19937(rndseed);
 
     // Load configuration
     cfgFile = cfg;
@@ -103,7 +109,7 @@ void IrcBot::start()
     int delay = 1;
 
     // Initialize a random seed
-    srand(time(NULL));
+    srand(time(NULL)); // Deprecated
 
     botSock->botConnect(nick, usr, realName);
 
@@ -684,7 +690,8 @@ void IrcBot::quote(string cmd, string args, string talkto, bool admin)
     {
         if (quotes.size() > 0) {
             if (verboseMode) cout<<"Selecting random quote\n";
-            say(talkto, quotes[rand() % quotes.size()]);
+            uniform_int_distribution<int> dist(0, quotes.size() - 1);
+            say(talkto, quotes[dist(*rnd)]);
         }
         else
             say(talkto, "No quotes");

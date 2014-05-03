@@ -8,6 +8,7 @@
 #include <string>
 #include <vector>
 #include <fstream>
+#include <random>
 
 #include "config.h"
 #include "privleges.h"
@@ -47,6 +48,7 @@ private:
     CPrivleges* botPriv;
     CNetSocket* botSock;
     CMutex* MessageQueue;
+    mt19937* rnd;
 
     // Important static values
     static long atoimax;
