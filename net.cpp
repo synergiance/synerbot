@@ -123,8 +123,8 @@ void CNetSocket::toThread(string data)
 void CNetSocket::bufMain()
 {// This is a thread that will manage the pipe buffer
     string str, buf;
-    bool keepRunning = true, moreBuffer = false, checkAgain = false;
-    int delay = 5, minDelay = 5, maxDelay = 3000;
+    bool keepRunning = true, moreBuffer = false;
+    int delay = 5, minDelay = 5, maxDelay = 3000, maxCmdDelay = 50;
 
     while (keepRunning || moreBuffer)
     {// Stuff as many messages as you can into a single pipe send
@@ -140,14 +140,13 @@ void CNetSocket::bufMain()
         else
             moreBuffer = PipeQueue->pull(str, delay++ * 10, 10);
         if (delay > maxDelay) delay = maxDelay;
-        if (str.compare("") != 0)
-        {
-            checkAgain = true;
-            delay /= 4; if (delay < minDelay) delay = minDelay;
-            if (toLower(str).find("net disconnect") == 0) keepRunning = false;
-            buf += str + "\r\n";
-        }
-        if (!moreBuffer && !checkAgain && buf.compare("") != 0)
+        if (str.compare("") == 0) continue;
+        checkAgain = true;
+        delay /= 4; if (delay < minDelay) delay = minDelay;
+        if (delay > maxCmdDelay) delay = maxCmdDelay;
+        if (toLower(str).find("net disconnect") == 0) keepRunning = false;
+        buf += str + "\r\n";
+        if (!moreBuffer && buf.compare("") != 0)
         {
             if (debugMode == 18) cout<<"Writing to pipe:\n"<<buf;
             write(pNet[1], buf.c_str(), buf.size() + 1); buf = "";
