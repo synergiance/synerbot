@@ -140,12 +140,14 @@ void CNetSocket::bufMain()
         else
             moreBuffer = PipeQueue->pull(str, delay++ * 10, 10);
         if (delay > maxDelay) delay = maxDelay;
-        if (str.compare("") == 0) continue;
-        checkAgain = true;
-        delay /= 4; if (delay < minDelay) delay = minDelay;
-        if (toLower(str).find("net disconnect") == 0) keepRunning = false;
-        buf += str + "\r\n";
-        if (!moreBuffer && buf.compare("") != 0)
+        if (str.compare("") != 0)
+        {
+            checkAgain = true;
+            delay /= 4; if (delay < minDelay) delay = minDelay;
+            if (toLower(str).find("net disconnect") == 0) keepRunning = false;
+            buf += str + "\r\n";
+        }
+        if (!moreBuffer && !checkAgain && buf.compare("") != 0)
         {
             if (debugMode == 18) cout<<"Writing to pipe:\n"<<buf;
             write(pNet[1], buf.c_str(), buf.size() + 1); buf = "";
