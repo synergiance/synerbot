@@ -105,7 +105,7 @@ void IrcBot::stop()
 
 void IrcBot::start()
 {
-    bool keepRunning = true, moreBuffer = false;
+    bool keepRunning = true, moreBuffer = false, checkAgain = false;
     int delay = 1, minDelay = 1, maxDelay = 100;
 
     // Initialize a random seed
@@ -121,6 +121,11 @@ void IrcBot::start()
 
         if (moreBuffer)
             moreBuffer = MessageQueue->pull(str, -1);
+        else if (checkAgain)
+        {
+            moreBuffer = MessageQueue->pull(str, -1);
+            checkAgain = false;
+        }
         else
             moreBuffer = MessageQueue->pull(str, delay++ * 100);
 
@@ -129,6 +134,8 @@ void IrcBot::start()
         if (stopping) botSock->botDisconnect();
         if (!getFirstWord(str, cmd, msg)) continue;
         if (msg.compare("") == 0) continue;
+
+        checkAgain = true;
 
         delay /= 4;
         if (delay < minDelay) delay = minDelay;
