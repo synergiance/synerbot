@@ -124,7 +124,7 @@ void CNetSocket::bufMain()
 {// This is a thread that will manage the pipe buffer
     string str, buf;
     bool keepRunning = true, moreBuffer = false;
-    int delay = 5, minDelay = 5, maxDelay = 1000;
+    int delay = 5, minDelay = 5, maxDelay = 3000;
 
     while (keepRunning || moreBuffer)
     {// Stuff as many messages as you can into a single pipe send

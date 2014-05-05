@@ -106,7 +106,7 @@ void IrcBot::stop()
 void IrcBot::start()
 {
     bool keepRunning = true, moreBuffer = false;
-    int delay = 1, minDelay = 1, maxDelay = 40;
+    int delay = 1, minDelay = 1, maxDelay = 100;
 
     // Initialize a random seed
     srand(time(NULL)); // Deprecated
