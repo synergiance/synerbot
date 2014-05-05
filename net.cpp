@@ -133,6 +133,7 @@ void CNetSocket::bufMain()
             moreBuffer = PipeQueue->pull(str); // No timeout or delay
         else if (checkAgain)
         {
+            usleep(100);
             moreBuffer = PipeQueue->pull(str);
             checkAgain = false;
         }
