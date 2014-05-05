@@ -131,17 +131,10 @@ void CNetSocket::bufMain()
         str = "";
         if (moreBuffer)
             moreBuffer = PipeQueue->pull(str); // No timeout or delay
-        else if (checkAgain)
-        {
-            usleep(100);
-            moreBuffer = PipeQueue->pull(str);
-            checkAgain = false;
-        }
         else
             moreBuffer = PipeQueue->pull(str, delay++ * 10, 10);
         if (delay > maxDelay) delay = maxDelay;
         if (str.compare("") == 0) continue;
-        checkAgain = true;
         delay /= 4; if (delay < minDelay) delay = minDelay;
         if (delay > maxCmdDelay) delay = maxCmdDelay;
         if (toLower(str).find("net disconnect") == 0) keepRunning = false;
