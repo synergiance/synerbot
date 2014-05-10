@@ -14,9 +14,14 @@
 
 using namespace std;
 
-QuoteHandler::QuoteHandler()
+QuoteHandler::QuoteHandler(string chnl)
 {
     //code
+}
+
+void QuoteHandler::command(string command, string user)
+{
+	//code
 }
 
 int QuoteHandler::addQuote(string quote)

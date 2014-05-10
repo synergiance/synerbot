@@ -17,14 +17,21 @@ class QuoteHandler
 {
 public:
     // Constructors
-    QuoteHandler();
+    QuoteHandler(string chnl);
+
+    void command(string command, string user, string talkto);
+
+    void getCapabilities(string& capabilities);
+private:
+	vector<int> previous_quotes;
+	vector<int> quotes;
+	int previous_quotes_limit;
+	string channel;
 
     int addQuote(string quote);
     int remQuote(int pos);
     bool loadQuotes(string file);
     int saveQuotes(string file);
-    void getCapabilities(string& capabilities);
-private:
 };
 
 #endif /* QUOTES_H_ */
