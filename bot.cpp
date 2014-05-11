@@ -541,6 +541,11 @@ int IrcBot::commandHandle(string cmd, string args, string talkto, bool admin)
     {
         say(talkto, "AUGH");
     }
+
+    if (toLower(cmd).compare("roulette") == 0)
+    {
+        say(talkto, "lol, no");
+    }
     
     // Admin commands
     if (admin)
