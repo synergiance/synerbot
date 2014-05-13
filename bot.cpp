@@ -389,7 +389,9 @@ void IrcBot::AI(string sender, string cmd, string msg)
             if (verboseMode)
                 cout<<name<<" said on "<<channel<<": "<<message<<endl;
 
-            if (message.find(nick + ": ") == 0 || message.find(nick + ", ") == 0)
+            //if (message.find(nick + ": ") == 0 || message.find(nick + ", ") == 0)
+            if (regex_match(toLower(message.substr(0, nick.size() + 1)),
+                regex(toLower(nick) + "(:|,)")))
             {// Got pinged, determine command
                 if (message.size() > nick.size() + 2)
                 {// Now we know there's text to parse after the ping
@@ -408,11 +410,11 @@ void IrcBot::AI(string sender, string cmd, string msg)
                         // Commands go here now, so GIT
                         commandHandle(command, args, channelName, isAdmin);
                     }
+                } else {// Someone tried to say hi as if I were a bot
+                    say(channel, "I prefer a hello");
                 }
             } else if (regex_search(toLower(message), regex(rgxHello)))
                 say(channel, EngLang->getHello(name, false));
-            else if (toLower(message).find(toLower(nick) + ":") == 0)
-                say(channel, "I prefer a hello");
         } else
         {// Message is a user
             extractCommandArgs(message, command, args);
