@@ -67,9 +67,9 @@ void CEnglish::addHi()
     hellos.push_back("Hello");
     hellos.push_back("Konnichi wa");
     hellos.push_back("こんにちは。");
-    hellos.push_back("-Hello");
+    hellos.push_back("-Hello,");
     hellos.push_back("Hi");
-    hellos.push_back("-Hi");
+    hellos.push_back("-Hi,");
     hellos.push_back("Hello");
     hellos.push_back("-Hi");
     hellos.push_back("-Hello");
