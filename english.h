@@ -9,6 +9,7 @@
 #include <vector>
 #include <iostream>
 #include <fstream>
+#include <random>
 
 using namespace std;
 
@@ -20,23 +21,31 @@ class CEnglish
 public:
     // Constructors
     CEnglish();
-    CEnglish(string file);
+    //CEnglish(string file);
     //virtual ~CEnglish();
 
     // Access functions
-    string getNoun(bool explicit, int tense);
-    string getVerb(bool explicit, int tense);
-    string getAdjective(bool explicit);
-    string getAdverb(bool explicit);
+    //string getNoun(bool daddylang, int tense);
+    //string getVerb(bool daddylang, int tense);
+    //string getAdjective(bool daddylang);
+    //string getAdverb(bool daddylang);
+
+    string getHello(string nick, bool only_roman);
 private:
+    mt19937* rnd;
+
     // Dictionary
     vector<string> nouns;
     vector<string> verbs;
     vector<string> adjectives;
     vector<string> adverbs;
 
-    void loadDictionary();
-    void saveDictionary();
+    vector<string> hellos;
+
+    //void loadDictionary();
+    //void saveDictionary();
+
+    void addHi();
 };
 
 #endif /* CENGLISH_H_ */

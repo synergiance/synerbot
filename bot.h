@@ -14,6 +14,7 @@
 #include "privleges.h"
 #include "net.h"
 #include "cmutex.h"
+#include "english.h"
 
 using namespace std;
 
@@ -48,6 +49,7 @@ private:
     CPrivleges* botPriv;
     CNetSocket* botSock;
     CMutex* MessageQueue;
+    CEnglish* EngLang;
     mt19937* rnd;
 
     // Important static values

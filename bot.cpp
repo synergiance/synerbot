@@ -13,6 +13,7 @@
 #include "miscbotlib.h"
 #include "net.h"
 #include "cmutex.h"
+#include "english.h"
 
 // Global Includes
 #include <iostream>
@@ -56,11 +57,13 @@ IrcBot::IrcBot(string cfg, int bDebug, bool bVerbose)
     char* bprmint = new char[sizeof(CPrivleges)];
     char* netmem = new char[sizeof(CNetSocket)];
     char* msgmem = new char[sizeof(CMutex)];
+    char* engmem = new char[sizeof(CEnglish)];
     char* rndmem = new char[sizeof(mt19937)];
 
     // Set modules
     botConfig = new (bcfgint) CConfig(cfg);
     botPriv = new (bprmint) CPrivleges();
+    EngLang = new (engmem) CEnglish();
 
     rnd = new (rndmem) mt19937(rndseed);
 
@@ -404,7 +407,7 @@ void IrcBot::AI(string sender, string cmd, string msg)
                 }
             } else // Be nice
                 if (message.find(nick) != string::npos)
-                    say(channel, "Hi " + name);
+                    say(channel, EngLang->getHello(name, false));
         } else
         {// Message is a user
             extractCommandArgs(message, command, args);
