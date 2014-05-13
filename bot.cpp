@@ -411,7 +411,7 @@ void IrcBot::AI(string sender, string cmd, string msg)
                 }
             } else if (regex_search(toLower(message), regex(rgxHello)))
                 say(channel, EngLang->getHello(name, false));
-            else if (toLower(message).find(name + ":") == 0)
+            else if (toLower(message).find(toLower(nick) + ":") == 0)
                 say(channel, "I prefer a hello");
         } else
         {// Message is a user
