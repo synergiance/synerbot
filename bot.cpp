@@ -534,48 +534,47 @@ int IrcBot::remQuote(int pos)
 int IrcBot::commandHandle(string cmd, string args, string talkto, bool admin)
 {// This method handles all the commands sent to the bot
     int intReturn = 0;
+
+    bool cmdMatch = false;
     
     // Normal commands
 
     // Say a random quote
-    if (cmd.compare("quote") == 0)
-    {
+    if (cmd.compare("quote") == 0) {
         // Forward everything to method
         string subcmd; string subargs;
-        if (!(extractCommandArgs(args, subcmd, subargs)))
-        { subcmd = ""; subcmd = ""; }
+        if (!(extractCommandArgs(args, subcmd, subargs))) {
+            subcmd = "";
+            subcmd = "";
+        }
         quote(subcmd, subargs, talkto, admin);
-    }
-
-    if (toLower(cmd).compare("augh") == 0)
-    {
-        say(talkto, "AUGH");
-    }
-
-    if (toLower(cmd).compare("roulette") == 0)
-    {
-        say(talkto, "lol, no");
+        cmdMatch = true;
+    } else if (toLower(cmd).compare("augh") == 0) {
+        say(talkto, "AUGH"); cmdMatch = true;
+    } else if (toLower(cmd).compare("roulette") == 0) {
+        say(talkto, "lol, no"); cmdMatch = true;
     }
     
     // Admin commands
-    if (admin)
-    {
-        if (cmd.compare("say") == 0 && args.compare("") != 0)
-        {
-            say(channelName, args);
-        }
-        if (cmd.compare("action") == 0 && args.compare("") != 0)
-        {
-            action(channelName, args);
-        }
-        if (cmd.compare("admin") == 0 && args.compare("") != 0)
-        {
+    else if (admin) {
+        if (cmd.compare("say") == 0 && args.compare("") != 0) {
+            say(channelName, args); cmdMatch = true;
+        } else if (cmd.compare("action") == 0 && args.compare("") != 0) {
+            action(channelName, args);cmdMatch = true;
+        } else if (cmd.compare("admin") == 0 && args.compare("") != 0) {
             // Forward everything to method
             string subcmd; string subargs;
             if (!(extractCommandArgs(args, subcmd, subargs)))
             { subcmd = ""; subcmd = ""; }
             editPrivs(subcmd, subargs, talkto);
+            cmdMatch = true;
         }
+    }
+
+    // No command matched
+    if (!cmdMatch)
+    {
+        say(talkto, "Try a real command");
     }
     return intReturn;
 }
