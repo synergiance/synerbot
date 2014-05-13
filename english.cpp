@@ -55,7 +55,7 @@ string CEnglish::getHello(string nick, bool only_roman)
     str = hellos[dist(*rnd)];
     if (str.find('-') == 0)
     {
-        str.erase(1);
+        str = str.substr(1, str.size() - 1);
         str += " " + nick;
     }
     return str;
