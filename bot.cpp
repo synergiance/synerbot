@@ -42,10 +42,10 @@ using namespace std;
 
 #define MAXDATASIZE 100
 
-long IrcBot::atoimax = 101702100412530687;
+long IrcBot::atoimax = 101702100412530687; // Wrong
 
 IrcBot::IrcBot(string cfg, int bDebug, bool bVerbose)
-{
+{// Constructor to get everything all set
     debugMode = bDebug;
     verboseMode = bVerbose;
 
@@ -95,19 +95,14 @@ IrcBot::IrcBot(string cfg, int bDebug, bool bVerbose)
 }
 
 IrcBot::~IrcBot()
-{
-    //sendData((char*)"QUIT :Watch out for them, they're coming for you!\r\n");
-    //close (s);
+{// Tell thread to stop when the bot gets destroyed
     botSock->botDisconnect();
     saveQuotes(quoteFile);
 }
 
 void IrcBot::stop()
-{
-    //sendData((char*)"QUIT :Watch out for them, they're coming for you!\r\n");
-    //close (s);
+{// Interrupt method to signal the bot to stop
     stopping = true;
-    //botSock->botDisconnect();
 }
 
 void IrcBot::start()
@@ -156,51 +151,10 @@ void IrcBot::start()
 }
 
 
-char * IrcBot::timeNow()
-{//returns the current date and time
-    time_t rawtime;
-    struct tm * timeinfo;
-
-    time ( &rawtime );
-    timeinfo = localtime ( &rawtime );
-
-    return asctime (timeinfo);
-}
-
-
 bool IrcBot::sendData(string msg)
-{// String sendData interface
-    //return sendData((char*)msg.c_str());
+{// Send data to network handler
     botSock->toThread("net send " + msg);
     return true;
-}
-
-
-bool IrcBot::sendData(char *msg)
-{//Send some data (deprecated)
-    /*
-    int len = strlen(msg);
-    int bytes_sent = send(s,msg,len,0);
-
-    if (bytes_sent == 0)
-        return false;
-    else
-        return true;
-    */
-    return true;
-}
-
-
-void IrcBot::sendPong(string data)
-{/* Pings must be replied with pongs or the connection will be
-  * closed. See http://www.irchelp.org/irchelp/rfc/chapter4.html
-  * for details
-  */
-    if (data == "")
-        sendData((char*)"PONG\r\n");
-    else
-        sendData("PONG " + data + "\n");
-    return;
 }
 
 
@@ -289,77 +243,10 @@ void IrcBot::msgHandel(string buf)
         if (code > 0)
             cout<<"<"<<sender<<"> ("<<code<<") "<<message<<endl;
 
-    // This could prove useful: http://tools.ietf.org/html/rfc1459.html
-    switch (code)
-    {
-
-    // These messages need special treatment
-    case -1:
-        if (debugMode == 5)
-            cout<<"PING "<<message<<endl;
-        if (sender == "PING")
-        {// It's a ping
-            sendPong(message);
-        } else {
-            if (message.find("NOTICE AUTH") == 0)
-            {// NOTICE AUTH contains the server name
-                if (serverName == "server")
-                    serverName = sender;
-            }
-            else
-                if (debugMode > 0)
-                    cout<<message<<endl;
-        }
-        break;
-
-    case 376: // MOTD Footer is how we know we're connected
-        cout<<"Joining "<<channelName<<"\n";
-        sendData((char*)"JOIN " + channelName + "\r\n");
-    case 375: // MOTD Header
-    case 372: // MOTD Content
-        break;
-
-    case 0: // These messages are tricky and require a separate handler
+    if (code == 0) {
         if (debugMode == 21 || debugMode == 5)
             cout<<"<"<<sender<<"> ("<<cmd<<") "<<message<<endl;
         AI(sender, cmd, message);
-        break;
-    case 1: // This means we logged in successfully
-        cout<<"Connection successful!\n";
-        break;
-    
-    // Server connect messages
-    case 2: // Server identity (with server type/version)
-    case 3: // This server was created <time/date stamp>
-    case 4: // Similar to 2
-    case 5: // Server capabilities
-    case 42: // Your unique ID (Inspircd)
-    case 251: // Network info?
-    case 252:
-    case 254: // I have x channels formed
-    case 255: // I have x clients and y servers
-    case 265: // Current local users
-    case 266: // Current global users
-        break;
-    
-    // Channel nick list
-    case 353: // Lists all nicknames prefixed with their mode
-        if (message.find("@Youmu") != string::npos)
-            say(channelName, ".op");
-    case 366: // "End of /NAMES list."
-        if (debugMode == 20)
-            cout<<"<"<<sender<<"> ("<<code<<") "<<message<<endl;
-        break;
-
-    // Channel topic
-    case 332: // Topic
-    case 333: // User who set topic
-        break;
-
-    // Messages we don't yet handle will display on screen
-    default:
-        if (debugMode > 10)
-            cout<<"<"<<sender<<"> ("<<code<<") "<<message<<endl;
     }
     return;
 }
@@ -389,7 +276,6 @@ void IrcBot::AI(string sender, string cmd, string msg)
             if (verboseMode)
                 cout<<name<<" said on "<<channel<<": "<<message<<endl;
 
-            //if (message.find(nick + ": ") == 0 || message.find(nick + ", ") == 0)
             if (regex_match(toLower(message.substr(0, nick.size() + 1)),
                 regex(toLower(nick) + "(:|,)")))
             {// Got pinged, determine command

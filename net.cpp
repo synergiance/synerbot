@@ -468,6 +468,7 @@ void CNetSocket::handleNumber(string sender, int code, string message)
         MessageQueue->push(ss.str());
     }
 
+    // This could prove useful: http://tools.ietf.org/html/rfc1459.html
     switch (code)
     {
 
