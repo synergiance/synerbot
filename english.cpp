@@ -66,6 +66,7 @@ void CEnglish::addHi()
     hellos.push_back("-Hi");
     hellos.push_back("Hello");
     hellos.push_back("Konnichi wa");
+    hellos.push_back("Konnichi wa");
     hellos.push_back("こんにちは。");
     hellos.push_back("-Hello,");
     hellos.push_back("Hi");
@@ -73,4 +74,28 @@ void CEnglish::addHi()
     hellos.push_back("Hello");
     hellos.push_back("-Hi");
     hellos.push_back("-Hello");
+    hellos.push_back("Hi");
+    hellos.push_back("-Hi,");
+    hellos.push_back("Hello");
+    hellos.push_back("-Hi");
+    hellos.push_back("-Hello,");
+    hellos.push_back("Greetings");
+    hellos.push_back("-Greetings,");
+    hellos.push_back("-Greetings,");
+    hellos.push_back("Ahoy");
+    hellos.push_back("G'day");
+    hellos.push_back("Hello there");
+    hellos.push_back("Hey");
+    hellos.push_back("Hi there");
+    hellos.push_back("Howdy");
+    hellos.push_back("Salutations");
+    hellos.push_back("Yo");
+    hellos.push_back("Hiya");
+    hellos.push_back("-Ahoy,");
+    hellos.push_back("G'day mate");
+    hellos.push_back("-Hello there");
+    hellos.push_back("-Hey");
+    hellos.push_back("-Hi there");
+    hellos.push_back("-Hiya");
+    hellos.push_back("-G'day,");
 }
