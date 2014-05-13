@@ -410,7 +410,7 @@ void IrcBot::AI(string sender, string cmd, string msg)
                     }
                 }
             } else // Be nice
-                if (regex_match(toLower(message), regex(rgxHello)))
+                if (regex_search(toLower(message), regex(rgxHello)))
                     say(channel, EngLang->getHello(name, false));
         } else
         {// Message is a user
