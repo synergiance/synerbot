@@ -406,7 +406,8 @@ void IrcBot::AI(string sender, string cmd, string msg)
                     }
                 }
             } else // Be nice
-                if (message.find(nick) != string::npos)
+                if (toLower(message).find("hi " + toLower(nick))
+                        != string::npos)
                     say(channel, EngLang->getHello(name, false));
         } else
         {// Message is a user
