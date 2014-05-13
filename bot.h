@@ -45,6 +45,8 @@ private:
     string channelName;
     string port;
 
+    string rgxHello;
+
     CConfig* botConfig;
     CPrivleges* botPriv;
     CNetSocket* botSock;

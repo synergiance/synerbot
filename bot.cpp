@@ -36,6 +36,7 @@
 #include <cstdlib>
 #include <sstream>
 #include <random> // Convert all rand() to random
+#include <regex>
 
 using namespace std;
 
@@ -81,6 +82,9 @@ IrcBot::IrcBot(string cfg, int bDebug, bool bVerbose)
     quoteFile = "quotes.txt";
     addedQuotes = false;
     loadQuotes(quoteFile);
+
+    rgxHello = "\\b(hi|hello|greetings|hey|ahoy|g'day|howdy|yo|hiya),? "
+             + toLower(nick) + "\\b";
 
     // Set other modules
     if (debugMode == 8 || debugMode == 13)
@@ -406,8 +410,7 @@ void IrcBot::AI(string sender, string cmd, string msg)
                     }
                 }
             } else // Be nice
-                if (toLower(message).find("hi " + toLower(nick))
-                        != string::npos)
+                if (regex_match(toLower(message), regex(rgxHello)))
                     say(channel, EngLang->getHello(name, false));
         } else
         {// Message is a user
