@@ -409,9 +409,10 @@ void IrcBot::AI(string sender, string cmd, string msg)
                         commandHandle(command, args, channelName, isAdmin);
                     }
                 }
-            } else // Be nice
-                if (regex_search(toLower(message), regex(rgxHello)))
-                    say(channel, EngLang->getHello(name, false));
+            } else if (regex_search(toLower(message), regex(rgxHello)))
+                say(channel, EngLang->getHello(name, false));
+            else if (toLower(message).find(name + ":") == 0)
+                say(channel, "I prefer a hello");
         } else
         {// Message is a user
             extractCommandArgs(message, command, args);
