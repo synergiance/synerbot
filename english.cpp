@@ -65,8 +65,9 @@ void CEnglish::addHi()
 {// TODO: Make dynamic
     hellos.push_back("-Hi");
     hellos.push_back("Hello");
-    hellos.push_back("Konnichi wa");
-    hellos.push_back("Konnichi wa");
+    hellos.push_back("Konnichiwa");
+    hellos.push_back("Konnichiwa");
+    hellos.push_back("Moshi moshi");
     hellos.push_back("こんにちは。");
     hellos.push_back("-Hello,");
     hellos.push_back("Hi");
