@@ -126,7 +126,7 @@ void QuoteHandler::command(string cmd, string args, string talkto, string usr)
     }
 }
 
-int IrcBot::addQuote(string quote)
+int QuoteHandler::addQuote(string quote)
 {// Adds a quote the quote file and checls to see if it already exists
     bool alreadyTaken = false;
     trimWhite(quote);
@@ -149,7 +149,7 @@ int IrcBot::addQuote(string quote)
         return -2;
 }
 
-int IrcBot::remQuote(int pos)
+int QuoteHandler::remQuote(int pos)
 {// Removes quote at 0 based index, returns -1 if index is out of bounds
     int tmpRet = 0; unsigned int uPos = pos;
     if ((pos >= 0) && (uPos < quotes.size()))
@@ -162,7 +162,7 @@ int IrcBot::remQuote(int pos)
     return tmpRet;
 }
 
-bool IrcBot::loadQuotes(string file)
+bool QuoteHandler::loadQuotes(string file)
 {// Loads from the quotes file, returns true if successful
     bool fState = false;
     ifstream qfile (file.c_str());
@@ -186,7 +186,7 @@ bool IrcBot::loadQuotes(string file)
     return fState;
 }
 
-int IrcBot::saveQuotes(string file)
+int QuoteHandler::saveQuotes(string file)
 {// Saves quotes buffer to file, returns 0 if successful
     int fState = 0;
     if (addedQuotes)
