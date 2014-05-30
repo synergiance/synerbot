@@ -7,6 +7,7 @@
 
 #include <string>
 #include <vector>
+#include <regex>
 
 using namespace std;
 
@@ -19,7 +20,7 @@ public:
     // Constructors
     QuoteHandler(string chnl);
 
-    void command(string command, string user, string talkto);
+    void command(string cmd, string args, string talkto, string usr);
 
     void getCapabilities(string& capabilities);
 private:
@@ -27,11 +28,13 @@ private:
 	vector<int> quotes;
 	int previous_quotes_limit;
 	string channel;
+    bool addedQuotes;
 
     int addQuote(string quote);
     int remQuote(int pos);
     bool loadQuotes(string file);
     int saveQuotes(string file);
+    void help(string cmd, string usr, string talkto);
 };
 
 #endif /* QUOTES_H_ */
