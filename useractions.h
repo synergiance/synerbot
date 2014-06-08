@@ -9,40 +9,20 @@
 #include <iostream>
 #include <fstream>
 
+#include "userstats.h"
+
 using namespace std;
 
-#ifndef CONFIG_H_
-#define CONFIG_H_
+#ifndef USERACTIONS_H_
+#define USERACTIONS_H_
 
-class CConfig
+class CuAction
 {
 public:
     // Constructors
-    CConfig();
-    CConfig(string file);
-    //virtual ~CConfig();
-
-    // Configuration access methods
-    string getNick();
-    string getUsr();
-    string getRealName();
-    string getServer();
-    string getServerName();
-    string getChannelName();
-    string getPort();
+    CuAction();
 private:
     // Config variables
-    string nick;
-    string usr;
-    string realName;
-    string server;
-    string cfgFile;
-    string serverName;
-    string channelName;
-    string port;
-
-    void loadConfig();
-    void writeFillConfig();
 };
 
-#endif /* CONFIG_H_ */
+#endif /* USERACTIONS_H_ */

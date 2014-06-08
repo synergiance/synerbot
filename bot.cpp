@@ -173,6 +173,20 @@ bool IrcBot::globalHandle(string cmd)
         sendData("JOIN " + channelName + "\r\n");
     }
     if (toUpper(command).compare("COUT") == 0) cout<<message<<endl;
+    if (toUpper(command).compare("SAY") == 0)
+    {
+        string channel, channel_message;
+        if (getFirstWord(command, channel, channel_message)
+                && channel_message.compare("") != 0)
+            say(channel, channel_message);
+    }
+    if (toUpper(command).compare("ACTION") == 0)
+    {
+        string channel, channel_message;
+        if (getFirstWord(command, channel, channel_message)
+                && channel_message.compare("") != 0)
+            action(channel, channel_message);
+    }
     return true;
 }
 
