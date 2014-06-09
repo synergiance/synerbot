@@ -22,7 +22,7 @@ public:
     // Constructors
     CuAction();
 private:
-    // Config variables
+    // Storage
 };
 
 #endif /* USERACTIONS_H_ */

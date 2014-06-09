@@ -7,6 +7,7 @@
 
 // Global Includes
 #include <string>
+#include <vector>
 #include <iostream>
 #include <fstream>
 
@@ -27,6 +28,38 @@ public:
     //virtual ~CUserStats();
 
 private:
+};
+
+class CUserStatsUser
+{
+public:
+	// Constructors
+	CUserStatsUser(string username);
+
+	// Actions
+	int addStat(string metric, int num);
+	string enumMetrics();
+	int getMetric(string metric);
+	string getName();
+
+private:
+	vector<CUserStatsStat> stats;
+	string username;
+};
+
+class CUserStatsStat
+{
+public:
+	// Constructors
+	CUserStatsStat(string metricName);
+
+	int add(num);
+	string getMetricName();
+	int getValue();
+
+private:
+	string metricName;
+	int value;
 };
 
 #endif /* CUSERSTATS_H_ */
