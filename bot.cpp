@@ -96,7 +96,7 @@ IrcBot::IrcBot(string cfg, int bDebug, bool bVerbose)
 
 IrcBot::~IrcBot()
 {// Tell thread to stop when the bot gets destroyed
-    botSock->botDisconnect();
+    delete botSock;
     saveQuotes(quoteFile);
 }
 

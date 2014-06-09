@@ -6,10 +6,9 @@
  */
 
 #include <string>
-#include <iostream>
-#include <fstream>
 
 #include "userstats.h"
+#include "english.h"
 
 using namespace std;
 

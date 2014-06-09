@@ -8,8 +8,6 @@
 // Global Includes
 #include <string>
 #include <vector>
-#include <iostream>
-#include <fstream>
 
 // Local Includes
 #include "cmutex.h"
@@ -24,42 +22,23 @@ class CUserStats
 public:
     // Constructors
     CUserStats();
-    CUserStats(string file);
-    //virtual ~CUserStats();
 
 private:
+    CMutex* messageQueue;
 };
 
-class CUserStatsUser
+struct CUserStatsUser
 {
-public:
-	// Constructors
-	CUserStatsUser(string username);
+    vector<CUserStatsStat> stats;
+    string username;
 
-	// Actions
-	int addStat(string metric, int num);
-	string enumMetrics();
-	int getMetric(string metric);
-	string getName();
-
-private:
-	vector<CUserStatsStat> stats;
-	string username;
+    int getStat(string statName);
 };
 
-class CUserStatsStat
+struct CUserStatsStat
 {
-public:
-	// Constructors
-	CUserStatsStat(string metricName);
-
-	int add(num);
-	string getMetricName();
-	int getValue();
-
-private:
-	string metricName;
-	int value;
+    string metricName;
+    int value;
 };
 
 #endif /* CUSERSTATS_H_ */

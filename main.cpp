@@ -83,6 +83,7 @@ int main(int argc, char* argv[])
     // Launch bot
     bot = new (botmem) IrcBot("ibot.cfg", debugMode, verbose);
     bot->start();
+    delete bot;
     
 
     return 0;
