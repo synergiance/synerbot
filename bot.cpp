@@ -200,14 +200,14 @@ void IrcBot::otherHandle(string command, string message)
     if (toUpper(command).compare("SAY") == 0)
     {
         string channel, channel_message;
-        if (getFirstWord(command, channel, channel_message)
+        if (getFirstWord(message, channel, channel_message)
                 && channel_message.compare("") != 0)
             say(channel, channel_message);
     }
     if (toUpper(command).compare("ACTION") == 0)
     {
         string channel, channel_message;
-        if (getFirstWord(command, channel, channel_message)
+        if (getFirstWord(message, channel, channel_message)
                 && channel_message.compare("") != 0)
             action(channel, channel_message);
     }
