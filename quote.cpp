@@ -145,9 +145,11 @@ void QuoteHandler::command(string cmd, string args, string talkto, string usr)
     else if (cmd.compare("") == 0 || cmd.compare("say") == 0)
     {
         if (quotes.size() > 0) {
-            if (verboseMode) cout<<"Selecting random quote\n";
+            if (verboseMode) cout<<"Selecting random quote: ";
             uniform_int_distribution<int> dist(0, quotes.size() - 1);
-            say(talkto, quotes[dist(*rnd)]);
+            int intTmp = dist(*rnd);
+            if (verboseMode) cout<<intTmp<<endl;
+            say(talkto, quotes[intTmp]);
         }
         else
             say(talkto, "No quotes");
