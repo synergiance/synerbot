@@ -12,6 +12,7 @@
 #include <string>
 #include <vector>
 #include <cctype>
+#include <climits>
 
 using namespace std;
 
@@ -80,4 +81,12 @@ bool getFirstWord(string message, string& first, string& rest)
         ecaStatus = true;
     }
     return ecaStatus;
+}
+
+bool matchesChars(char chr, string str)
+{
+    bool retVal = false;
+    for (unsigned char c = 0; !retVal && c < str.size() && c <= UCHAR_MAX; c++)
+        if (chr == str[c]) retVal = true;
+    return retVal;
 }

@@ -18,3 +18,5 @@ void trimWhite(string& text);
 string makeBorder(string title);
 
 bool getFirstWord(string message, string& first, string& rest);
+
+bool matchesChars(char chr, string str);

@@ -9,6 +9,7 @@
 #include "quote.h"
 #include "cmutex.h"
 #include "privleges.h"
+#include "miscbotlib.h"
 
 // Global Imports
 #include <string>
@@ -19,6 +20,7 @@
 #include <random>
 #include <time.h>
 #include <sstream>
+#include <cctype>
 
 using namespace std;
 
@@ -332,6 +334,10 @@ string QuoteHandler::getQuoter(string& quote)
             quoter = quote.substr(found);
             quote = quote.substr(0, found - 2);
         }
+    }
+    if (quoter != "") {
+        char chr = quoter[0];
+        if (matchesChars(chr, "@+~&")) quoter.erase(0);
     }
     return quoter;
 }
