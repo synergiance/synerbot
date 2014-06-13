@@ -79,7 +79,7 @@ void QuoteHandler::command(string cmd, string args, string talkto, string usr)
         string str, str2;
         str = args;
         str2 = getQuoter(str);
-        if (str2 == "") str2 = usr;
+        if (str2 == "") str2 = usr.substr(0, usr.find('!'));
         say(talkto, str + " ~" + str2);
     }
     else if (cmd.compare("num") == 0)
@@ -318,7 +318,7 @@ string QuoteHandler::getQuoter(string& quote)
             if (quote[c] == '>') found = c;
         }
     }
-    if (found > 1) {
+    if (found > 1 && found + 1 < strLen) {
         quoter = quote.substr(1, found - 1);
         quote = quote.substr(found + 2);
     }
