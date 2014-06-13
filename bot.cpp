@@ -459,7 +459,8 @@ int IrcBot::commandHandle(string cmd, string args, string talkto, string usr)
             subcmd = "";
             subcmd = "";
         }
-        quote(subcmd, subargs, talkto, admin);
+        //quote(subcmd, subargs, talkto, admin);
+        CQuotes->command(subcmd, subargs, talkto, usr);
         cmdMatch = true;
     } else if (toLower(cmd).compare("augh") == 0) {
         say(talkto, "AUGH"); cmdMatch = true;
