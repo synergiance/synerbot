@@ -195,6 +195,7 @@ bool IrcBot::globalHandle(string cmd)
 
 void IrcBot::otherHandle(string command, string message)
 {
+    if (debugMode == 30) cout<<"OTHER HANDLER: "<<command<<" "<<message<<endl;
     if (toUpper(command).compare("COUT") == 0) cout<<message<<endl;
     if (toUpper(command).compare("SAY") == 0)
     {
