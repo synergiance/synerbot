@@ -154,10 +154,15 @@ void IrcBot::start()
         delay /= 4;
         if (delay < minDelay) delay = minDelay;
 
-        if (toUpper(cmd).compare("RAW") == 0)
+        if (toUpper(cmd).compare("RAW") == 0) {
             msgHandel(msg);
-        if (toUpper(cmd).compare("GLOBAL") == 0)
+        }
+        else if (toUpper(cmd).compare("GLOBAL") == 0) {
             if (!globalHandle(msg)) keepRunning = false;
+        }
+        else {
+            otherHandle(cmd, msg);
+        }
     }
     //saveQuotes(quoteFile);
 }
@@ -184,6 +189,12 @@ bool IrcBot::globalHandle(string cmd)
         cout<<"Joining "<<channelName<<"\n";
         sendData("JOIN " + channelName + "\r\n");
     }
+    if (toUpper(command).compare("COUT") == 0) cout<<message<<endl; // Deprecated
+    return true;
+}
+
+void IrcBot::otherHandle(string command, string message)
+{
     if (toUpper(command).compare("COUT") == 0) cout<<message<<endl;
     if (toUpper(command).compare("SAY") == 0)
     {
@@ -199,7 +210,6 @@ bool IrcBot::globalHandle(string cmd)
                 && channel_message.compare("") != 0)
             action(channel, channel_message);
     }
-    return true;
 }
 
 int IrcBot::msgParse(string buf, string& sender, string& message, string& cmd)

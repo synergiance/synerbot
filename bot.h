@@ -75,6 +75,7 @@ private:
     void sendPong(string data);
 
     bool globalHandle(string cmd);
+    void otherHandle(string command, string message);
     void msgHandel(string buf);
 
     int msgParse(string buf, string& sender, string& message, string& cmd);
