@@ -15,6 +15,7 @@
 #include "net.h"
 #include "cmutex.h"
 #include "english.h"
+#include "quote.h"
 
 using namespace std;
 
@@ -51,6 +52,7 @@ private:
     CPrivleges* botPriv;
     CNetSocket* botSock;
     CMutex* MessageQueue;
+    QuoteHandler* CQuotes;
     CEnglish* EngLang;
     mt19937* rnd;
 
@@ -79,7 +81,7 @@ private:
 
     void AI(string sender, string cmd, string msg);
 
-    int commandHandle(string cmd, string args, string talkto, bool admin);
+    int commandHandle(string cmd, string args, string talkto, string usr);
     bool extractCommandArgs(string message, string& command, string& args);
 
     void say(string target, string message);

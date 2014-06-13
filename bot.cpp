@@ -14,6 +14,7 @@
 #include "net.h"
 #include "cmutex.h"
 #include "english.h"
+#include "quote.h"
 
 // Global Includes
 #include <iostream>
@@ -60,6 +61,7 @@ IrcBot::IrcBot(string cfg, int bDebug, bool bVerbose)
     char* msgmem = new char[sizeof(CMutex)];
     char* engmem = new char[sizeof(CEnglish)];
     char* rndmem = new char[sizeof(mt19937)];
+    char* qtsmem = new char[sizeof(QuoteHandler)];
 
     // Set modules
     botConfig = new (bcfgint) CConfig(cfg);
@@ -79,9 +81,11 @@ IrcBot::IrcBot(string cfg, int bDebug, bool bVerbose)
     port = botConfig->getPort();
 
     // Will hopefully be deprecated
+    /* Disabling
     quoteFile = "quotes.txt";
     addedQuotes = false;
     loadQuotes(quoteFile);
+    */
 
     rgxHello = "\\b(hi|hello|greetings|hey|ahoy|g'day|howdy|yo|hiya),? "
              + toLower(nick) + "\\b";
@@ -92,12 +96,20 @@ IrcBot::IrcBot(string cfg, int bDebug, bool bVerbose)
     else
         MessageQueue = new (msgmem) CMutex();
     botSock = new (netmem) CNetSocket(server, port, *MessageQueue, bDebug);
+    CQuotes = new (qtsmem) QuoteHandler(*MessageQueue, *botPriv, channelName);
+    CQuotes->setVerbosity(bVerbose);
 }
 
 IrcBot::~IrcBot()
 {// Tell thread to stop when the bot gets destroyed
     delete botSock;
-    saveQuotes(quoteFile);
+    delete CQuotes;
+    delete MessageQueue;
+    delete botConfig;
+    delete botPriv;
+    delete EngLang;
+    delete rnd;
+    //saveQuotes(quoteFile);
 }
 
 void IrcBot::stop()
@@ -147,7 +159,7 @@ void IrcBot::start()
         if (toUpper(cmd).compare("GLOBAL") == 0)
             if (!globalHandle(msg)) keepRunning = false;
     }
-    saveQuotes(quoteFile);
+    //saveQuotes(quoteFile);
 }
 
 
@@ -272,9 +284,6 @@ void IrcBot::AI(string sender, string cmd, string msg)
     string name;
     string command;
     string args;
-
-    // Test privleges
-    bool isAdmin = botPriv->checkUsr(sender);
     
     // Get sender's name
     name = sender.substr(0, sender.find("!"));
@@ -308,7 +317,7 @@ void IrcBot::AI(string sender, string cmd, string msg)
                                 : " no parameters")<<endl;
 
                         // Commands go here now, so GIT
-                        commandHandle(command, args, channelName, isAdmin);
+                        commandHandle(command, args, channelName, sender);
                     }
                 } else {// Someone tried to say hi as if I were a bot
                     say(channel, "I prefer a hello");
@@ -326,7 +335,7 @@ void IrcBot::AI(string sender, string cmd, string msg)
                     : "no parameters")<<endl;
 
             // Commands go here now, now git
-            commandHandle(command, args, name, isAdmin);
+            commandHandle(command, args, name, sender);
         }
     }
     return;
@@ -431,9 +440,12 @@ int IrcBot::remQuote(int pos)
     return tmpRet;
 }
 
-int IrcBot::commandHandle(string cmd, string args, string talkto, bool admin)
+int IrcBot::commandHandle(string cmd, string args, string talkto, string usr)
 {// This method handles all the commands sent to the bot
     int intReturn = 0;
+
+    // Check permissions
+    bool admin = botPriv->checkUsr(usr);
 
     bool cmdMatch = false;
     

@@ -7,6 +7,8 @@
 
 // Local Imports
 #include "quote.h"
+#include "cmutex.h"
+#include "privleges.h"
 
 // Global Imports
 #include <string>
@@ -14,16 +16,47 @@
 #include <regex>
 #include <iostream>
 #include <fstream>
+#include <random>
+#include <time.h>
+#include <sstream>
 
 using namespace std;
 
-QuoteHandler::QuoteHandler(string chnl)
+QuoteHandler::QuoteHandler(CMutex& buffer, CPrivleges& priv, string chnl)
 {
-    //code
+    unsigned rndseed = chrono::system_clock::now().time_since_epoch().count();
+    char* rndmem = new char[sizeof(mt19937)];
+    rnd = new (rndmem) mt19937(rndseed);
+
+    MessageQueue = &buffer;
+    botPriv = &priv;
+    channel = chnl;
+
+    quoteFile = "quotes.txt";
+    addedQuotes = false;
+    loadQuotes(quoteFile);
+
+    verboseMode = false;
+}
+
+QuoteHandler::~QuoteHandler()
+{
+    saveQuotes(quoteFile);
+}
+
+void QuoteHandler::setVerbosity(bool verbosity)
+{
+    verboseMode = verbosity;
+}
+
+void QuoteHandler::say(string target, string message)
+{
+    MessageQueue->push("SAY " + target + " " + message);
 }
 
 void QuoteHandler::command(string cmd, string args, string talkto, string usr)
 {
+    bool admin = botPriv->checkUsr(usr);
     if (cmd.compare("help") == 0) help(args, usr, talkto);
     else if (cmd.compare("add") == 0)
     {// Add a quote
@@ -212,7 +245,7 @@ int QuoteHandler::saveQuotes(string file)
 
 void QuoteHandler::getCapabilities(string& capabilities)
 {
-    //code
+    capabilities = "quote";
 }
 
 void QuoteHandler::help(string cmd, string usr, string talkto)
