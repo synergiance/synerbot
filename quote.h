@@ -45,12 +45,14 @@ private:
     bool addedQuotes;
     bool verboseMode;
 
-    int addQuote(string quote);
+    int addQuote(string quote, string sender);
     int remQuote(int pos);
     bool loadQuotes(string file);
     int saveQuotes(string file);
     void help(string cmd, string usr, string talkto);
     void say(string target, string message);
+
+    string getQuoter(string& quote);
 };
 
 #endif /* QUOTES_H_ */

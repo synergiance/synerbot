@@ -60,8 +60,9 @@ void QuoteHandler::command(string cmd, string args, string talkto, string usr)
     if (cmd.compare("help") == 0) help(args, usr, talkto);
     else if (cmd.compare("add") == 0)
     {// Add a quote
+        /* - Disabled code
         int tmpq;
-        tmpq = addQuote(args);
+        tmpq = addQuote(args, usr);
         if (tmpq == -1)
         {
             if (verboseMode) cout<<"Quote already exists:\n"<<args<<endl;
@@ -73,6 +74,13 @@ void QuoteHandler::command(string cmd, string args, string talkto, string usr)
             if (verboseMode) cout<<"Quote null\n";
             say(talkto, "Invalid quote: Null");
         }
+        */
+        say(talkto, "Quote not added:");
+        string str, str2;
+        str = args;
+        str2 = getQuoter(str);
+        if (str2 == "") str2 = usr;
+        say(talkto, str + " ~" + str2);
     }
     else if (cmd.compare("num") == 0)
     {
@@ -161,9 +169,10 @@ void QuoteHandler::command(string cmd, string args, string talkto, string usr)
     }
 }
 
-int QuoteHandler::addQuote(string quote)
+int QuoteHandler::addQuote(string quote, string sender)
 {// Adds a quote the quote file and checls to see if it already exists
     bool alreadyTaken = false;
+    string quoter; // This is where we start getting the quoter
     trimWhite(quote);
     if (quote.compare("") != 0)
     {// Check to see the quote exists
@@ -295,4 +304,34 @@ void QuoteHandler::help(string cmd, string usr, string talkto)
         say(talkto, "Usage: quote");
         say(talkto, "Subcommands: show, remove, add, num, help");
     }
+}
+
+string QuoteHandler::getQuoter(string& quote)
+{
+    int c = 0;
+    int found = 0;
+    int strLen = quote.size();
+    string quoter;
+    if (quote[c] == '<') {
+        for (c = 1; found == 0 && c < strLen; c++) {
+            if (quote[c] == ' ') found = -1;
+            if (quote[c] == '>') found = c;
+        }
+    }
+    if (found > 1) {
+        quoter = quote.substr(1, found - 1);
+        quote = quote.substr(found + 2);
+    }
+    else {
+        found = 0;
+        for (c = strLen - 1; found == 0 && c >= 0; c--) {
+            if (quote[c] == ' ') found = -1;
+            if (quote[c] == '~') found = c;
+        }
+        if (found > 0 && ++found < strLen) {
+            quoter = quote.substr(found);
+            quote = quote.substr(0, found - 2);
+        }
+    }
+    return quoter;
 }
