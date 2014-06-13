@@ -337,7 +337,7 @@ string QuoteHandler::getQuoter(string& quote)
     }
     if (quoter != "") {
         char chr = quoter[0];
-        if (matchesChars(chr, "@+~&")) quoter.erase(0);
+        if (matchesChars(chr, "@+~&")) quoter.erase(0,1);
     }
     return quoter;
 }
