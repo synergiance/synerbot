@@ -62,9 +62,13 @@ void QuoteHandler::command(string cmd, string args, string talkto, string usr)
     if (cmd.compare("help") == 0) help(args, usr, talkto);
     else if (cmd.compare("add") == 0)
     {// Add a quote
-        /* - Disabled code
         int tmpq;
-        tmpq = addQuote(args, usr);
+        string str, str2;
+        str = args;
+        str2 = getQuoter(str);
+        if (str2 == "") str2 = usr.substr(0, usr.find('!'));
+        //say(talkto, str + " ~" + str2);
+        tmpq = addQuote(str, str2);
         if (tmpq == -1)
         {
             if (verboseMode) cout<<"Quote already exists:\n"<<args<<endl;
@@ -76,13 +80,6 @@ void QuoteHandler::command(string cmd, string args, string talkto, string usr)
             if (verboseMode) cout<<"Quote null\n";
             say(talkto, "Invalid quote: Null");
         }
-        */
-        say(talkto, "Quote not added:");
-        string str, str2;
-        str = args;
-        str2 = getQuoter(str);
-        if (str2 == "") str2 = usr.substr(0, usr.find('!'));
-        say(talkto, str + " ~" + str2);
     }
     else if (cmd.compare("num") == 0)
     {
@@ -179,14 +176,16 @@ int QuoteHandler::addQuote(string quote, string sender)
     if (quote.compare("") != 0)
     {// Check to see the quote exists
         if (quotes.size() > 0)
-            for (long index = 0;
-                        (index<(long)quotes.size() && (alreadyTaken == false));
-                        ++index)
-                if (quote.compare(quotes.at(index)) == 0)
+            for (long index = 0; (index<(long)quotes.size()
+                    && (alreadyTaken == false)); ++index) {
+                string tmp = quotes.at(index);
+                getQuoter(tmp);
+                if (quote.compare(tmp) == 0)
                     alreadyTaken = true;
+            }
         if (alreadyTaken == false)
         {// Add quote
-            quotes.push_back(quote);
+            quotes.push_back(quote + " ~" + sender);
             addedQuotes = true;
             return 0;
         } else
