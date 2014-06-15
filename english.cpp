@@ -37,6 +37,15 @@ EADJECTIVES:
 ADVERBS:
 EADVERBS:
 
+WORD:
+Explicit
+Types array
+links array with ratings
+
+sentence ideas:
+[adjective] noun verb [adjective] noun [adverb]
+[adjective] noun verb [adverb]
+
 */
 
 CEnglish::CEnglish()

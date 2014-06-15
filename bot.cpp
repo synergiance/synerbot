@@ -39,6 +39,9 @@
 #include <random> // Convert all rand() to random
 #include <regex>
 
+// RFCs to check out: 2810, 2811, 2812, 2813
+// http://www.irchelp.org/irchelp/rfc/
+
 using namespace std;
 
 #define MAXDATASIZE 100
