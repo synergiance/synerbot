@@ -52,7 +52,15 @@ struct word
 {
     string word;
     string types;
-    bool explicit;
+    bool explitive;
+    bool locked;
+    vector<wordLink> links;
+};
+
+struct wordLink
+{
+    string word;
+    int strength;
 };
 
 #endif /* CENGLISH_H_ */
