@@ -48,4 +48,11 @@ private:
     void addHi();
 };
 
+struct word
+{
+    string word;
+    string types;
+    bool explicit;
+};
+
 #endif /* CENGLISH_H_ */
