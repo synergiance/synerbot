@@ -19,18 +19,14 @@ using namespace std;
 struct wordLink
 {
     string word;
-    int sentenceStrength;
-    int followUpStrength;
+    long long sentenceStrength;
+    long long followUpStrength;
 };
 
 struct word
 {
     string word;
-    string types;
-    string nounPlural;
-    string verbPast;
-    string verbPresent;
-    string verbcupation;
+    string type;
     bool explitive;
     bool locked;
     vector<wordLink> links;
@@ -60,10 +56,10 @@ private:
     string phraseFileName;
 
     // Dictionary
-    vector<string> nouns;
-    vector<string> verbs;
-    vector<string> adjectives;
-    vector<string> adverbs;
+    vector<word> nouns;
+    vector<word> verbs;
+    vector<word> adjectives;
+    vector<word> adverbs;
 
     vector<string> hellos;
 
@@ -78,6 +74,10 @@ private:
     int readPhrases(string fileName);
     int writePhrases(string fileName);
     int checkDir();
+
+    // Sentence Construction
+    //string makeSentence(string related);
+    //string nounPhrase(string related);
 };
 
 #endif /* CENGLISH_H_ */

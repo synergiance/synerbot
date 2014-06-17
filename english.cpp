@@ -26,6 +26,9 @@ using namespace std;
 
 /*
 
+It feels strange reading this but:
+http://en.wikipedia.org/wiki/English_grammar
+
 Ideas:
 
 VERBS:
@@ -51,6 +54,8 @@ links array with ratings
 sentence ideas:
 [adjective] noun verb [adjective] noun [adverb]
 [adjective] noun verb [adverb]
+
+noun: Determiner + Pre-modifiers + NOUN + Postmodifiers/Complement
 
 */
 
@@ -121,6 +126,44 @@ void CEnglish::addHi()
     hellos.push_back("-G'day,");
 }
 
+/*
+
+Word File Structure:
+
+conjunctions {
+    and
+    or
+    but
+    but not
+}
+
+wordname {
+    noun
+    connections {
+        word,21,32
+        other,43,9
+    }
+}
+
+Synergiance {
+    pronoun
+    connections {
+        word,0,0
+        other,2,1
+    }
+}
+
+fuck {
+    verb
+    explitive
+    connections {
+        word,3,2
+        other,5,3
+    }
+}
+
+*/
+
 int CEnglish::readWords(string fileName)
 {
     ifstream ifile (fileName.c_str());
@@ -129,6 +172,7 @@ int CEnglish::readWords(string fileName)
 
 int CEnglish::writeWords(string fileName)
 {
+    checkDir();
     return 0;
 }
 
@@ -139,12 +183,14 @@ int CEnglish::readPhrases(string fileName)
 
 int CEnglish::writePhrases(string fileName)
 {
+    checkDir();
     return 0;
 }
 
 int CEnglish::checkDir()
-{
-//    if (stat(folderName) == -1)
-//        mkdir(folderName, "0644");
+{// Separate function in case I need to mess with OS specifics
+    struct stat sb = {0};
+    if (stat(folderName.c_str(), &sb) == -1)
+        mkdir(folderName.c_str(), 0644);
     return 0;
 }
