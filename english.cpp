@@ -55,6 +55,11 @@ CEnglish::CEnglish()
     rnd = new (rndmem) mt19937(rndseed);
 
     addHi();
+
+    // File Names
+    folderName = "lang";
+    wordFileName = "words.db";
+    phraseFileName = "phrases.txt";
 }
 
 string CEnglish::getHello(string nick, bool only_roman)

@@ -16,6 +16,24 @@ using namespace std;
 #ifndef CENGLISH_H_
 #define CENGLISH_H_
 
+struct wordLink
+{
+    string word;
+    int strength;
+};
+
+struct word
+{
+    string word;
+    string types;
+    string nounPlural;
+    string verbPast;
+    string verbPresent;
+    bool explitive;
+    bool locked;
+    vector<wordLink> links;
+};
+
 class CEnglish
 {
 public:
@@ -34,6 +52,11 @@ public:
 private:
     mt19937* rnd;
 
+    // Files
+    string folderName;
+    string wordFileName;
+    string phraseFileName;
+
     // Dictionary
     vector<string> nouns;
     vector<string> verbs;
@@ -46,21 +69,6 @@ private:
     //void saveDictionary();
 
     void addHi();
-};
-
-struct word
-{
-    string word;
-    string types;
-    bool explitive;
-    bool locked;
-    vector<wordLink> links;
-};
-
-struct wordLink
-{
-    string word;
-    int strength;
 };
 
 #endif /* CENGLISH_H_ */
