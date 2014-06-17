@@ -462,6 +462,11 @@ int IrcBot::commandHandle(string cmd, string args, string talkto, string usr)
     bool admin = botPriv->checkUsr(usr);
 
     bool cmdMatch = false;
+
+    if (toLower(usr).find("mandapanda") == 0) {
+        say(talkto, "No");
+        return intReturn;
+    }
     
     // Normal commands
 

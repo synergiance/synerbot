@@ -19,7 +19,8 @@ using namespace std;
 struct wordLink
 {
     string word;
-    int strength;
+    int sentenceStrength;
+    int followUpStrength;
 };
 
 struct word
@@ -29,6 +30,7 @@ struct word
     string nounPlural;
     string verbPast;
     string verbPresent;
+    string verbcupation;
     bool explitive;
     bool locked;
     vector<wordLink> links;
@@ -69,6 +71,13 @@ private:
     //void saveDictionary();
 
     void addHi();
+
+    // File IO
+    int readWords(string fileName);
+    int writeWords(string fileName);
+    int readPhrases(string fileName);
+    int writePhrases(string fileName);
+    int checkDir();
 };
 
 #endif /* CENGLISH_H_ */

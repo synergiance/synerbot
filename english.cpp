@@ -14,6 +14,12 @@
 #include <iostream>
 #include <fstream>
 
+// Linux Imports
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+
+// Local Imports
 #include "english.h"
 
 using namespace std;
@@ -113,4 +119,32 @@ void CEnglish::addHi()
     hellos.push_back("-Hi there");
     hellos.push_back("-Hiya");
     hellos.push_back("-G'day,");
+}
+
+int CEnglish::readWords(string fileName)
+{
+    ifstream ifile (fileName.c_str());
+    return 0;
+}
+
+int CEnglish::writeWords(string fileName)
+{
+    return 0;
+}
+
+int CEnglish::readPhrases(string fileName)
+{
+    return 0;
+}
+
+int CEnglish::writePhrases(string fileName)
+{
+    return 0;
+}
+
+int CEnglish::checkDir()
+{
+//    if (stat(folderName) == -1)
+//        mkdir(folderName, "0644");
+    return 0;
 }
