@@ -13,7 +13,7 @@ sentences. Please do laugh at the silly sentences Synerbot comes up with.
 
 ##### Building
 
-Just type 'make' in the terminal. Makefile will take care of the rest
+Just type `make` in the terminal. Makefile will take care of the rest
 
 ##### Debugging
 
