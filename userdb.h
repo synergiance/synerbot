@@ -21,6 +21,8 @@ struct memberEntry
     vector<int> userints;
     vector<string> hosts;
     vector<int> hostints;
+    vector<string> names;
+    vector<int> nameints;
 };
 
 class CUserDB
@@ -40,7 +42,6 @@ private:
     void readdb();
     void writedb();
 
-    bool parseUser(string fqdn, string& nick, string& user, string& host);
     int checkUser(string nick, string user, string host);
     string compileUser(int num);
 };

@@ -20,3 +20,5 @@ string makeBorder(string title);
 bool getFirstWord(string message, string& first, string& rest);
 
 bool matchesChars(char chr, string str);
+
+bool parseUser(string fqdn, string& nick, string& user, string& host);

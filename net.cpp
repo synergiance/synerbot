@@ -468,6 +468,8 @@ void CNetSocket::handleNumber(string sender, int code, string message)
         MessageQueue->push(ss.str());
     }
 
+    stringstream ss;
+
     // This could prove useful: http://tools.ietf.org/html/rfc1459.html
     switch (code)
     {
@@ -510,11 +512,24 @@ void CNetSocket::handleNumber(string sender, int code, string message)
     case 333: // User who set topic
         break;
 
+    // Whois reply (all is prefixed with nickname)
+    case 311: // user information [nick] [user] [host] * :[realname]
+    case 312: // server user is connected to [nick] [svrhost] :[svrdesc]
+    case 317: // idle/signon [nick] [seconds] [time] :seconds idle, signon time
+    case 318: // End of whois list
+    case 319: // Channels user is connected to [nick] :[@#channel] <#channel2>
+
+    // yourself specific whois
+    case 378: // Your host/IP
+    case 379: // Your modes
+        ss<<"WHOISRPLY "<<code<<" "<<data;
+        MessageQueue->push(ss.str());
+        break;
+
     // Messages we don't yet handle will display on screen
     default:
         if (debugMode == 4)
         {// For debugging purposes
-            stringstream ss;
             ss<<"GLOBAL COUT ("<<code<<") "<<data;
             MessageQueue->push(ss.str());
         }

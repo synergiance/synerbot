@@ -90,3 +90,17 @@ bool matchesChars(char chr, string str)
         if (chr == str[c]) retVal = true;
     return retVal;
 }
+
+bool parseUser(string fqdn, string& nick, string& user, string& host)
+{
+    int a = fqdn.find("!");
+    int b = fqdn.find("@");
+    bool ret = false;
+    if (!(a == -1 || b == -1)) {
+        nick = fqdn.substr(0,a++);
+        user = fqdn.substr(a,b-a);
+        host = fqdn.substr(b+1);
+        ret = true;
+    }
+    return ret;
+}
