@@ -744,6 +744,7 @@ void IrcBot::nicklistHandle(string list)
         string buf2;
         getFirstWord(buf, str, buf2);
         buf = buf2;
+        if (matchesChars(str[0], "@+~&")) str.erase(0,1);
         whois(str);
     }
 }
