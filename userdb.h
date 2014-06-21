@@ -32,9 +32,14 @@ public:
     CUserDB();
     ~CUserDB();
 
-    //string checkUser(string nick, string user, string host);
     string checkUser(string username);
-    string spotUser(string username);
+    string checkUser(string nick, string user, string host, string name);
+    string spotUser(string nick, string user, string host, string name);
+    int searchUser(string nick, string user, string host, string name);
+
+    string compileUser(int num);
+
+    memberEntry getUser(int num);
 private:
     vector<memberEntry> members;
     string userdbfile;
@@ -42,8 +47,6 @@ private:
     void readdb();
     void writedb();
 
-    int checkUser(string nick, string user, string host);
-    string compileUser(int num);
 };
 
 #endif /* CUSERDB_H_ */
