@@ -501,7 +501,7 @@ void CNetSocket::handleNumber(string sender, int code, string message)
     
     // Channel nick list
     case 353: // Lists all nicknames prefixed with their mode
-        MessageQueue->push("GLOBAL NICKLIST " + data);
+        MessageQueue->push("GLOBAL NICKLIST "+data.substr(data.find(":")+1));
     case 366: // "End of /NAMES list."
         break;
 
