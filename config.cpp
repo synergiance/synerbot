@@ -35,7 +35,7 @@ void CConfig::loadConfig()
     if (ifile)
     {// File exists, read configuration from it
         string strBuffer;
-        cout<<"Found "<<cfgFile<<", loading configuration...\n";
+        cout<<"Loading configuration...";
         int tmp; string tmpstr; string tmpstr2;
         while (getline(ifile, strBuffer))
         {// Read a line
@@ -65,15 +65,13 @@ void CConfig::loadConfig()
                 else if (channelName.compare("") == 0 &&
                          tmpstr.compare("Channel") == 0)
                     channelName = tmpstr2;
-                else
-                    cout<<"Unknown config setting: "<<tmpstr<<endl;
             }
         }
-        cout<<"Loading complete!\n";
+        cout<<" Done!\n";
         // Always make sure to close your files
         ifile.close();
     } else {// File does not exist, create it and write defaults
-        cout<<"Could not find "<<cfgFile<<", continuing with defaults\n";
+        cout<<"Using default configuration\n";
     }
     writeFillConfig();
 }
@@ -110,10 +108,10 @@ bool CConfig::writeFillConfig()
         ofile<<"ServerName="<<serverName<<endl;
         ofile<<"Port="<<port<<endl;
         ofile<<"Channel="<<channelName<<endl;
-        ofile.close(); cout<<" Done\n";
+        ofile.close(); cout<<" Done!\n";
         bSuccess = true;
     } else {// Errors
-        cout<<"Error writing file\n";
+        cout<<"Error writing configuration\n";
         bSuccess = false;
     }
     return bSuccess;

@@ -16,6 +16,7 @@
 #include "cmutex.h"
 #include "english.h"
 #include "quote.h"
+#include "userdb.h"
 
 using namespace std;
 
@@ -55,6 +56,7 @@ private:
     QuoteHandler* CQuotes;
     CEnglish* EngLang;
     mt19937* rnd;
+    CUserDB* UserDB;
 
     // Important static values
     static long atoimax;

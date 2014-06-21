@@ -15,6 +15,7 @@
 #include "cmutex.h"
 #include "english.h"
 #include "quote.h"
+#include "userdb.h"
 
 // Global Includes
 #include <iostream>
@@ -65,11 +66,13 @@ IrcBot::IrcBot(string cfg, int bDebug, bool bVerbose)
     char* engmem = new char[sizeof(CEnglish)];
     char* rndmem = new char[sizeof(mt19937)];
     char* qtsmem = new char[sizeof(QuoteHandler)];
+    char* usrmem = new char[sizeof(CUserDB)];
 
     // Set modules
     botConfig = new (bcfgint) CConfig(cfg);
     botPriv = new (bprmint) CPrivleges();
     EngLang = new (engmem) CEnglish();
+    UserDB = new (usrmem) CUserDB();
 
     rnd = new (rndmem) mt19937(rndseed);
 
@@ -112,6 +115,7 @@ IrcBot::~IrcBot()
     delete botPriv;
     delete EngLang;
     delete rnd;
+    delete UserDB;
     //saveQuotes(quoteFile);
 }
 

@@ -39,7 +39,7 @@ private:
 
 	vector<int> previous_quotes;
 	vector<string> quotes;
-	int previous_quotes_limit;
+	// int previous_quotes_limit; // Will be used in the future
     string quoteFile;
 	string channel;
     bool addedQuotes;
