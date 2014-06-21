@@ -191,6 +191,7 @@ bool IrcBot::globalHandle(string cmd)
     { botSock->botDisconnect(); return false; }
     if (toUpper(command).compare("DISCONNECTED") == 0) return false;
     if (toUpper(command).compare("CONNECTED") == 0) cout<<"Connected!\n";
+    if (toUpper(command).compare("NICKLIST") == 0) nicklistHandle(message);
     if (toUpper(command).compare("MOTD") == 0)
     {
         cout<<"Joining "<<channelName<<"\n";
@@ -734,4 +735,15 @@ bool IrcBot::extractCommandArgs(string message, string& command, string& args)
 void IrcBot::whois(string target)
 {
     sendData("WHOIS " + target);
+}
+
+void IrcBot::nicklistHandle(string list)
+{
+    string str; string buf = list;
+    while (buf.size() > 0) {
+        string buf2;
+        getFirstWord(buf, str, buf2);
+        buf = buf2;
+        whois(str);
+    }
 }

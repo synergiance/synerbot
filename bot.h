@@ -79,6 +79,7 @@ private:
     bool globalHandle(string cmd);
     void otherHandle(string command, string message);
     void msgHandel(string buf);
+    void nicklistHandle(string list);
 
     int msgParse(string buf, string& sender, string& message, string& cmd);
 
