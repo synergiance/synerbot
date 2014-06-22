@@ -358,6 +358,11 @@ void IrcBot::AI(string sender, string cmd, string msg)
             commandHandle(command, args, name, sender);
         }
     }
+    else if (toUpper(cmd) == "JOIN")
+    {// User joined the channel
+        string nick = sender.substr(0, sender.find("!"));
+        whois(nick);
+    }
     return;
 }
 
