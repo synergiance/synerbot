@@ -94,7 +94,7 @@ string CUserDB::spotUser(string nick, string user, string host, string name)
             members[num].hostints.push_back(1);
         }
         found = false;
-        for (c = 0; c < members[num].hosts.size() && !found; c++)
+        for (c = 0; c < members[num].names.size() && !found; c++)
             if (toLower(members[num].names[c]) == toLower(name))
                 found = true;
         if (found) {
