@@ -765,10 +765,6 @@ void IrcBot::whoisHandle(string buf)
             getFirstWord(tmp, user, args);
             getFirstWord(args, host, tmp);
             name = tmp.substr(tmp.rfind(":") + 1);
-            if (debugMode == 40) {
-                cout<<"User spotted:\nNick: "<<nick<<"\nUser: "<<user
-                    <<"\nHost: "<<host<<"\nName: "<<name<<endl;
-            }
             UserDB->spotUser(nick, user, host, name);
             break;
         case 312: // Connected server

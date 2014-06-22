@@ -53,7 +53,7 @@ string CUserDB::spotUser(string nick, string user, string host, string name)
         newMember.userints.push_back(1);
         newMember.hosts.push_back(host);
         newMember.hostints.push_back(1);
-        newMember.names.push_back(host);
+        newMember.names.push_back(name);
         newMember.nameints.push_back(1);
         members.push_back(newMember);
         ret = nick + "!" + user + "@" + host;
@@ -166,7 +166,7 @@ void CUserDB::readdb()
                             trimWhite(str);
                             if (str.compare("}") == 0) break;
                             if (str == "") continue;
-                            int pos = str.find(' ');
+                            int pos = str.rfind(' ');
                             int num = atoi(str.substr(pos+1).c_str());
                             newMember.nicks.push_back(str.substr(0, pos));
                             newMember.nickints.push_back(num);
@@ -178,7 +178,7 @@ void CUserDB::readdb()
                             trimWhite(str);
                             if (str.compare("}") == 0) break;
                             if (str == "") continue;
-                            int pos = str.find(' ');
+                            int pos = str.rfind(' ');
                             int num = atoi(str.substr(pos+1).c_str());
                             newMember.users.push_back(str.substr(0, pos));
                             newMember.userints.push_back(num);
@@ -190,7 +190,7 @@ void CUserDB::readdb()
                             trimWhite(str);
                             if (str.compare("}") == 0) break;
                             if (str == "") continue;
-                            int pos = str.find(' ');
+                            int pos = str.rfind(' ');
                             int num = atoi(str.substr(pos+1).c_str());
                             newMember.hosts.push_back(str.substr(0, pos));
                             newMember.hostints.push_back(num);
@@ -202,7 +202,7 @@ void CUserDB::readdb()
                             trimWhite(str);
                             if (str.compare("}") == 0) break;
                             if (str == "") continue;
-                            int pos = str.find(' ');
+                            int pos = str.rfind(' ');
                             int num = atoi(str.substr(pos+1).c_str());
                             newMember.names.push_back(str.substr(0, pos));
                             newMember.nameints.push_back(num);
@@ -227,7 +227,7 @@ void CUserDB::writedb()
         ofstream ofile (userdbfile.c_str());
         string tab = "    ";
         if (ofile) {
-            cout<<"Loading user database...";
+            cout<<"Saving user database...";
             for (unsigned c = 0; c < members.size(); c++) {
                 ofile<<"member {\n"<<tab<<"nicks {\n";
                 for (unsigned x = 0; x < members[c].nicks.size(); x++) {
