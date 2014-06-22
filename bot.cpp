@@ -219,6 +219,7 @@ void IrcBot::otherHandle(string command, string message)
                 && channel_message.compare("") != 0)
             action(channel, channel_message);
     }
+    if (toUpper(command).compare("WHOISRPLY") == 0) whoisHandle(message);
 }
 
 int IrcBot::msgParse(string buf, string& sender, string& message, string& cmd)
