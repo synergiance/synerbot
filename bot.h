@@ -80,6 +80,7 @@ private:
     void otherHandle(string command, string message);
     void msgHandel(string buf);
     void nicklistHandle(string list);
+    void whoisHandle(string buf);
 
     int msgParse(string buf, string& sender, string& message, string& cmd);
 

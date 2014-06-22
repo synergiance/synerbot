@@ -37,44 +37,49 @@ string CUserDB::checkUser(string username)
 {
     string nick, user, host; int tmp = -1;
     if (parseUser(username, nick, user, host))
-        tmp = checkUser(nick, user, host);
+        tmp = searchUser(nick, user, host, "");
     return compileUser(tmp);
 }
 
-string CUserDB::spotUser(string username)
+string CUserDB::spotUser(string nick, string user, string host, string name)
 {
-    string nick, user, host, ret = ""; int num;
-    if (parseUser(username, nick, user, host)) {
-        num = checkUser(nick, user, host);
-        if (num == -1) { // Create a new member
-            memberEntry newMember;
-            newMember.nicks.push_back(nick);
-            newMember.nickints.push_back(1);
-            newMember.users.push_back(user);
-            newMember.userints.push_back(1);
-            newMember.hosts.push_back(host);
-            newMember.hostints.push_back(1);
-            members.push_back(newMember);
-            ret = username;
-        }
-        else { // Add to existing member
-            bool found = false;
-            for (int c = 0; c < members[num].nicks.size() && !found; c++)
-                if (toLower(members[num].nicks[c]) == toLower(nick))
-                    found = true;
-            if (!found) members[num].nicks.push_back(nick);
-            found = false;
-            for (int c = 0; c < members[num].users.size() && !found; c++)
-                if (toLower(members[num].users[c]) == toLower(user))
-                    found = true;
-            if (!found) members[num].users.push_back(user);
-            found = false;
-            for (int c = 0; c < members[num].hosts.size() && !found; c++)
-                if (toLower(members[num].hosts[c]) == toLower(user))
-                    found = true;
-            if (!found) members[num].hosts.push_back(user);
-            ret = compileUser(num);
-        }
+    string ret = "";
+    int num = searchUser(nick, user, host, name);
+    if (num == -1) { // Create a new member
+        memberEntry newMember;
+        newMember.nicks.push_back(nick);
+        newMember.nickints.push_back(1);
+        newMember.users.push_back(user);
+        newMember.userints.push_back(1);
+        newMember.hosts.push_back(host);
+        newMember.hostints.push_back(1);
+        newMember.names.push_back(host);
+        newMember.nameints.push_back(1);
+        members.push_back(newMember);
+        ret = nick + "!" + user + "@" + host;
+    }
+    else { // Add to existing member
+        bool found = false;
+        for (unsigned c = 0; c < members[num].nicks.size() && !found; c++)
+            if (toLower(members[num].nicks[c]) == toLower(nick))
+                found = true;
+        if (!found) members[num].nicks.push_back(nick);
+        found = false;
+        for (unsigned c = 0; c < members[num].users.size() && !found; c++)
+            if (toLower(members[num].users[c]) == toLower(user))
+                found = true;
+        if (!found) members[num].users.push_back(user);
+        found = false;
+        for (unsigned c = 0; c < members[num].hosts.size() && !found; c++)
+            if (toLower(members[num].hosts[c]) == toLower(host))
+                found = true;
+        if (!found) members[num].hosts.push_back(host);
+        found = false;
+        for (unsigned c = 0; c < members[num].hosts.size() && !found; c++)
+            if (toLower(members[num].names[c]) == toLower(name))
+                found = true;
+        if (!found) members[num].names.push_back(name);
+        ret = compileUser(num);
     }
     return ret;
 }
@@ -87,17 +92,34 @@ string CUserDB::compileUser(int num)
     return ret;
 }
 
-int CUserDB::checkUser(string nick, string user, string host)
+memberEntry CUserDB::getUser(int num)
+{
+    return members[num];
+}
+
+string CUserDB::checkUser(string nick, string user, string host, string name)
+{
+    return compileUser(searchUser(nick, user, host, name));
+}
+
+int CUserDB::searchUser(string nick, string user, string host, string name)
 {
     int pos = -1;
     if (members.size() > 0) {
-        for (int x = 0; x < members.size() && pos == -1; x++) {
-            for (int y = 0; y < members[x].nicks.size() && pos == -1; y++)
-                if (toLower(members[x].nicks[y]) == toLower(nick)) pos = x;
-            for (int y = 0; y < members[x].users.size() && pos == -1; y++)
-                if (toLower(members[x].users[y]) == toLower(user)) pos = x;
-            for (int y = 0; y < members[x].hosts.size() && pos == -1; y++)
-                if (toLower(members[x].hosts[y]) == toLower(host)) pos = x;
+        for (unsigned x = 0; x < members.size() && pos == -1; x++) {
+            unsigned y;
+            if (nick != "")
+                for (y = 0; y < members[x].nicks.size() && pos == -1; y++)
+                    if (toLower(members[x].nicks[y]) == toLower(nick)) pos = x;
+            if (user != "")
+                for (y = 0; y < members[x].users.size() && pos == -1; y++)
+                    if (toLower(members[x].users[y]) == toLower(user)) pos = x;
+            if (host != "")
+                for (y = 0; y < members[x].hosts.size() && pos == -1; y++)
+                    if (toLower(members[x].hosts[y]) == toLower(host)) pos = x;
+            if (name != "")
+                for (y = 0; y < members[x].names.size() && pos == -1; y++)
+                    if (toLower(members[x].names[y]) == toLower(name)) pos = x;
         }
     }
     return pos;
@@ -149,6 +171,18 @@ void CUserDB::readdb()
                             newMember.hostints.push_back(num);
                         }
                     }
+                    else if (strBuffer.compare("    names {") == 0) {
+                        while (getline(ifile, strBuffer)) {
+                            string str = strBuffer;
+                            trimWhite(str);
+                            if (str.compare("}") == 0) break;
+                            if (str == "") continue;
+                            int pos = str.find(' ');
+                            int num = atoi(str.substr(pos+1).c_str());
+                            newMember.names.push_back(str.substr(0, pos));
+                            newMember.nameints.push_back(num);
+                        }
+                    }
                     else if (strBuffer.compare("}") == 0) break;
                 }
                 members.push_back(newMember);
@@ -169,21 +203,26 @@ void CUserDB::writedb()
         string tab = "    ";
         if (ofile) {
             cout<<"Loading user database...";
-            for (int c = 0; c < members.size(); c++) {
+            for (unsigned c = 0; c < members.size(); c++) {
                 ofile<<"member {\n"<<tab<<"nicks {\n";
-                for (int x = 0; x < members[c].nicks.size(); x++) {
+                for (unsigned x = 0; x < members[c].nicks.size(); x++) {
                     ofile<<tab<<tab<<members[c].nicks[x]<<" "
                                    <<members[c].nickints[x]<<endl;
                 }
                 ofile<<tab<<"}\n"<<tab<<"users {\n";
-                for (int x = 0; x < members[c].users.size(); x++) {
+                for (unsigned x = 0; x < members[c].users.size(); x++) {
                     ofile<<tab<<tab<<members[c].users[x]<<" "
                                    <<members[c].userints[x]<<endl;
                 }
                 ofile<<tab<<"}\n"<<tab<<"hosts {\n";
-                for (int x = 0; x < members[c].hosts.size(); x++) {
+                for (unsigned x = 0; x < members[c].hosts.size(); x++) {
                     ofile<<tab<<tab<<members[c].hosts[x]<<" "
                                    <<members[c].hostints[x]<<endl;
+                }
+                ofile<<tab<<"}\n"<<tab<<"names {\n";
+                for (unsigned x = 0; x < members[c].names.size(); x++) {
+                    ofile<<tab<<tab<<members[c].names[x]<<" "
+                                   <<members[c].nameints[x]<<endl;
                 }
                 ofile<<tab<<"}\n}\n\n";
             }

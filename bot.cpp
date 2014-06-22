@@ -750,3 +750,35 @@ void IrcBot::nicklistHandle(string list)
         whois(str);
     }
 }
+
+void IrcBot::whoisHandle(string buf)
+{
+    string tmp, args; int num;
+    string nick, user, host, name;
+    getFirstWord(buf, tmp, args);
+    num = atoi(tmp.c_str());
+    getFirstWord(args, nick, tmp);
+    switch (num)
+    {
+        case 311: // nickuserhost / real name
+            getFirstWord(tmp, user, args);
+            getFirstWord(args, host, tmp);
+            name = tmp.substr(tmp.rfind(":") + 1);
+            UserDB->spotUser(nick, user, host, name);
+            break;
+        case 312: // Connected server
+            break;
+        case 317: // user times
+            break;
+        case 318: // end whois
+            break;
+        case 319: // channels
+            break;
+        case 378: // My userhost/IP
+            break;
+        case 379: // My modes
+            break;
+        default: // Halp aliens stole my penis
+            break;
+    }
+}
