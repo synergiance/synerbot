@@ -65,7 +65,7 @@ string CUserDB::spotUser(string nick, string user, string host, string name)
             if (toLower(members[num].nicks[c]) == toLower(nick))
                 found = true;
         if (found) {
-            members[num].nickints[c]++;
+            members[num].nickints[c-1]++;
         }
         else {
             members[num].nicks.push_back(nick);
@@ -76,7 +76,7 @@ string CUserDB::spotUser(string nick, string user, string host, string name)
             if (toLower(members[num].users[c]) == toLower(user))
                 found = true;
         if (found) {
-            members[num].userints[c]++;
+            members[num].userints[c-1]++;
         }
         else {
             members[num].users.push_back(user);
@@ -87,7 +87,7 @@ string CUserDB::spotUser(string nick, string user, string host, string name)
             if (toLower(members[num].hosts[c]) == toLower(host))
                 found = true;
         if (found) {
-            members[num].hostints[c]++;
+            members[num].hostints[c-1]++;
         }
         else {
             members[num].hosts.push_back(host);
@@ -98,7 +98,7 @@ string CUserDB::spotUser(string nick, string user, string host, string name)
             if (toLower(members[num].names[c]) == toLower(name))
                 found = true;
         if (found) {
-            members[num].nameints[c]++;
+            members[num].nameints[c-1]++;
         }
         else {
             members[num].names.push_back(name);
