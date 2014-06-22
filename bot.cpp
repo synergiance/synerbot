@@ -498,6 +498,8 @@ int IrcBot::commandHandle(string cmd, string args, string talkto, string usr)
         say(talkto, "lol, no"); cmdMatch = true;
     } else if (toLower(cmd).compare("toss") == 0) {
         say(talkto, "(╯°□°）╯︵ ┻━┻"); cmdMatch = true;
+    } else if (toLower(cmd).compare("whois") == 0) {
+        lookup(args, talkto); cmdMatch = true;
     }
     
     // Admin commands
@@ -522,6 +524,15 @@ int IrcBot::commandHandle(string cmd, string args, string talkto, string usr)
         say(talkto, "Try a real command");
     }
     return intReturn;
+}
+
+void IrcBot::lookup(string search, string talkto)
+{
+    string nick, user, host, name;
+    int memberNumber = UserDB->searchUser(search, search, search, search);
+    say(talkto, search + " was first seen as "
+        + UserDB->compileUser(memberNumber));
+    //memberEntry user = UserDB->getUser(memberNumber);
 }
 
 void IrcBot::quote(string cmd, string args, string talkto, bool admin)

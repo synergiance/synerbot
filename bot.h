@@ -103,6 +103,8 @@ private:
 
     // Utils
     void whois(string target);
+
+    void lookup(string search, string talkto);
 };
 
 #endif /* IRCBOT_H_ */
