@@ -491,7 +491,7 @@ int IrcBot::commandHandle(string cmd, string args, string talkto, string usr)
     } else if (toLower(cmd).compare("roulette") == 0) {
         say(talkto, "lol, no"); cmdMatch = true;
     } else if (toLower(cmd).compare("toss") == 0) {
-        say(talkto, "(╯°□°）╯︵ ┻━┻");
+        say(talkto, "(╯°□°）╯︵ ┻━┻"); cmdMatch = true;
     }
     
     // Admin commands
