@@ -60,25 +60,50 @@ string CUserDB::spotUser(string nick, string user, string host, string name)
     }
     else { // Add to existing member
         bool found = false;
-        for (unsigned c = 0; c < members[num].nicks.size() && !found; c++)
+        unsigned c;
+        for (c = 0; c < members[num].nicks.size() && !found; c++)
             if (toLower(members[num].nicks[c]) == toLower(nick))
                 found = true;
-        if (!found) members[num].nicks.push_back(nick);
+        if (found) {
+            members[num].nickints[c]++;
+        }
+        else {
+            members[num].nicks.push_back(nick);
+            members[num].nickints.push_back(1);
+        }
         found = false;
-        for (unsigned c = 0; c < members[num].users.size() && !found; c++)
+        for (c = 0; c < members[num].users.size() && !found; c++)
             if (toLower(members[num].users[c]) == toLower(user))
                 found = true;
-        if (!found) members[num].users.push_back(user);
+        if (found) {
+            members[num].userints[c]++;
+        }
+        else {
+            members[num].users.push_back(user);
+            members[num].userints.push_back(1);
+        }
         found = false;
-        for (unsigned c = 0; c < members[num].hosts.size() && !found; c++)
+        for (c = 0; c < members[num].hosts.size() && !found; c++)
             if (toLower(members[num].hosts[c]) == toLower(host))
                 found = true;
-        if (!found) members[num].hosts.push_back(host);
+        if (found) {
+            members[num].hostints[c]++;
+        }
+        else {
+            members[num].hosts.push_back(host);
+            members[num].hostints.push_back(1);
+        }
         found = false;
-        for (unsigned c = 0; c < members[num].hosts.size() && !found; c++)
+        for (c = 0; c < members[num].hosts.size() && !found; c++)
             if (toLower(members[num].names[c]) == toLower(name))
                 found = true;
-        if (!found) members[num].names.push_back(name);
+        if (found) {
+            members[num].nameints[c]++;
+        }
+        else {
+            members[num].names.push_back(name);
+            members[num].nameints.push_back(1);
+        }
         ret = compileUser(num);
     }
     return ret;
