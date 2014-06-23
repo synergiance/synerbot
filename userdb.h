@@ -31,6 +31,8 @@ public:
     CUserDB();
     ~CUserDB();
 
+    void setDebug(bool mode);
+
     string checkUser(string username);
     string checkUser(string nick, string user, string host, string name);
     string spotUser(string nick, string user, string host, string name);
@@ -42,6 +44,8 @@ public:
 private:
     vector<memberEntry> members;
     string userdbfile;
+
+    bool debugMode;
 
     void readdb();
     void writedb();

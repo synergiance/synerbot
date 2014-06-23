@@ -104,6 +104,8 @@ IrcBot::IrcBot(string cfg, int bDebug, bool bVerbose)
     botSock = new (netmem) CNetSocket(server, port, *MessageQueue, bDebug);
     CQuotes = new (qtsmem) QuoteHandler(*MessageQueue, *botPriv, channelName);
     CQuotes->setVerbosity(bVerbose);
+
+    UserDB->setDebug(debugMode == 25);
 }
 
 IrcBot::~IrcBot()

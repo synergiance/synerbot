@@ -26,11 +26,17 @@ CUserDB::CUserDB()
 {
     userdbfile = "userdb.db";
     readdb();
+    debugMode = false;
 }
 
 CUserDB::~CUserDB()
 {
     writedb();
+}
+
+void CUserDB::setDebug(bool mode)
+{
+    debugMode = mode;
 }
 
 string CUserDB::checkUser(string username)
@@ -128,9 +134,13 @@ string CUserDB::checkUser(string nick, string user, string host, string name)
 }
 
 int CUserDB::searchUser(string nick, string user, string host, string name)
-{
+{// Searches and finds a user based on parameters
     int pos = -1;
     char score = 0;
+    if (debugMode) {// Debug mode
+        cout<<"Searching user database for:\nNick: "<<nick<<"\nUser: "
+            <<user<<"\nHost: "<<host<<"\nName: "<<name<<endl;
+    }
     if (members.size() > 0) {
         for (unsigned x = 0; x < members.size(); x++) {
             unsigned y;
@@ -151,6 +161,9 @@ int CUserDB::searchUser(string nick, string user, string host, string name)
                 for (y = 0; y < members[x].names.size() && pos == -1; y++)
                     if (toLower(members[x].names[y]) == toLower(name))
                         tmpScore += 25;
+            if (debugMode) {// Debug Mode
+                cout<<compileUser(x)<<" "<<score<<endl;
+            }
             if (tmpScore > score) {
                 score = tmpScore;
                 pos = x;
@@ -162,7 +175,7 @@ int CUserDB::searchUser(string nick, string user, string host, string name)
 }
 
 void CUserDB::readdb()
-{
+{// Reads the user database into memory
     ifstream ifile (userdbfile.c_str());
     if (ifile) { // File exists, let's read from it
         string strBuffer;
