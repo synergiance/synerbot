@@ -13,8 +13,7 @@ using namespace std;
 #ifndef CUSERDB_H_
 #define CUSERDB_H_
 
-struct memberEntry
-{
+struct memberEntry {
     vector<string> nicks;
     vector<int> nickints;
     vector<string> users;

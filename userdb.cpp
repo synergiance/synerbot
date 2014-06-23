@@ -130,22 +130,33 @@ string CUserDB::checkUser(string nick, string user, string host, string name)
 int CUserDB::searchUser(string nick, string user, string host, string name)
 {
     int pos = -1;
+    char score = 0;
     if (members.size() > 0) {
         for (unsigned x = 0; x < members.size() && pos == -1; x++) {
             unsigned y;
+            unsigned char tmpScore = 0;
             if (nick != "")
                 for (y = 0; y < members[x].nicks.size() && pos == -1; y++)
-                    if (toLower(members[x].nicks[y]) == toLower(nick)) pos = x;
+                    if (toLower(members[x].nicks[y]) == toLower(nick))
+                        tmpScore += 30;
             if (user != "")
                 for (y = 0; y < members[x].users.size() && pos == -1; y++)
-                    if (toLower(members[x].users[y]) == toLower(user)) pos = x;
+                    if (toLower(members[x].users[y]) == toLower(user))
+                        tmpScore += 35;
             if (host != "")
                 for (y = 0; y < members[x].hosts.size() && pos == -1; y++)
-                    if (toLower(members[x].hosts[y]) == toLower(host)) pos = x;
+                    if (toLower(members[x].hosts[y]) == toLower(host))
+                        tmpScore += 10;
             if (name != "")
                 for (y = 0; y < members[x].names.size() && pos == -1; y++)
-                    if (toLower(members[x].names[y]) == toLower(name)) pos = x;
+                    if (toLower(members[x].names[y]) == toLower(name))
+                        tmpScore += 25;
+            if (tmpScore > score) {
+                score = tmpScore;
+                pos = x;
+            }
         }
+        if (score < 45) pos = -1;
     }
     return pos;
 }
