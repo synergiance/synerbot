@@ -136,7 +136,7 @@ string CUserDB::checkUser(string nick, string user, string host, string name)
 int CUserDB::searchUser(string nick, string user, string host, string name)
 {// Searches and finds a user based on parameters
     int pos = -1;
-    char score = 0;
+    unsigned char score = 0;
     if (debugMode) {// Debug mode
         cout<<"Searching user database for:\nNick: "<<nick<<"\nUser: "
             <<user<<"\nHost: "<<host<<"\nName: "<<name<<endl;
@@ -162,7 +162,7 @@ int CUserDB::searchUser(string nick, string user, string host, string name)
                     if (toLower(members[x].names[y]) == toLower(name))
                         tmpScore += 25;
             if (debugMode) {// Debug Mode
-                cout<<compileUser(x)<<" "<<int(score)<<endl;
+                cout<<compileUser(x)<<" "<<tmpScore<<endl;
             }
             if (tmpScore > score) {
                 score = tmpScore;
