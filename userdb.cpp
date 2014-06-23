@@ -162,7 +162,7 @@ int CUserDB::searchUser(string nick, string user, string host, string name)
                     if (toLower(members[x].names[y]) == toLower(name))
                         tmpScore += 25;
             if (debugMode) {// Debug Mode
-                cout<<compileUser(x)<<" "<<tmpScore<<endl;
+                cout<<compileUser(x)<<" "<<int(tmpScore)<<endl;
             }
             if (tmpScore > score) {
                 score = tmpScore;
