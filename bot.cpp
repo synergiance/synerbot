@@ -361,7 +361,7 @@ void IrcBot::AI(string sender, string cmd, string msg)
     else if (toUpper(cmd) == "JOIN")
     {// User joined the channel
         string nick = sender.substr(0, sender.find("!"));
-        whois(nick);
+        if (nick != IrcBot::nick) whois(nick);
     }
     return;
 }
@@ -530,9 +530,12 @@ void IrcBot::lookup(string search, string talkto)
 {
     string nick, user, host, name;
     int memberNumber = UserDB->searchUser(search, search, search, search);
-    say(talkto, search + " was first seen as "
-        + UserDB->compileUser(memberNumber));
-    //memberEntry user = UserDB->getUser(memberNumber);
+    if (memberNumber == -1) say(talkto, "I don't believe I have met" + search);
+    else {
+        say(talkto, search + " was first seen as "
+            + UserDB->compileUser(memberNumber));
+        memberEntry member = UserDB->getUser(memberNumber);
+    }
 }
 
 void IrcBot::quote(string cmd, string args, string talkto, bool admin)
