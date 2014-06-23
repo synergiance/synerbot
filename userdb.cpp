@@ -132,7 +132,7 @@ int CUserDB::searchUser(string nick, string user, string host, string name)
     int pos = -1;
     char score = 0;
     if (members.size() > 0) {
-        for (unsigned x = 0; x < members.size() && pos == -1; x++) {
+        for (unsigned x = 0; x < members.size(); x++) {
             unsigned y;
             unsigned char tmpScore = 0;
             if (nick != "")

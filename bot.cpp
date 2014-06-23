@@ -530,7 +530,7 @@ void IrcBot::lookup(string search, string talkto)
 {
     string nick, user, host, name;
     int memberNumber = UserDB->searchUser(search, search, search, search);
-    if (memberNumber == -1) say(talkto, "I don't believe I have met" + search);
+    if (memberNumber == -1) say(talkto, "I don't believe I have met " + search);
     else {
         say(talkto, search + " was first seen as "
             + UserDB->compileUser(memberNumber));
