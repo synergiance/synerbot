@@ -539,7 +539,8 @@ void IrcBot::lookup(string search, string talkto)
             stringstream ss;
             memberEntry member = UserDB->getUser(memberNumbers.positions[c]);
             string tmpstr;
-            ss<<"Result #"<<c<<" with "<<memberNumbers.scores[c]<<"%% relevence";
+            ss<<"Result #"<<c<<" with "<<int(memberNumbers.scores[c])
+                <<"% relevence";
             say(talkto, ss.str());
             ss.str(string());
             unsigned char tmp = 0;
