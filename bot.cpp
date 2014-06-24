@@ -530,13 +530,53 @@ int IrcBot::commandHandle(string cmd, string args, string talkto, string usr)
 
 void IrcBot::lookup(string search, string talkto)
 {
-    string nick, user, host, name;
-    int memberNumber = UserDB->searchUser(search, search, search, search);
-    if (memberNumber == -1) say(talkto, "I don't believe I have met " + search);
+    posPair memberNumbers = UserDB->lookupUser(search, search, search, search);
+    if (memberNumbers.scores.size() == 0)
+        say(talkto, "I don't believe I have met " + search);
     else {
-        say(talkto, search + " was first seen as "
-            + UserDB->compileUser(memberNumber));
-        memberEntry member = UserDB->getUser(memberNumber);
+        say(talkto, "Results for " + search + ":");
+        for (unsigned c = 0; c < memberNumbers.scores.size(); c++) {
+            stringstream ss;
+            memberEntry member = UserDB->getUser(memberNumbers.positions[c]);
+            string tmpstr;
+            ss<<"Result #"<<c<<" with "<<memberNumbers.scores[c]<<"% relevence";
+            say(talkto, ss.str());
+            ss.str(string());
+            unsigned char tmp = 0;
+            ss<<"Most seen as: ";
+            for (unsigned y = 0; y < member.nicks.size(); y++) {
+                if (member.nickints[y] > tmp) {
+                    tmp = member.nickints[y];
+                    tmpstr = member.nicks[y];
+                }
+            }
+            ss<<tmpstr<<"!";
+            tmp = 0;
+            for (unsigned y = 0; y < member.users.size(); y++) {
+                if (member.userints[y] > tmp) {
+                    tmp = member.userints[y];
+                    tmpstr = member.users[y];
+                }
+            }
+            ss<<tmpstr<<"@";
+            tmp = 0;
+            for (unsigned y = 0; y < member.hosts.size(); y++) {
+                if (member.hostints[y] > tmp) {
+                    tmp = member.hostints[y];
+                    tmpstr = member.hosts[y];
+                }
+            }
+            ss<<tmpstr<<" (";
+            tmp = 0;
+            for (unsigned y = 0; y < member.names.size(); y++) {
+                if (member.nameints[y] > tmp) {
+                    tmp = member.nameints[y];
+                    tmpstr = member.names[y];
+                }
+            }
+            ss<<tmpstr<<")";
+            say(talkto, ss.str());
+        }
     }
 }
 

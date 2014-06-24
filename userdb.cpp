@@ -174,6 +174,45 @@ int CUserDB::searchUser(string nick, string user, string host, string name)
     return pos;
 }
 
+posPair CUserDB::lookupUser(string nick, string user, string host, string name)
+{// Searches and finds a user based on parameters
+    posPair scores;
+    if (debugMode) {// Debug mode
+        cout<<"Searching user database for:\nNick: "<<nick<<"\nUser: "
+            <<user<<"\nHost: "<<host<<"\nName: "<<name<<endl;
+    }
+    if (members.size() > 0) {
+        for (unsigned x = 0; x < members.size(); x++) {
+            unsigned y;
+            unsigned char tmpScore = 0;
+            if (nick != "")
+                for (y = 0; y < members[x].nicks.size(); y++)
+                    if (toLower(members[x].nicks[y]) == toLower(nick))
+                        tmpScore += 30;
+            if (user != "")
+                for (y = 0; y < members[x].users.size(); y++)
+                    if (toLower(members[x].users[y]) == toLower(user))
+                        tmpScore += 35;
+            if (host != "")
+                for (y = 0; y < members[x].hosts.size(); y++)
+                    if (toLower(members[x].hosts[y]) == toLower(host))
+                        tmpScore += 10;
+            if (name != "")
+                for (y = 0; y < members[x].names.size(); y++)
+                    if (toLower(members[x].names[y]) == toLower(name))
+                        tmpScore += 25;
+            if (debugMode) {// Debug Mode
+                cout<<compileUser(x)<<" "<<int(tmpScore)<<endl;
+            }
+            if (tmpScore > 0) {
+                scores.positions.push_back(x);
+                scores.scores.push_back(tmpScore);
+            }
+        }
+    }
+    return scores;
+}
+
 void CUserDB::readdb()
 {// Reads the user database into memory
     ifstream ifile (userdbfile.c_str());

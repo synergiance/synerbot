@@ -24,6 +24,11 @@ struct memberEntry {
     vector<int> nameints;
 };
 
+struct posPair {
+    vector<unsigned> positions;
+    vector<unsigned char> scores;
+};
+
 class CUserDB
 {
 public:
@@ -37,6 +42,7 @@ public:
     string checkUser(string nick, string user, string host, string name);
     string spotUser(string nick, string user, string host, string name);
     int searchUser(string nick, string user, string host, string name);
+    posPair lookupUser(string nick, string user, string host, string name);
 
     string compileUser(int num);
 
