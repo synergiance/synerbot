@@ -543,6 +543,10 @@ void IrcBot::lookup(string search, string talkto)
                 <<"% relevance";
             say(talkto, ss.str());
             ss.str(string());
+            ss<<"First seen as: "<<member.nicks[0]<<"!"<<member.users[0]<<"@"
+                <<member.hosts[0]<<" ("<<member.names[0]<<")";
+            say(talkto, ss.str());
+            ss.str(string());
             unsigned char tmp = 0;
             ss<<"Most seen as: ";
             for (unsigned y = 0; y < member.nicks.size(); y++) {
