@@ -52,7 +52,9 @@ int main(int argc, char* argv[])
     char* botmem = new char[sizeof(IrcBot)];
 
     // Variables
-    int debugMode = 0; bool verbose = false;
+    int debugMode = 0;
+    bool verbose = false;
+    bool silent = false;
     
     for (int c = 1; c < argc; c++)
     {
@@ -75,15 +77,23 @@ int main(int argc, char* argv[])
         }
         if (strncmp(argv[c], "-v", 20) == 0)
             verbose = true;
+        if (strncmp(argv[c], "-s", 20) == 0)
+            silent = true;
     }
 
-    // Register SIGINT signal
-    signal(SIGINT, sigHandler);
-    
-    // Launch bot
-    bot = new (botmem) IrcBot("ibot.cfg", debugMode, verbose);
-    bot->start();
-    delete bot;
+    if (verbose && silent) { // Verbose and silent are incompatible
+        cout<<"Verbose and Silent cannot both be enabled at the same time\n"
+            <<"Program terminated\n";
+    }
+    else { // No conflicts
+        // Register SIGINT signal
+        signal(SIGINT, sigHandler);
+        
+        // Launch bot
+        bot = new (botmem) IrcBot("ibot.cfg", debugMode, verbose);
+        bot->start();
+        delete bot;
+    }
     
 
     return 0;
