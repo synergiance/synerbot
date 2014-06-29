@@ -502,6 +502,21 @@ int IrcBot::commandHandle(string cmd, string args, string talkto, string usr)
         say(talkto, "(╯°□°）╯︵ ┻━┻"); cmdMatch = true;
     } else if (toLower(cmd).compare("whois") == 0) {
         lookup(args, talkto); cmdMatch = true;
+    } else if (toLower(cmd).compare("compare") == 0) {
+        string str1, str2;
+        int int1, int2;
+        stringstream ss;
+        getFirstWord(args, str1, str2);
+        if (str1 == "" || str2 == "")
+            say(talkto, "You mist type 2 words");
+        else {
+            compare(str1, str2, int1, int2);
+            ss<<"Beginning: "<<int1;
+            say(talkto, ss.str());
+            ss.str(string());
+            ss<<"End: "<<int2;
+            say(talkto, ss.str());
+        }
     }
     
     // Admin commands

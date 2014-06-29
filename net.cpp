@@ -29,7 +29,7 @@
 
 using namespace std;
 
-#define MAXDATASIZE 100
+#define MAXDATASIZE 128
 
 string CNetSocket::strDisconnected = "GLOBAL DISCONNECTED";
 
