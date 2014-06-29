@@ -502,21 +502,6 @@ int IrcBot::commandHandle(string cmd, string args, string talkto, string usr)
         say(talkto, "(╯°□°）╯︵ ┻━┻"); cmdMatch = true;
     } else if (toLower(cmd).compare("whois") == 0) {
         lookup(args, talkto); cmdMatch = true;
-    } else if (toLower(cmd).compare("compare") == 0) {
-        string str1, str2;
-        int int1, int2;
-        stringstream ss;
-        getFirstWord(args, str1, str2);
-        if (str1 == "" || str2 == "")
-            say(talkto, "You mist type 2 words");
-        else {
-            compare(str1, str2, int1, int2);
-            ss<<"Beginning: "<<int1;
-            say(talkto, ss.str());
-            ss.str(string());
-            ss<<"End: "<<int2;
-            say(talkto, ss.str());
-        }
     }
     
     // Admin commands
@@ -580,10 +565,48 @@ void IrcBot::lookup(string search, string talkto)
             }
             ss<<tmpstr<<"@";
             tmp = 0;
-            for (unsigned y = 0; y < member.hosts.size(); y++) {
-                if (member.hostints[y] > tmp) {
-                    tmp = member.hostints[y];
-                    tmpstr = member.hosts[y];
+            {// Force these arrays to go out of scope
+                vector<string> tmpHosts;
+                vector<int> tmpHostInts;
+                for (int x = 0; x < member.hosts.size() - 1; x++) {
+                    for (int y = x + 1; y < member.hosts.size(); y++) {
+                        int a, b, d; string str;
+                        compare(member.hosts[x], member.hosts[y], a, b);
+                        if (a > 0 && a > b) {
+                            str = member.hosts[x].substr(0,a) + "*";
+                            d = member.hostints[x] + member.hostints[y];
+                        }
+                        if (b > 0 && b > a) {
+                            str = "*" + member.hosts[x].substr(
+                                member.hosts[x].size() - b);
+                            d = member.hostints[x] + member.hostints[y];
+                        }
+                        if (d != 0) {
+                            for (int e = 0; e < tmpHosts.size(); e++) {
+                                if (str == tmpHosts[e]) {
+                                    str = ""; d = 0;
+                                    tmpHostInts[e] += member.hostints[x];
+                                    break;
+                                }
+                            }
+                            if (d > 0) {
+                                tmpHosts.push_back(str);
+                                tmpHostInts.push_back(d);
+                            }
+                        }
+                    }
+                }
+                for (unsigned y = 0; y < member.hosts.size(); y++) {
+                    if (member.hostints[y] > tmp) {
+                        tmp = member.hostints[y];
+                        tmpstr = member.hosts[y];
+                    }
+                }
+                for (unsigned y = 0; y < tmpHosts.size(); y++) {
+                    if (tmpHostInts[y] > tmp) {
+                        tmp = tmpHostInts[y];
+                        tmpstr = tmpHosts[y];
+                    }
                 }
             }
             ss<<tmpstr<<" (";
