@@ -578,7 +578,6 @@ void IrcBot::lookup(string search, string talkto)
                             if (b > 0) str += member.hosts[x].substr(
                                         member.hosts[x].size() - b);
                             d = member.hostints[x] + member.hostints[y];
-                            cout<<str<<endl;
                         }
                         if (d != 0) {
                             for (int e = 0; e < tmpHosts.size(); e++) {
