@@ -570,18 +570,15 @@ void IrcBot::lookup(string search, string talkto)
                 vector<int> tmpHostInts;
                 for (int x = 0; x < member.hosts.size() - 1; x++) {
                     for (int y = x + 1; y < member.hosts.size(); y++) {
-                        int a, b, d; string str;
+                        int a, b, d = 0; string str;
                         compare(member.hosts[x], member.hosts[y], a, b);
-                        if (a > 0 && a > b) {
-                            str = member.hosts[x].substr(0,a) + "*";
-                            cout<<str<<endl;
+                        if (a > 0 || b > 0) {
+                            if (a > 0) str += member.hosts[x].substr(0,a);
+                            str += "*";
+                            if (b > 0) str += member.hosts[x].substr(
+                                        member.hosts[x].size() - b);
                             d = member.hostints[x] + member.hostints[y];
-                        }
-                        if (b > 0 && b > a) {
-                            str = "*" + member.hosts[x].substr(
-                                member.hosts[x].size() - b);
                             cout<<str<<endl;
-                            d = member.hostints[x] + member.hostints[y];
                         }
                         if (d != 0) {
                             for (int e = 0; e < tmpHosts.size(); e++) {
