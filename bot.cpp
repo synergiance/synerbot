@@ -583,12 +583,12 @@ void IrcBot::lookup(string search, string talkto)
                             for (int e = 0; e < tmpHosts.size(); e++) {
                                 if (str == tmpHosts[e]) {
                                     str = ""; d = 0;
-                                    tmpHostInts[e] += member.hostints[x];
                                     break;
                                 }
                             }
                             if (d > 0) {
-                                for (int e = 0; e < x; e++) {
+                                d = 0;
+                                for (int e = 0; e < member.hosts.size(); e++) {
                                     int f, g;
                                     compare(str,member.hosts[e],f,g);
                                     if (f==a && g==b) d += member.hostints[e];
@@ -596,9 +596,9 @@ void IrcBot::lookup(string search, string talkto)
                                 tmpHosts.push_back(str);
                                 tmpHostInts.push_back(d);
                             }
+                            if (debugMode == 27)
+                                cout<<"Address compare: "<<str<<" "<<d<<endl;
                         }
-                        if (debugMode == 27)
-                            cout<<"Address compare: "<<str<<" "<<d<<endl;
                     }
                 }
                 for (unsigned y = 0; y < member.hosts.size(); y++) {
