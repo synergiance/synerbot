@@ -597,6 +597,8 @@ void IrcBot::lookup(string search, string talkto)
                                 tmpHostInts.push_back(d);
                             }
                         }
+                        if (debugMode == 27)
+                            cout<<"Address compare: "<<str<<" "<<d<<endl;
                     }
                 }
                 for (unsigned y = 0; y < member.hosts.size(); y++) {
