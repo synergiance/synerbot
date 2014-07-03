@@ -588,6 +588,11 @@ void IrcBot::lookup(string search, string talkto)
                                 }
                             }
                             if (d > 0) {
+                                for (int e = 0; e < x; e++) {
+                                    int f, g;
+                                    compare(str,member.hosts[e],f,g);
+                                    if (f==a && g==b) d += member.hostints[e];
+                                }
                                 tmpHosts.push_back(str);
                                 tmpHostInts.push_back(d);
                             }
