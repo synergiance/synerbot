@@ -595,9 +595,9 @@ void IrcBot::lookup(string search, string talkto)
                                 }
                                 tmpHosts.push_back(str);
                                 tmpHostInts.push_back(d);
+                                if (debugMode == 27)
+                                    cout<<"Found: "<<str<<" "<<d<<endl;
                             }
-                            if (debugMode == 27)
-                                cout<<"Address compare: "<<str<<" "<<d<<endl;
                         }
                     }
                 }
