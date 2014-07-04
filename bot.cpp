@@ -97,7 +97,7 @@ IrcBot::IrcBot(string cfg, int bDebug, bool bVerbose)
              + toLower(nick) + "\\b";
 
     // Set other modules
-    if (debugMode == 8 || debugMode == 13)
+    if (debugMode == 8 || debugMode == 13 || debugMode == 28)
         MessageQueue = new (msgmem) CMutex(true);
     else
         MessageQueue = new (msgmem) CMutex();

@@ -421,8 +421,7 @@ void CNetSocket::handleMessage(string data)
     //cout<<"Test 1\n";
 
     // For debugging purposes
-    //if (debugMode == 6) MessageQueue->push("COUT " + data);
-    if (debugMode == 6) cout<<data<<endl;
+    if (debugMode == 6 || debugMode == 28) MessageQueue->push("COUT " + data);
 
     // Let's grab the first word
     if (!getFirstWord(data, sender, message)) return;
