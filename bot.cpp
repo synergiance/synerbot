@@ -360,10 +360,15 @@ void IrcBot::AI(string sender, string cmd, string msg)
             commandHandle(command, args, name, sender);
         }
     }
-    else if (toUpper(cmd) == "JOIN")
-    {// User joined the channel
+    else if (toUpper(cmd) == "JOIN") {// User joined the channel
         string nick = sender.substr(0, sender.find("!"));
         if (nick != IrcBot::nick) whois(nick);
+    }
+    else if (toUpper(cmd) == "NICK") {// Nick change
+        whois(msg);
+    }
+    else if (toUpper(cmd) == "QUIT") {// User quit
+        //code
     }
     return;
 }
