@@ -201,7 +201,7 @@ void CNetSocket::main()
             str = str.substr(0, str.size() - 2);
             if (debugMode == 9) cout<<"PIPE: "<<str<<endl;
             if (debugMode == 10 || debugMode == 12)
-                MessageQueue->push("GLOBAL COUT PIPE: " + str);
+                MessageQueue->push("COUT PIPE: " + str);
             if (!pipeHandle(str)) keepGoing = false;
         }
 
@@ -216,7 +216,7 @@ void CNetSocket::main()
             str = str.substr(0, str.size() - 2);
             if (debugMode == 9) cout<<"NET: "<<str<<endl;
             if (debugMode == 10)
-                MessageQueue->push("GLOBAL COUT NET: " + str);
+                MessageQueue->push("COUT NET: " + str);
             handleMessage(str);
         }
     }
@@ -421,7 +421,8 @@ void CNetSocket::handleMessage(string data)
     //cout<<"Test 1\n";
 
     // For debugging purposes
-    if (debugMode == 6) MessageQueue->push("GLOBAL COUT " + data);
+    //if (debugMode == 6) MessageQueue->push("COUT " + data);
+    if (debugMode == 6) cout<<data<<endl;
 
     // Let's grab the first word
     if (!getFirstWord(data, sender, message)) return;
