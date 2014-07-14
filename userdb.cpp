@@ -385,22 +385,27 @@ int memberEntry::getHighestMask (const vector<int>& stringNums,
     int tmp; string tmpstr;
     vector<string> masks;
     vector<int> maskNums;
+    if (debugMode) cout<<"BEGIN SEARCH FOR HIGHEST MASK\n";
     if (stringNums.size() != strings.size()) return -1;
-    cout<<"Nums size: "<<stringNums.size()<<"\nStrings size: "<<strings.size()<<endl;
     for (unsigned x = 0; x < strings.size() - 1; x++) {
+        if (debugMode) cout<<"Comparing: "<<strings[x]<<endl;
         for (unsigned y = x + 1; y < strings.size(); y++) {
             int a, b, d = 0; string str;
+            if (debugMode) cout<<"To: "<<strings[y]<<endl;
             compare(strings[x], strings[y], a, b);
+            if (debugMode) cout<<"Begin: "<<a<<" End: "<<b<<endl;
             if (a > 0 || b > 0) {
                 if (a > 0) str += strings[x].substr(0,a);
                 str += "*";
                 if (b > 0) str += strings[x].substr(strings[x].size() - b);
                 d = stringNums[x] + stringNums[y];
             }
+            if (debugMode) cout<<"Hypothetical mask: "<<str<<endl;
             if (d != 0) {
                 for (unsigned e = 0; e < masks.size(); e++) {
                     if (str == masks[e]) {
                         str = ""; d = 0;
+                        if (debugMode) cout<<"Duplicate\n";
                         break;
                     }
                 }
@@ -413,24 +418,28 @@ int memberEntry::getHighestMask (const vector<int>& stringNums,
                     }
                     masks.push_back(str);
                     maskNums.push_back(d);
+                    if (debugMode) cout<<"Added\n";
                 }
             }
         }
     }
+    if (debugMode) cout<<"SEARCHING RAW\n";
     for (unsigned y = 0; y < strings.size(); y++) {
         if (stringNums[y] > tmp) {
             tmp = stringNums[y];
             tmpstr = strings[y];
-            cout<<tmpstr<<" "<<tmp<<endl;
+            if (debugMode) cout<<tmpstr<<" "<<tmp<<endl;
         }
     }
+    if (debugMode) cout<<"SEARCHING GENERATED\n";
     for (unsigned y = 0; y < masks.size(); y++) {
         if (maskNums[y] > tmp) {
             tmp = maskNums[y];
             tmpstr = masks[y];
-            cout<<tmpstr<<" "<<tmp<<endl;
+            if (debugMode) cout<<tmpstr<<" "<<tmp<<endl;
         }
     }
+    if (debugMode) cout<<"Final Result: "<<tmpstr<<endl;
     mask = tmpstr;
     num = tmp;
     return 0;

@@ -548,6 +548,7 @@ void IrcBot::lookup(string search, string talkto)
                 <<"% relevance";
             say(talkto, ss.str());
             ss.str(string());
+            if (debugMode == 27) member.debugMode = true;
             say(talkto, member.firstSeen());
             say(talkto, member.mostSeen());
         }
