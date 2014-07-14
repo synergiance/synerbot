@@ -412,7 +412,6 @@ int memberEntry::getHighestMask (const vector<int>& stringNums,
                     }
                     masks.push_back(str);
                     maskNums.push_back(d);
-                    cout<<str<<" "<<d<<endl;
                 }
             }
         }
@@ -421,12 +420,14 @@ int memberEntry::getHighestMask (const vector<int>& stringNums,
         if (stringNums[y] > tmp) {
             tmp = stringNums[y];
             tmpstr = strings[y];
+            cout<<tmpstr<<" "<<tmp<<endl;
         }
     }
     for (unsigned y = 0; y < masks.size(); y++) {
         if (maskNums[y] > tmp) {
             tmp = maskNums[y];
             tmpstr = masks[y];
+            cout<<tmpstr<<" "<<tmp<<endl;
         }
     }
     mask = tmpstr;
