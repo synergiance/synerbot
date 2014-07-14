@@ -369,7 +369,7 @@ string memberEntry::lastSeen()
 unsigned memberEntry::getHighest(const vector<int>& array)
 {
     unsigned a = 0;
-    for (unsigned c; c < array.size(); c++)
+    for (unsigned c = 0; c < array.size(); c++)
         if (array[c] > array[a]) a = c;
     return a;
 }
@@ -412,6 +412,7 @@ int memberEntry::getHighestMask (const vector<int>& stringNums,
                     }
                     masks.push_back(str);
                     maskNums.push_back(d);
+                    cout<<str<<" "<<d<<endl;
                 }
             }
         }
