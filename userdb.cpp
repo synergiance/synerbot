@@ -386,7 +386,7 @@ int memberEntry::getHighestMask (const vector<int>& stringNums,
     vector<string> masks;
     vector<int> maskNums;
     if (stringNums.size() != strings.size()) return -1;
-    cout<<"CHECK\n";
+    cout<<"Nums size: "<<stringNums.size()<<"\nStrings size: "<<strings.size()<<endl;
     for (unsigned x = 0; x < strings.size() - 1; x++) {
         for (unsigned y = x + 1; y < strings.size(); y++) {
             int a, b, d = 0; string str;
