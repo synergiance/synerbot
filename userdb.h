@@ -14,14 +14,37 @@ using namespace std;
 #define CUSERDB_H_
 
 struct memberEntry {
+public:
     vector<string> nicks;
     vector<int> nickints;
+    vector<int> nicktime;
+    vector<int> nickseen;
+    vector<int> nickfrst;
     vector<string> users;
     vector<int> userints;
+    vector<int> usertime;
+    vector<int> userseen;
+    vector<int> userfrst;
     vector<string> hosts;
     vector<int> hostints;
+    vector<int> hosttime;
+    vector<int> hostseen;
+    vector<int> hostfrst;
     vector<string> names;
     vector<int> nameints;
+    vector<int> nametime;
+    vector<int> nameseen;
+    vector<int> namefrst;
+
+    string firstSeen();
+    string mostSeen();
+    string lastSeen();
+private:
+    unsigned getHighest(const vector<int>& array);
+    int getHighestMask (const vector<int>& stringNums,
+        const vector<string>& strings, string& mask, int& num);
+    int getHighestMask (const vector<int>& stringNums,
+        const vector<string>& strings, string& mask);
 };
 
 struct posPair {

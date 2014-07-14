@@ -16,6 +16,7 @@ A class designed to keep track of users across hostnames
 #include <fstream>
 #include <iostream>
 #include <stdlib.h>
+#include <sstream>
 
 #include "userdb.h"
 #include "miscbotlib.h"
@@ -324,4 +325,110 @@ void CUserDB::writedb()
     else {
         cout<<"No users spotted\n";
     }
+}
+
+//------------------------------------------------------------------------------
+//    Member Entry Code
+
+string memberEntry::firstSeen()
+{
+    stringstream ss;
+    ss<<"First seen as: "<<nicks[0]<<"!"<<users[0]
+      <<"@"<<hosts[0]<<" ("<<names[0]<<")";
+    return ss.str();
+}
+
+string memberEntry::mostSeen()
+{// Returns most seen variation of current member entry
+    stringstream ss;
+    string tmpstr;
+    unsigned tmp = 0;
+    ss<<"Most seen as: ";
+    tmp = getHighest(nickints);
+    tmpstr = nicks[tmp];
+    ss<<tmpstr<<"!";
+    tmp = getHighest(userints);
+    tmpstr = users[tmp];
+    ss<<tmpstr<<"@";
+    tmpstr = string();
+    getHighestMask(hostints, hosts, tmpstr);
+    ss<<tmpstr<<" (";
+    tmp = getHighest(nameints);
+    tmpstr = names[tmp];
+    ss<<tmpstr<<")";
+    return ss.str();
+}
+
+string memberEntry::lastSeen()
+{
+    stringstream ss;
+    ss<<"This function is not currently ready for production";
+    return ss.str();
+}
+
+unsigned memberEntry::getHighest(const vector<int>& array)
+{
+    unsigned a = 0;
+    for (unsigned c; c < array.size(); c++)
+        if (array[c] > array[a]) a = c;
+    return a;
+}
+
+// Boiler Plate - (yes I love boiler plating things, sue me)
+int memberEntry::getHighestMask (const vector<int>& stringNums,
+    const vector<string>& strings, string& mask)
+{ int a; return getHighestMask(stringNums, strings, mask, a); }
+
+int memberEntry::getHighestMask (const vector<int>& stringNums,
+    const vector<string>& strings, string& mask, int& num)
+{
+    int tmp; string tmpstr;
+    vector<string> masks;
+    vector<int> maskNums;
+    if (stringNums.size() != strings.size()) return -1;
+    for (unsigned x = 0; x < strings.size() - 1; x++) {
+        for (unsigned y = x + 1; y < strings.size(); y++) {
+            int a, b, d = 0; string str;
+            compare(strings[x], strings[y], a, b);
+            if (a > 0 || b > 0) {
+                if (a > 0) str += strings[x].substr(0,a);
+                str += "*";
+                if (b > 0) str += strings[x].substr(strings[x].size() - b);
+                d = stringNums[x] + stringNums[y];
+            }
+            if (d != 0) {
+                for (unsigned e = 0; e < masks.size(); e++) {
+                    if (str == masks[e]) {
+                        str = ""; d = 0;
+                        break;
+                    }
+                }
+                if (d > 0) {
+                    d = 0;
+                    for (unsigned e = 0; e < strings.size(); e++) {
+                        int f, g;
+                        compare(str,strings[e],f,g);
+                        if (f==a && g==b) d += stringNums[e];
+                    }
+                    masks.push_back(str);
+                    maskNums.push_back(d);
+                }
+            }
+        }
+    }
+    for (unsigned y = 0; y < strings.size(); y++) {
+        if (stringNums[y] > tmp) {
+            tmp = stringNums[y];
+            tmpstr = strings[y];
+        }
+    }
+    for (unsigned y = 0; y < masks.size(); y++) {
+        if (maskNums[y] > tmp) {
+            tmp = maskNums[y];
+            tmpstr = masks[y];
+        }
+    }
+    mask = tmpstr;
+    num = tmp;
+    return 0;
 }

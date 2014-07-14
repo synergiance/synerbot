@@ -548,87 +548,8 @@ void IrcBot::lookup(string search, string talkto)
                 <<"% relevance";
             say(talkto, ss.str());
             ss.str(string());
-            ss<<"First seen as: "<<member.nicks[0]<<"!"<<member.users[0]<<"@"
-                <<member.hosts[0]<<" ("<<member.names[0]<<")";
-            say(talkto, ss.str());
-            ss.str(string());
-            unsigned char tmp = 0;
-            ss<<"Most seen as: ";
-            for (unsigned y = 0; y < member.nicks.size(); y++) {
-                if (member.nickints[y] > tmp) {
-                    tmp = member.nickints[y];
-                    tmpstr = member.nicks[y];
-                }
-            }
-            ss<<tmpstr<<"!";
-            tmp = 0;
-            for (unsigned y = 0; y < member.users.size(); y++) {
-                if (member.userints[y] > tmp) {
-                    tmp = member.userints[y];
-                    tmpstr = member.users[y];
-                }
-            }
-            ss<<tmpstr<<"@";
-            tmp = 0;
-            {// Force these arrays to go out of scope
-                vector<string> tmpHosts;
-                vector<int> tmpHostInts;
-                for (int x = 0; x < member.hosts.size() - 1; x++) {
-                    for (int y = x + 1; y < member.hosts.size(); y++) {
-                        int a, b, d = 0; string str;
-                        compare(member.hosts[x], member.hosts[y], a, b);
-                        if (a > 0 || b > 0) {
-                            if (a > 0) str += member.hosts[x].substr(0,a);
-                            str += "*";
-                            if (b > 0) str += member.hosts[x].substr(
-                                        member.hosts[x].size() - b);
-                            d = member.hostints[x] + member.hostints[y];
-                        }
-                        if (d != 0) {
-                            for (int e = 0; e < tmpHosts.size(); e++) {
-                                if (str == tmpHosts[e]) {
-                                    str = ""; d = 0;
-                                    break;
-                                }
-                            }
-                            if (d > 0) {
-                                d = 0;
-                                for (int e = 0; e < member.hosts.size(); e++) {
-                                    int f, g;
-                                    compare(str,member.hosts[e],f,g);
-                                    if (f==a && g==b) d += member.hostints[e];
-                                }
-                                tmpHosts.push_back(str);
-                                tmpHostInts.push_back(d);
-                                if (debugMode == 27)
-                                    cout<<"Found: "<<str<<" "<<d<<endl;
-                            }
-                        }
-                    }
-                }
-                for (unsigned y = 0; y < member.hosts.size(); y++) {
-                    if (member.hostints[y] > tmp) {
-                        tmp = member.hostints[y];
-                        tmpstr = member.hosts[y];
-                    }
-                }
-                for (unsigned y = 0; y < tmpHosts.size(); y++) {
-                    if (tmpHostInts[y] > tmp) {
-                        tmp = tmpHostInts[y];
-                        tmpstr = tmpHosts[y];
-                    }
-                }
-            }
-            ss<<tmpstr<<" (";
-            tmp = 0;
-            for (unsigned y = 0; y < member.names.size(); y++) {
-                if (member.nameints[y] > tmp) {
-                    tmp = member.nameints[y];
-                    tmpstr = member.names[y];
-                }
-            }
-            ss<<tmpstr<<")";
-            say(talkto, ss.str());
+            say(talkto, member.firstSeen());
+            say(talkto, member.mostSeen());
         }
     }
 }
