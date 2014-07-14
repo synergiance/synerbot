@@ -39,6 +39,8 @@ public:
     string firstSeen();
     string mostSeen();
     string lastSeen();
+
+    bool debugMode;
 private:
     unsigned getHighest(const vector<int>& array);
     int getHighestMask (const vector<int>& stringNums,
