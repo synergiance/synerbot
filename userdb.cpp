@@ -399,8 +399,8 @@ int memberEntry::getHighestMask (const vector<int>& stringNums,
                 str += "*";
                 if (b > 0) str += strings[x].substr(strings[x].size() - b);
                 d = stringNums[x] + stringNums[y];
+                if (debugMode) cout<<"Hypothetical mask: "<<str<<" "<<d<<endl;
             }
-            if (debugMode) cout<<"Hypothetical mask: "<<str<<endl;
             if (d != 0) {
                 for (unsigned e = 0; e < masks.size(); e++) {
                     if (str == masks[e]) {
