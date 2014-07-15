@@ -92,19 +92,12 @@ private:
     void say(string target, string message);
     void action(string target, string message);
 
-    int addQuote(string quote);
-    int remQuote(int pos);
-    bool loadQuotes(string file);
-    int saveQuotes(string file);
-
     // User Functions
-    void quote(string cmd, string args, string talkto, bool admin);
     void editPrivs(string cmd, string args, string talkto);
+    void lookup(string search, string talkto);
 
     // Utils
     void whois(string target);
-
-    void lookup(string search, string talkto);
 };
 
 #endif /* IRCBOT_H_ */
