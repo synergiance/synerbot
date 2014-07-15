@@ -426,19 +426,23 @@ int memberEntry::getHighestMask (const vector<int>& stringNums,
     }
     if (debugMode) cout<<"SEARCHING RAW\n";
     for (unsigned y = 0; y < strings.size(); y++) {
+        if (debugMode) cout<<strings[y]<<" "<<stringNums[y];
         if (stringNums[y] > tmp) {
             tmp = stringNums[y];
             tmpstr = strings[y];
-            if (debugMode) cout<<tmpstr<<" "<<tmp<<endl;
+            if (debugMode) cout<<" √";
         }
+        if (debugMode) cout<<endl;
     }
     if (debugMode) cout<<"SEARCHING GENERATED\n";
     for (unsigned y = 0; y < masks.size(); y++) {
+        if (debugMode) cout<<masks[y]<<" "<<maskNums[y];
         if (maskNums[y] > tmp) {
             tmp = maskNums[y];
             tmpstr = masks[y];
-            if (debugMode) cout<<tmpstr<<" "<<tmp<<endl;
+            if (debugMode) cout<<" √";
         }
+        if (debugMode) cout<<endl;
     }
     if (debugMode) cout<<"Final Result: "<<tmpstr<<endl;
     mask = tmpstr;
