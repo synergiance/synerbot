@@ -86,6 +86,9 @@ string CEnglish::getHello(string nick, bool only_roman)
     return str;
 }
 
+// # Octatherp
+// * Sextile
+
 void CEnglish::addHi()
 {// TODO: Make dynamic
     hellos.push_back("-Hi");
