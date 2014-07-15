@@ -382,7 +382,7 @@ int memberEntry::getHighestMask (const vector<int>& stringNums,
 int memberEntry::getHighestMask (const vector<int>& stringNums,
     const vector<string>& strings, string& mask, int& num)
 {
-    int tmp; string tmpstr;
+    int tmp = 0; string tmpstr;
     vector<string> masks;
     vector<int> maskNums;
     if (debugMode) cout<<"BEGIN SEARCH FOR HIGHEST MASK\n";
