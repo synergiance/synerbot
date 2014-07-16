@@ -337,6 +337,7 @@ void IrcBot::AI(string sender, string cmd, string msg)
                 }
             } else if (regex_search(toLower(message), regex(rgxHello)))
                 say(channel, EngLang->getHello(name, false));
+                // Above regex_search call segfaults in cygwin
         } else
         {// Message is a user
             extractCommandArgs(message, command, args);

@@ -30,6 +30,7 @@ ibot
 
 # Specific files
 quotes.txt
+*.stackdump
 
 # Folders
 lang/
