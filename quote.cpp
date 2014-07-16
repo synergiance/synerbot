@@ -104,7 +104,7 @@ void QuoteHandler::command(string cmd, string args, string talkto, string usr)
                     if (verboseMode) cout<<"Reciting quote "<<intTmp<<endl;
                     say(talkto, quotes[intTmp]);
                 }
-                if (cmd.compare("remove") == 0)
+                if ((cmd.compare("remove") == 0) || (cmd.compare("rem") == 0))
                 {
                     if (verboseMode) cout<<"Removing quote "<<intTmp<<endl;
                     remQuote(intTmp);
