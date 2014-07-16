@@ -68,17 +68,15 @@ void QuoteHandler::command(string cmd, string args, string talkto, string usr)
         str2 = getQuoter(str);
         if (str2 == "") str2 = usr.substr(0, usr.find('!'));
         //say(talkto, str + " ~" + str2);
-        tmpq = addQuote(str, str2);
-        if (tmpq == -1)
-        {
+        if (str2 == "kitsune") {
+            if (verboseMode) cout<<"Invalid quote: Faggit";
+            say(talkto, "Lol that kid doesn't say anything original");
+        } else if ((tmpq = addQuote(str, str2)) == -1) {
             if (verboseMode) cout<<"Quote already exists:\n"<<args<<endl;
             say(talkto, "Quote already exists");
         } else if (tmpq == 0) {
             if (verboseMode) cout<<"Adding quote:\n"<<args<<endl;
             say(talkto, "Quote added");
-        } else if (tmpq == -3) {
-            if (verboseMode) cout<<"Invalid quote: Faggit";
-            say(talkto, "Lol that kid doesn't say anything original");
         } else {
             if (verboseMode) cout<<"Quote null\n";
             say(talkto, "Invalid quote: Null");
@@ -183,7 +181,6 @@ int QuoteHandler::addQuote(string quote, string sender)
                     && (alreadyTaken == false)); ++index) {
                 string tmp = quotes.at(index);
                 getQuoter(tmp);
-                if (toLower(quoter) == "kitsune") return -3;
                 if (quote.compare(tmp) == 0)
                     alreadyTaken = true;
             }
