@@ -23,4 +23,4 @@ bool matchesChars(char chr, string str);
 
 bool parseUser(string fqdn, string& nick, string& user, string& host);
 
-void compare(string str1, string str2, int& begin, int& end);
+void compare(string str1, string str2, unsigned& begin, unsigned& end);
