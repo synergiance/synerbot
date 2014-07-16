@@ -105,7 +105,7 @@ bool parseUser(string fqdn, string& nick, string& user, string& host)
     return ret;
 }
 
-void compare(string str1, string str2, int& begin, int& end)
+void compare(string str1, string str2, unsigned& begin, unsigned& end)
 {
     for (begin = 0; begin < str1.size() && begin < str2.size(); begin++)
         if (str1[begin] != str2[begin]) break;

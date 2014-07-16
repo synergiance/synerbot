@@ -26,6 +26,7 @@
 # Compiled program and its configuration files
 ibot
 *.cfg
+*.db
 
 # Specific files
 quotes.txt

@@ -413,7 +413,7 @@ int memberEntry::getHighestMask (const vector<int>& stringNums,
                 if (d > 0) {
                     d = 0;
                     for (unsigned e = 0; e < strings.size(); e++) {
-                        int f, g;
+                        unsigned f, g;
                         compare(str,strings[e],f,g);
                         if (f==a && g==b) d += stringNums[e];
                     }
