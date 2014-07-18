@@ -164,16 +164,16 @@ void CNetSocket::main()
 
     if (tmp == -1) // We didn't manage to connect
         MessageQueue->push(strDisconnected);
-    else if (tmp == 0) // Socket connected fine
+    else if (tmp == 0) {// Socket connected fine
+        // Set all signals green
         keepGoing = true;
-    else // We may or may not want this special case
+        accessConnected(true);
+        // Send username info
+        sendData("NICK " + botNick + "\r\n");
+        sendData("USER " + botUser + " 8 * :" + botRealName + "\r\n");
+    } else // We may or may not want this special case
         MessageQueue->push(strDisconnected);
 
-    accessConnected(true);
-
-    // Send username info
-    sendData("NICK " + botNick + "\r\n");
-    sendData("USER " + botUser + " 8 * :" + botRealName + "\r\n");
 
     while (keepGoing)
     {// Main loop
