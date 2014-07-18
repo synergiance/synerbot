@@ -231,8 +231,8 @@ void CNetSocket::main()
         MessageQueue->push("COUT Disconnecting...");
         if (disconMessage.compare("") != 0)
             sendLine("QUIT :" + disconMessage);
-        close(sockfd);
     }
+    close(sockfd);
 
     accessConnected(false);
     MessageQueue->push("COUT Net terminated");
