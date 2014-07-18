@@ -162,17 +162,20 @@ void CNetSocket::main()
         MessageQueue->push(ss.str());
     }
 
-    if (tmp == -1) // We didn't manage to connect
-        MessageQueue->push(strDisconnected);
-    else if (tmp == 0) {// Socket connected fine
+    if (tmp == 0) {// Socket connected fine
         // Set all signals green
         keepGoing = true;
         accessConnected(true);
         // Send username info
         sendData("NICK " + botNick + "\r\n");
         sendData("USER " + botUser + " 8 * :" + botRealName + "\r\n");
-    } else // We may or may not want this special case
+    }
+    /* --This section of code breaks ordering
+    else if (tmp == -1) // We didn't manage to connect
         MessageQueue->push(strDisconnected);
+    else // We may or may not want this special case
+        MessageQueue->push(strDisconnected);
+    */
 
 
     while (keepGoing)
@@ -220,12 +223,16 @@ void CNetSocket::main()
             handleMessage(str);
         }
     }
+
     MessageQueue->push("GLOBAL COUT Disconnecting...");
 
-    // Disconnect before we close
-    if (disconMessage.compare("") != 0)
-        sendLine("QUIT :" + disconMessage);
-    close(sockfd);
+    if (tmp == 0) {// Only run this if we were connected in the first place
+        // Disconnect before we close
+        if (disconMessage.compare("") != 0)
+            sendLine("QUIT :" + disconMessage);
+        close(sockfd);
+    }
+
     MessageQueue->push(strDisconnected);
     accessConnected(false);
 }
