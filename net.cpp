@@ -226,17 +226,17 @@ void CNetSocket::main()
         }
     }
 
-    MessageQueue->push("GLOBAL COUT Disconnecting...");
-
     if (tmp == 0) {// Only run this if we were connected in the first place
         // Disconnect before we close
+        MessageQueue->push("COUT Disconnecting...");
         if (disconMessage.compare("") != 0)
             sendLine("QUIT :" + disconMessage);
         close(sockfd);
     }
 
-    MessageQueue->push(strDisconnected);
     accessConnected(false);
+    MessageQueue->push("COUT Net terminated");
+    MessageQueue->push(strDisconnected);
 }
 
 bool CNetSocket::sendLine(string msg)
