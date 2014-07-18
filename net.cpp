@@ -230,8 +230,10 @@ void CNetSocket::main()
     if (tmp == 0) {// Only run this if we were connected in the first place
         // Disconnect before we close
         MessageQueue->push("COUT Disconnecting...");
-        if (disconMessage.compare("") != 0)
+        if (disconMessage.compare("") != 0) {
             sendLine("QUIT :" + disconMessage);
+            MessageQueue->push("COUT This should have said " + disconMessage);
+        }
     } else {
         MessageQueue->push("COUT ERROR: Could not connect");
     }
