@@ -232,8 +232,8 @@ void CNetSocket::main()
         MessageQueue->push("COUT Disconnecting...");
         if (disconMessage.compare("") != 0) {
             sendLine("QUIT :" + disconMessage);
-            MessageQueue->push("COUT This should have said " + disconMessage);
         }
+        usleep(100); // Maybe it needs to cool down
     } else {
         MessageQueue->push("COUT ERROR: Could not connect");
     }
