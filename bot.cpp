@@ -182,7 +182,8 @@ bool IrcBot::globalHandle(string cmd)
     if (!getFirstWord(cmd, command, message)) return true;
     if (toUpper(command).compare("DISCONNECT") == 0)
     { botSock->botDisconnect(); return false; }
-    if (toUpper(command).compare("DISCONNECTED") == 0) return false;
+    if (toUpper(command).compare("DISCONNECTED") == 0)
+    { return false; botSock->toThread("net disconnected"); }
     if (toUpper(command).compare("CONNECTED") == 0) cout<<"Connected!\n";
     if (toUpper(command).compare("NICKLIST") == 0) nicklistHandle(message);
     if (toUpper(command).compare("MOTD") == 0)

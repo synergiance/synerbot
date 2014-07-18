@@ -138,6 +138,8 @@ void CNetSocket::bufMain()
         delay /= 4; if (delay < minDelay) delay = minDelay;
         if (delay > maxCmdDelay) delay = maxCmdDelay;
         if (toLower(str).find("net disconnect") == 0) keepRunning = false;
+        if (toLower(str).find("net disconnected") == 0)
+        { keepRunning = false; str = ""; } // Don't add this string to buffer
         buf += str + "\r\n";
         if (!moreBuffer && buf.compare("") != 0)
         {
