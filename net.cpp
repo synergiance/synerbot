@@ -148,6 +148,7 @@ void CNetSocket::bufMain()
             usleep(100); // Needs some cool down time or the pipe will clog
         }
     }
+    if (debugMode == 18) cout<<"Buffer killed\n";
 }
 
 void CNetSocket::main()
@@ -232,7 +233,7 @@ void CNetSocket::main()
         if (disconMessage.compare("") != 0)
             sendLine("QUIT :" + disconMessage);
     }
-    close(sockfd);
+    close(sockfd); // Close works even when not connected
 
     accessConnected(false);
     MessageQueue->push("COUT Net terminated");
