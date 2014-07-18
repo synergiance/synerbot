@@ -232,11 +232,13 @@ void CNetSocket::main()
         MessageQueue->push("COUT Disconnecting...");
         if (disconMessage.compare("") != 0)
             sendLine("QUIT :" + disconMessage);
+    } else {
+        MessageQueue->push("COUT ERROR: Could not connect");
     }
+
     close(sockfd); // Close works even when not connected
 
     accessConnected(false);
-    MessageQueue->push("COUT Net terminated");
     MessageQueue->push(strDisconnected);
 }
 
