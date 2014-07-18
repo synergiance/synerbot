@@ -227,12 +227,12 @@ void CNetSocket::main()
         }
     }
 
-    // Disconnect before we close
-    if (disconMessage.compare("") != 0) {
-        sendLine("QUIT :" + disconMessage);
-    }
     if (tmp == 0) {// Only run this if we were connected in the first place
+        // Disconnect before we close
         MessageQueue->push("COUT Disconnecting...");
+        if (disconMessage.compare("") != 0) {
+            sendLine("QUIT :" + disconMessage);
+        }
     } else {
         MessageQueue->push("COUT ERROR: Could not connect");
     }
