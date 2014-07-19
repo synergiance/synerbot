@@ -430,6 +430,8 @@ int IrcBot::commandHandle(string cmd, string args, string talkto, string usr)
             { subcmd = ""; subcmd = ""; }
             editPrivs(subcmd, subargs, talkto);
             cmdMatch = true;
+        } else if (toLower(cmd).compare("raw") == 0) {
+            sendData(args); cmdMatch = true;
         }
     }
 
