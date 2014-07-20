@@ -47,6 +47,10 @@ private:
         const vector<string>& strings, string& mask, int& num);
     int getHighestMask (const vector<int>& stringNums,
         const vector<string>& strings, string& mask);
+    int getHighestHostMask (const vector<int>& stringNums,
+        const vector<string>& strings, string& mask, int& num);
+    int getHighestHostMask (const vector<int>& stringNums,
+        const vector<string>& strings, string& mask);
 };
 
 struct posPair {

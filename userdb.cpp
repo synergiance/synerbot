@@ -449,3 +449,14 @@ int memberEntry::getHighestMask (const vector<int>& stringNums,
     num = tmp;
     return 0;
 }
+
+// Boiler Plate - (yes I love boiler plating things, sue me)
+int memberEntry::getHighestHostMask (const vector<int>& stringNums,
+    const vector<string>& strings, string& mask)
+{ int a; return getHighestHostMask(stringNums, strings, mask, a); }
+
+int memberEntry::getHighestHostMask (const vector<int>& stringNums,
+    const vector<string>& strings, string& mask, int& num)
+{
+    //code
+}
