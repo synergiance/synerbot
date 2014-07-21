@@ -419,6 +419,10 @@ int IrcBot::commandHandle(string cmd, string args, string talkto, string usr)
         say(talkto, "(╯°□°）╯︵ ┻━┻"); cmdMatch = true;
     } else if (toLower(cmd).compare("whois") == 0) {
         lookup(args, talkto); cmdMatch = true;
+    } else if (toLower(cmd).compare("addresstype") == 0) {
+        if (check_IPv6(args)) say(talkto, "That was an IPv6 address"); else
+        if (check_IPv4(args)) say(talkto, "That was an IPv4 address"); else
+                              say(talkto, "That was not an IP");
     }
     
     // Admin commands
