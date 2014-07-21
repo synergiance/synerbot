@@ -117,7 +117,7 @@ string CUserDB::spotUser(string nick, string user, string host, string name)
 }
 
 string CUserDB::compileUser(int num)
-{
+{// Returns a string representing the time a user has been seen
     string ret = "";
     if (num >= 0) ret = members[num].nicks[0] + "!" + members[num].users[0]
                       + "@" + members[num].hosts[0];
@@ -125,12 +125,12 @@ string CUserDB::compileUser(int num)
 }
 
 memberEntry CUserDB::getUser(int num)
-{
+{// Returns the user at specified index
     return members[num];
 }
 
 string CUserDB::checkUser(string nick, string user, string host, string name)
-{
+{// Checks the name on a user search
     return compileUser(searchUser(nick, user, host, name));
 }
 
