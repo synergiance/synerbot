@@ -467,13 +467,36 @@ int memberEntry::getHighestHostMask (const vector<int>& stringNums,
     vector<int> IPv4hostNums;
     vector<int> IPv6hostNums;
     for (unsigned x = 0; x < strings.size(); x++) {
-        vector<string> hostBits;
         string str = strings[x];
         if (check_IPv4(str)) {
-            //code
+            size_t a;
+            char num [3];
+            unsigned char b, c, d, e;
+            vector<unsigned char> IPv4hostBits;
+            for (;;) {
+                a = str.find('.'); e = 0;
+                for (c = 0; c < 3; c++) num[c] = 0;
+                if (a == string::npos) {
+                    for (c = 0; c < 3 && c < str.length(); c++)
+                        num[c] = str[str.length() - 1 - c];
+                    break;
+                } else {
+                    for (c = 0; c < 3 && c < a; c++)
+                        num[c] = str[a-1-c];
+                    IPv4hostBits.push_back(e); str.erase(0,a+1);
+                }
+                for (c = 0; c < 3; c++) {
+                    b = 1;
+                    for (d = 0; d < c; d++)
+                        b *= 10;
+                    e += b * num[c];
+                }
+            }
+            IPv4hosts.push_back(IPv4hostBits);
         } else if (check_IPv6(str)) {
             //code
         } else {
+            vector<string> hostBits;
             size_t a;
             for (;;) {
                 a = str.rfind('.');
