@@ -468,12 +468,12 @@ int memberEntry::getHighestHostMask (const vector<int>& stringNums,
     vector<int> IPv6hostNums;
     for (unsigned x = 0; x < strings.size(); x++) {
         string str = strings[x];
+        size_t a; // This will be used everywhere anyways so don't waste bits
         if (check_IPv4(str)) {
-            size_t a;
-            char num [3];
+            char num [3]; // Non-terminated character string of length 3
             unsigned char b, c, d, e;
             vector<unsigned char> IPv4hostBits;
-            for (;;) {
+            for (;;) {// More efficient than while (true)
                 a = str.find('.'); e = 0;
                 for (c = 0; c < 3; c++) num[c] = 0;
                 if (a == string::npos) {
@@ -485,7 +485,7 @@ int memberEntry::getHighestHostMask (const vector<int>& stringNums,
                         num[c] = str[a-1-c];
                     IPv4hostBits.push_back(e); str.erase(0,a+1);
                 }
-                for (c = 0; c < 3; c++) {
+                for (c = 0; c < 3; c++) {// Base 10 convert without a null term
                     b = 1;
                     for (d = 0; d < c; d++)
                         b *= 10;
@@ -493,11 +493,19 @@ int memberEntry::getHighestHostMask (const vector<int>& stringNums,
                 }
             }
             IPv4hosts.push_back(IPv4hostBits);
+            IPv4hostNums.push_back(stringNums[x]);
         } else if (check_IPv6(str)) {
-            //code
+            a = str.find("::");
+            unsigned char c;
+            vector<int> IPv6hostBits;
+            if (a == string::npos) {// No shortening in address
+                //code
+            } else {// Address is shorthand, we'll have to do this in 2 parts
+                // Initialize 8 ints in the array to 0
+                for (c=0;c<8;c++) IPv6hostBits.push_back(0);
+            }
         } else {
             vector<string> hostBits;
-            size_t a;
             for (;;) {
                 a = str.rfind('.');
                 if (a == string::npos) {
