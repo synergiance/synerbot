@@ -89,4 +89,7 @@ private:
     void handleNumber(string sender, int code, string message);
 };
 
+bool check_IPv6(string addr);
+bool check_IPv4(string addr);
+
 #endif /* NETWORK_H_ */

@@ -553,3 +553,20 @@ void CNetSocket::handleNumber(string sender, int code, string message)
     }
     return;
 }
+
+/*
+inet_pton(AF_INET, "192.0.2.1", &(sa.sin_addr)); // IPv4
+inet_pton(AF_INET6, "2001:db8:63b3:1::3490", &(sa6.sin6_addr)); // IPv6
+*/
+
+bool check_IPv6(string addr)
+{// Checks whether this is a valid IPv6 address
+    struct sockaddr_in6 sa6;
+    return inet_pton(AF_INET6, addr.c_str(), &(sa6.sin6_addr)) > 0;
+}
+
+bool check_IPv4(string addr)
+{// Checks whether this is a valid IPv4 address
+    struct sockaddr_in sa;
+    return inet_pton(AF_INET, addr.c_str(), &(sa.sin_addr)) > 0;
+}

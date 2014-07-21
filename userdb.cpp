@@ -17,10 +17,11 @@ A class designed to keep track of users across hostnames
 #include <iostream>
 #include <stdlib.h>
 #include <sstream>
-#include <regex>
+//#include <regex>
 
 #include "userdb.h"
 #include "miscbotlib.h"
+#include "net.h"
 
 using namespace std;
 
@@ -331,9 +332,6 @@ void CUserDB::writedb()
 //------------------------------------------------------------------------------
 //    Member Entry Code
 
-const char *memberEntry::QuadOctetRegex =
-"[1-2]?[0-9]?[0-9]\\.[1-2]?[0-9]?[0-9]\\.[1-2]?[0-9]?[0-9]\\.[1-2]?[0-9]?[0-9]";
-
 string memberEntry::firstSeen()
 {// Returns the first time the member has been seen by the bot
     stringstream ss;
@@ -463,26 +461,33 @@ int memberEntry::getHighestHostMask (const vector<int>& stringNums,
     const vector<string>& strings, string& mask, int& num)
 {// Makes a wildcard mask of hostnames/IPs
     vector< vector<string> > hosts;
+    vector< vector<unsigned char> > IPv4hosts;
+    vector< vector<int> > IPv6hosts;
     vector<int> hostNums;
+    vector<int> IPv4hostNums;
+    vector<int> IPv6hostNums;
     for (int x = 0; x < strings.size(); x++) {
         vector<string> hostBits;
         string str = strings[x];
-        if (regex_match(str, regex(QuadOctetRegex))) {// IPv4 Address we think
+        if (check_IPv4(str)) {
             //code
-        }
-        size_t a;
-        for (;;) {
-            a = str.rfind('.');
-            if (a == string::npos) {
-                hostBits.push_back(str);
-                break;
-            } else {
-                hostBits.push_back(str.substr(a+1));
-                str = str.substr(0,a);
+        } else if (check_IPv6(str)) {
+            //code
+        } else {
+            size_t a;
+            for (;;) {
+                a = str.rfind('.');
+                if (a == string::npos) {
+                    hostBits.push_back(str);
+                    break;
+                } else {
+                    hostBits.push_back(str.substr(a+1));
+                    str = str.substr(0,a);
+                }
             }
+            hostNums.push_back(stringNums[x]);
+            hosts.push_back(hostBits);
         }
-        hostNums.push_back(stringNums[x]);
-        hosts.push_back(hostBits);
     }
     return 0;
 }
