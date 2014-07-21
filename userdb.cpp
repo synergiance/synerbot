@@ -457,6 +457,25 @@ int memberEntry::getHighestHostMask (const vector<int>& stringNums,
 
 int memberEntry::getHighestHostMask (const vector<int>& stringNums,
     const vector<string>& strings, string& mask, int& num)
-{
-    //code
+{// Makes a wildcard mask of hostnames/IPs
+    vector< vector<string> > hosts;
+    vector<int> hostNums;
+    for (int x = 0; x < strings.size(); x++) {
+        vector<string> hostBits;
+        string str = strings[x];
+        size_t a;
+        for (;;) {
+            a = str.rfind('.');
+            if (a == string::npos) {
+                hostBits.push_back(str);
+                break;
+            } else {
+                hostBits.push_back(str.substr(a+1));
+                str = str.substr(0,a);
+            }
+        }
+        hostNums.push_back(stringNums[x]);
+        hosts.push_back(hostBits);
+    }
+    return 0;
 }
