@@ -266,7 +266,7 @@ bool CNetSocket::sendData(char *msg)
     if (debugMode == 15)
     {
         stringstream ss;
-        ss<<"GLOBAL COUT Sending ("<<bytes_sent<<"): "<<msg;
+        ss<<"COUT Sending ("<<bytes_sent<<"): "<<msg;
         MessageQueue->push(ss.str());
     }
 
@@ -380,13 +380,13 @@ int CNetSocket::activateSocket()
 
     // Connect to the server
     s = getaddrinfo(svrAddress.c_str(), svrPort.c_str(), &hints, &res);
-    if (debugMode == 14) MessageQueue->push("GLOBAL COUT NET Acquired Address");
+    if (debugMode == 14) MessageQueue->push("COUT NET Acquired Address");
     if (s != 0) return -3;
     sockfd = socket(res->ai_family, res->ai_socktype, res->ai_protocol);
-    if (debugMode == 14) MessageQueue->push("GLOBAL COUT NET Created Socket");
+    if (debugMode == 14) MessageQueue->push("COUT NET Created Socket");
     if (sockfd == -1) return -2;
     s = connect(sockfd, res->ai_addr, res->ai_addrlen);
-    if (debugMode == 14) MessageQueue->push("GLOBAL COUT NET Connect Success");
+    if (debugMode == 14) MessageQueue->push("COUT NET Connect Success");
     if (s == -1) { close(sockfd); return -1; }
 
     freeaddrinfo(res);
@@ -401,12 +401,12 @@ bool CNetSocket::pipeHandle(string message)
     // Filters
     if (!getFirstWord(message, cmd, str)) return true;
     if (debugMode == 11 || debugMode == 12)
-        MessageQueue->push("GLOBAL COUT NET: PIPE HANDLER LAUNCHED");
+        MessageQueue->push("COUT NET: PIPE HANDLER LAUNCHED");
     if (toLower(cmd).compare("net") != 0) return true;
     if (!getFirstWord(str, cmd, args)) return true;
 
     if (debugMode == 11 || debugMode == 12)
-        MessageQueue->push("GLOBAL COUT NET: " + toUpper(cmd));
+        MessageQueue->push("COUT NET: " + toUpper(cmd));
 
     if (toLower(cmd).compare("disconnect") == 0)
     {// Disconnect from server
@@ -480,7 +480,7 @@ void CNetSocket::handleNumber(string sender, int code, string message)
     if (debugMode == 5)
     {// For debugging purposes
         stringstream ss;
-        ss<<"GLOBAL COUT ("<<code<<") "<<data;
+        ss<<"COUT ("<<code<<") "<<data;
         MessageQueue->push(ss.str());
     }
 
@@ -546,7 +546,7 @@ void CNetSocket::handleNumber(string sender, int code, string message)
     default:
         if (debugMode == 4)
         {// For debugging purposes
-            ss<<"GLOBAL COUT ("<<code<<") "<<data;
+            ss<<"COUT ("<<code<<") "<<data;
             MessageQueue->push(ss.str());
         }
         break;
