@@ -331,7 +331,7 @@ void CUserDB::writedb()
 //    Member Entry Code
 
 string memberEntry::firstSeen()
-{
+{// Returns the first time the member has been seen by the bot
     stringstream ss;
     ss<<"First seen as: "<<nicks[0]<<"!"<<users[0]
       <<"@"<<hosts[0]<<" ("<<names[0]<<")";
@@ -360,14 +360,14 @@ string memberEntry::mostSeen()
 }
 
 string memberEntry::lastSeen()
-{
+{// Returns the last time that the member has been seen by the bot
     stringstream ss;
     ss<<"This function is not currently ready for production";
     return ss.str();
 }
 
 unsigned memberEntry::getHighest(const vector<int>& array)
-{
+{// Returns the entry with the most visability
     unsigned a = 0;
     for (unsigned c = 0; c < array.size(); c++)
         if (array[c] > array[a]) a = c;
@@ -381,7 +381,7 @@ int memberEntry::getHighestMask (const vector<int>& stringNums,
 
 int memberEntry::getHighestMask (const vector<int>& stringNums,
     const vector<string>& strings, string& mask, int& num)
-{
+{// Create a wildcard mask for any string of characters
     int tmp = 0; string tmpstr;
     vector<string> masks;
     vector<int> maskNums;
