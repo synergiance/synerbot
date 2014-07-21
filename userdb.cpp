@@ -487,22 +487,34 @@ int memberEntry::getHighestHostMask (const vector<int>& stringNums,
                 }
                 for (c = 0; c < 3; c++) {// Base 10 convert without a null term
                     b = 1;
-                    for (d = 0; d < c; d++)
-                        b *= 10;
-                    e += b * num[c];
+                    for (d = 0; d < c; d++) b *= 10;
+                    e += b * (num[c] - 48);
                 }
             }
             IPv4hosts.push_back(IPv4hostBits);
             IPv4hostNums.push_back(stringNums[x]);
         } else if (check_IPv6(str)) {
             a = str.find("::");
-            unsigned char c;
+            size_t b;
+            unsigned char c, d, e, f;
+            int g;
             vector<int> IPv6hostBits;
+            char tmpStr [5];
             if (a == string::npos) {// No shortening in address
                 //code
             } else {// Address is shorthand, we'll have to do this in 2 parts
                 // Initialize 8 ints in the array to 0
                 for (c=0;c<8;c++) IPv6hostBits.push_back(0);
+                for (c=0;c<8;c++) {// Iterator + limiter pretty much
+                    b = str.find(":");
+                    tmpStr = str.substr(0,b).c_str();
+                    for (d=0;d<b;d++) {
+                        g = 1; e = tmpStr[d] - 48;
+                        if (e > 9) e -= 7; // A-F range
+                        if (e > 9) e -= 32; // a-f range
+                        for (f = 0; f < d; f++) g *= 16;
+                    }
+                }
             }
         } else {
             vector<string> hostBits;
