@@ -198,7 +198,11 @@ bool IrcBot::globalHandle(string cmd)
 void IrcBot::otherHandle(string command, string message)
 {
     if (debugMode == 30) cout<<"OTHER HANDLER: "<<command<<" "<<message<<endl;
-    if (toUpper(command).compare("COUT") == 0) cout<<message<<endl;
+    if (toUpper(command).compare("COUT") == 0) {
+        if (message.back() == '\n') message.pop_back();
+        if (message.back() == '\r') message.pop_back();
+        cout<<message<<endl;
+    }
     if (toUpper(command).compare("SAY") == 0)
     {
         string channel, channel_message;
