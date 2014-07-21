@@ -509,10 +509,19 @@ int memberEntry::getHighestHostMask (const vector<int>& stringNums,
                     b = str.find(":");
                     tmpStr = str.substr(0,b).c_str();
                     for (d=0;d<b;d++) {
-                        g = 1; e = tmpStr[d] - 48;
+                        g = 1; e = tmpStr[b - 1 - d] - 48;
                         if (e > 9) e -= 7; // A-F range
                         if (e > 9) e -= 32; // a-f range
                         for (f = 0; f < d; f++) g *= 16;
+                        g = e * f;
+                    }
+                    IPv6hostBits[c] = g;
+                    if (a == b) {// We reached the '::'
+                        str.erase(0, b + 2);
+                        break;
+                    } else {// Move a up and eat the beginning of the address
+                        str.erase(0, ++b);
+                        a -= b;
                     }
                 }
             }
