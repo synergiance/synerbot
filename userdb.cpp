@@ -17,6 +17,7 @@ A class designed to keep track of users across hostnames
 #include <iostream>
 #include <stdlib.h>
 #include <sstream>
+#include <regex>
 
 #include "userdb.h"
 #include "miscbotlib.h"
@@ -330,6 +331,9 @@ void CUserDB::writedb()
 //------------------------------------------------------------------------------
 //    Member Entry Code
 
+const char *memberEntry::QuadOctetRegex =
+"[1-2]?[0-9]?[0-9]\\.[1-2]?[0-9]?[0-9]\\.[1-2]?[0-9]?[0-9]\\.[1-2]?[0-9]?[0-9]";
+
 string memberEntry::firstSeen()
 {// Returns the first time the member has been seen by the bot
     stringstream ss;
@@ -463,6 +467,9 @@ int memberEntry::getHighestHostMask (const vector<int>& stringNums,
     for (int x = 0; x < strings.size(); x++) {
         vector<string> hostBits;
         string str = strings[x];
+        if (regex_match(str, regex(QuadOctetRegex))) {// IPv4 Address we think
+            //code
+        }
         size_t a;
         for (;;) {
             a = str.rfind('.');

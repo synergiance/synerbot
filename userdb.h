@@ -42,6 +42,7 @@ public:
 
     bool debugMode;
 private:
+    static const char* QuadOctetRegex;
     unsigned getHighest(const vector<int>& array);
     int getHighestMask (const vector<int>& stringNums,
         const vector<string>& strings, string& mask, int& num);
