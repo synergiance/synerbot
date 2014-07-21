@@ -507,6 +507,10 @@ int memberEntry::getHighestHostMask (const vector<int>& stringNums,
                 for (c=0;c<8;c++) IPv6hostBits.push_back(0);
                 for (c=0;c<8;c++) {// Iterator + limiter pretty much
                     b = str.find(":");
+                    if (b == 0) {// '::' iss at the beginning of the address
+                        str.erase(0,2);
+                        break;
+                    }
                     tmpStr = str.substr(0,b).c_str();
                     for (d=0;d<b;d++) {
                         g = 1; e = tmpStr[b - 1 - d] - 48;
@@ -522,6 +526,14 @@ int memberEntry::getHighestHostMask (const vector<int>& stringNums,
                     } else {// Move a up and eat the beginning of the address
                         str.erase(0, ++b);
                         a -= b;
+                    }
+                }
+                for (c=0;c<0;c++) {
+                    b = str.rfind(":");
+                    if (b == string::npos) {// Last group in IPv6 address
+                        tmpStr = str.c_str();
+                    } else {
+                        tmpStr = str.substr(1).c_str();
                     }
                 }
             }
