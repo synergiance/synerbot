@@ -466,7 +466,7 @@ int memberEntry::getHighestHostMask (const vector<int>& stringNums,
     vector<int> hostNums;
     vector<int> IPv4hostNums;
     vector<int> IPv6hostNums;
-    for (int x = 0; x < strings.size(); x++) {
+    for (unsigned x = 0; x < strings.size(); x++) {
         vector<string> hostBits;
         string str = strings[x];
         if (check_IPv4(str)) {
