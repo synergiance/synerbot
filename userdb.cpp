@@ -496,7 +496,7 @@ int memberEntry::getHighestHostMask (const vector<int>& stringNums,
         } else if (check_IPv6(str)) {
             a = str.find("::");
             size_t b;
-            unsigned char c, d;
+            unsigned char c;
             vector<int> IPv6hostBits;
             string tmpStr;
             if (a == string::npos) {// No '::' in address
@@ -562,7 +562,7 @@ int memberEntry::getHighestHostMask (const vector<int>& stringNums,
 int memberEntry::quadhextoint(string hexNum)
 {// Converts up to 4 hex characters to an int, returns -1 if string is too long
     size_t a, b; char c; unsigned d, e = 0; unsigned char f;
-    if (a = hexNum.size() > 4) return -1;
+    if ((a = hexNum.size()) > 4) return -1;
     for (b = 0; b < a; b++) {
         c = hexNum[a-1-b] - 48;
         if (c > 9) c -= 7; // A-F range
