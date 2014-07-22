@@ -658,7 +658,6 @@ int memberEntry::IPv4search(const vector<int>& addrNums,
                         if (tmpItem[z] != tmpList[c][z])
                             verdict = false;
                     }
-                    if (debugMode) cout<<(verdict?"Taken":"Added")<<endl;
                     if (verdict) break;
                 }
                 if (!verdict) {
@@ -666,7 +665,8 @@ int memberEntry::IPv4search(const vector<int>& addrNums,
                     tmpMaskList.push_back(tmpMaskItem);
                     tmpNumList.push_back(addrNums[x] + addrNums[y]);
                 }
-            }
+                if (debugMode) cout<<(verdict?"Taken":"Added")<<endl;
+            } else if (debugMode) cout<<"Invalid"<<endl;
         }
     }
     return 0;
