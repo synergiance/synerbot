@@ -496,12 +496,20 @@ int memberEntry::getHighestHostMask (const vector<int>& stringNums,
         } else if (check_IPv6(str)) {
             a = str.find("::");
             size_t b;
-            unsigned char c, d, e, f;
-            int g;
+            unsigned char c, d;
             vector<int> IPv6hostBits;
-            char tmpStr [5];
-            if (a == string::npos) {// No shortening in address
-                //code
+            string tmpStr;p.-
+            if (a == string::npos) {// No '::' in address
+                for (;;) {
+                    b = str.find(":");
+                    if (b == string::npos) {// We reached the end
+                        IPv6hostBits.push_back(quadhextoint(str));
+                        break;
+                    } else {// Eat the string and move on to the next
+                        IPv6hostBits.push_back(quadhextoint(str.substr(0,b)));
+                        str.erase(0,b+1); // EAT THE DAMN STRING RAWR
+                    }
+                }
             } else {// Address is shorthand, we'll have to do this in 2 parts
                 // Initialize 8 ints in the array to 0
                 for (c=0;c<8;c++) IPv6hostBits.push_back(0);
@@ -511,15 +519,7 @@ int memberEntry::getHighestHostMask (const vector<int>& stringNums,
                         str.erase(0,2);
                         break;
                     }
-                    tmpStr = str.substr(0,b).c_str();
-                    for (d=0;d<b;d++) {
-                        g = 1; e = tmpStr[b - 1 - d] - 48;
-                        if (e > 9) e -= 7; // A-F range
-                        if (e > 9) e -= 32; // a-f range
-                        for (f = 0; f < d; f++) g *= 16;
-                        g = e * f;
-                    }
-                    IPv6hostBits[c] = g;
+                    IPv6hostBits[c] = quadhextoint(str.substr(0,b));
                     if (a == b) {// We reached the '::'
                         str.erase(0, b + 2);
                         break;
@@ -531,12 +531,15 @@ int memberEntry::getHighestHostMask (const vector<int>& stringNums,
                 for (c=0;c<0;c++) {
                     b = str.rfind(":");
                     if (b == string::npos) {// Last group in IPv6 address
-                        tmpStr = str.c_str();
-                    } else {
-                        tmpStr = str.substr(1).c_str();
+                        IPv6hostBits[7-c] = quadhextoint(str); break;
+                    } else {// Not the last group, continue happily
+                        IPv6hostBits[7-c] = quadhextoint(str.substr(b+1));
+                        str.erase(b, str.size() - b + 1);
                     }
                 }
             }
+            IPv6hosts.push_back(IPv6hostBits);
+            IPv6hostNums.push_back(stringNums[x]);
         } else {
             vector<string> hostBits;
             for (;;) {
