@@ -641,7 +641,7 @@ int memberEntry::IPv4search(const vector<int>& addrNums,
             if (debugMode) cout<<"To: "<<compileIPv4(addrs[y])<<endl;
             for (z = 0; z < 4; z++) {
                 if (addrs[x][z] == addrs[y][z]) {
-                    if (z > 0 && tmpMaskItem[z-1]) {
+                    if (z == 0 || tmpMaskItem[z-1]) {
                         tmpItem[z] = addrs[x][z];
                         tmpMaskItem[z] = true;
                     }
@@ -665,8 +665,8 @@ int memberEntry::IPv4search(const vector<int>& addrNums,
                     tmpMaskList.push_back(tmpMaskItem);
                     tmpNumList.push_back(addrNums[x] + addrNums[y]);
                 }
-                if (debugMode) cout<<(verdict?"Taken":"Added")<<endl;
-            } else if (debugMode) cout<<"Invalid"<<endl;
+                if (debugMode) cout<<(verdict?" Taken":" Added")<<endl;
+            } else if (debugMode) cout<<" Invalid"<<endl;
         }
     }
     return 0;
