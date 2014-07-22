@@ -469,8 +469,8 @@ int memberEntry::getHighestHostMask (const vector<int>& stringNums,
     vector<int> IPv4hostNums;
     vector<int> IPv6hostNums;
     vector<int> hostNums;
-    string tmpMask;
-    int tmpNum;
+    string tmpMask; int tmpNum;
+    unsigned c, x, y; unsigned char z; // Reusable variables
     for (unsigned x = 0; x < strings.size(); x++) {
         string str = strings[x];
         if (debugMode) cout<<"Identifying: "<<str<<endl;
@@ -501,14 +501,53 @@ int memberEntry::getHighestHostMask (const vector<int>& stringNums,
     }
     if (IPv4hosts.size() > 0) {
         if (debugMode) cout<<"Comparing IPv4 hosts\n";
-        for (unsigned x = 0; x < IPv4hosts.size() - 1; x++) {
-            //code
+        vector< vector<unsigned char> > tmpList;
+        vector< vector<bool> > tmpMaskList;
+        vector<unsigned char> tmpItem;
+        vector<bool> tmpMaskItem;
+        vector<int> tmpNumList;
+        for (z = 0; z < 4; z++) {
+            tmpItem.push_back(0);
+            tmpMaskItem.push_back(0);
         }
+        for (x = 0; x < IPv4hosts.size() - 1; x++) {
+            for (y = x + 1; y < IPv4hosts.size(); y++) {
+                for (z = 0; z < 4; z++) {
+                    if (IPv4hosts[x][z] == IPv4hosts[y][z]) {
+                        if (z > 0 && tmpMaskItem[z-1]) {
+                            tmpItem[z] = IPv4hosts[x][z];
+                            tmpMaskItem[z] = true;
+                        }
+                    } else tmpMaskItem[z] = false;
+                }
+                if (tmpMaskItem[0]) {
+                    bool verdict;
+                    for (c = 0; c < tmpList.size(); c++) {
+                        verdict = true;
+                        for (z = 0; z < 4 && verdict; z++) {
+                            if (tmpMaskItem[z] != tmpMaskList[c][z])
+                                verdict = false;
+                            if (tmpItem[z] != tmpList[c][z])
+                                verdict = false;
+                        }
+                        if (verdict) break;
+                    }
+                    if (!verdict) {
+                        tmpList.push_back(tmpItem);
+                        tmpMaskList.push_back(tmpMaskItem);
+                        tmpNumList.push_back(IPv4hostNums[x] + IPv4hostNums[y]);
+                    }
+                }
+            }
+        }
+        //code
     }
     if (IPv6hosts.size() > 0) {
         if (debugMode) cout<<"Comparing IPv6 hosts\n";
-        for (unsigned x = 0; x < IPv6hosts.size() - 1; x++) {
-            //code
+        for (x = 0; x < IPv6hosts.size() - 1; x++) {
+            for (y = x + 1; y < IPv6hosts.size(); y++) {
+                //code
+            }
         }
     }
     return 0;
