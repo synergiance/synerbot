@@ -51,6 +51,8 @@ private:
         const vector<string>& strings, string& mask, int& num);
     int getHighestHostMask (const vector<int>& stringNums,
         const vector<string>& strings, string& mask);
+
+    int quadhextoint(string hexNum);
 };
 
 struct posPair {

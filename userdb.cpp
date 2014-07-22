@@ -555,3 +555,21 @@ int memberEntry::getHighestHostMask (const vector<int>& stringNums,
     }
     return 0;
 }
+
+int memberEntry::quadhextoint(string hexNum)
+{// Converts up to 4 hex characters to an int, returns -1 if string is too long
+    char c;
+    size_t a, b;
+    unsigned d, e = 0;
+    unsigned char f;
+    if (a = hexNum.size() > 4) return -1;
+    for (b = 0; b < a; b++) {
+        c = hexNum[a-1-b] - 48;
+        if (c > 9) c -= 7; // A-F range
+        if (c > 9) c -= 32; // a-f range
+        d = 1;
+        for (f = 0; f < b; f++) d *= 16;
+        e += d * c;
+    }
+    return e;
+}
