@@ -482,7 +482,7 @@ int memberEntry::getHighestHostMask (const vector<int>& stringNums,
             IPv6parse(str, IPv6hostBits);
             IPv6hosts.push_back(IPv6hostBits);
             IPv6hostNums.push_back(stringNums[x]);
-        } else if (str.find('.') >= 0) {
+        } else if (str.find('.') != string::npos) {
             vector<string> DNShostBits;
             DNSparse(str, DNShostBits);
             DNShostNums.push_back(stringNums[x]);
@@ -583,7 +583,7 @@ bool memberEntry::IPv6parse(string str, vector<int>& array)
 bool memberEntry::DNSparse(string str, vector<string>& array)
 {// Parses a dot formatted DNS entry into it's sub parts
     size_t a;
-    if (str.find('.') < 0) return false;
+    if (str.find('.') == string::npos) return false;
     if (debugMode) cout<<"DNS accepted, parsing...\n";
     for (;;) {
         a = str.rfind('.');
