@@ -504,9 +504,11 @@ bool memberEntry::IPv4parse(string str, vector<unsigned char>& array)
         a = str.find('.'); e = 0;
         for (c = 0; c < 3; c++) num[c] = 0;
         if (a == string::npos) {
+            if (debugMode) cout<<str<<" ";
             for (c = 0; c < 3 && c < str.length(); c++)
                 num[c] = str[str.length() - 1 - c];
         } else {
+            if (debugMode) cout<<str.substr(0,a)<<" ";
             for (c = 0; c < 3 && c < a; c++)
                 num[c] = str[a-1-c];
             str.erase(0,a+1);
@@ -517,7 +519,6 @@ bool memberEntry::IPv4parse(string str, vector<unsigned char>& array)
             e += b * (num[c] - 48);
         }
         array.push_back(e);
-        cout<<e<<" ";
         if (a == string::npos) break;
     }
     cout<<"Done!\n";
@@ -563,7 +564,7 @@ bool memberEntry::IPv6parse(string str, vector<int>& array)
             }
         }
         if (debugMode) cout<<":: ";
-        for (c=0;c<0;c++) {
+        for (c=0;c<8;c++) {
             b = str.rfind(":");
             if (b == string::npos) {// Last group in IPv6 address
                 array[7-c] = quadhextoint(str);
@@ -600,7 +601,6 @@ bool memberEntry::DNSparse(string str, vector<string>& array)
     if (debugMode) cout<<"Done!\n";
     return true;
 }
-
 
 int memberEntry::quadhextoint(string hexNum)
 {// Converts up to 4 hex characters to an int, returns -1 if string is too long
