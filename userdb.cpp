@@ -489,7 +489,7 @@ int memberEntry::getHighestHostMask (const vector<int>& stringNums,
 }
 
 bool memberEntry::IPv4parse(string str, vector<unsigned char>& array)
-{// Parses an IPv4 quad octet into 4 chars
+{// Parses an IPv4 quad octet into 4 chars, returns false if not IPv4
     if (!check_IPv4(str)) return false;
     size_t a; unsigned char b, c, d, e; char num [3];
     for (;;) {// More efficient than while (true)
@@ -514,7 +514,7 @@ bool memberEntry::IPv4parse(string str, vector<unsigned char>& array)
 }
 
 bool memberEntry::IPv6parse(string str, vector<int>& array)
-{// Parses an IPv6 quad octet into 4 chars
+{// Parses an IPv6 quad octet into 4 chars, returns false if not IPv6
     if (!check_IPv6(str)) return false;
     size_t a, b; unsigned char c;
     a = str.find("::");
