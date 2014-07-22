@@ -698,12 +698,12 @@ int memberEntry::quadhextoint(string hexNum)
 
 string memberEntry::inttoquadhex(int number)
 {// Turns an int into a quad hex (IPv6)
-    unsigned char a, b, c; int d; char e [4]; string f;
-    return str;
+    unsigned char a, b, c; int d; char e [5]; string f;
+    return f;
 }
 
 string memberEntry::numchartostring(unsigned char num)
 {
-    string str;
-    return str;
+    unsigned char a, b, c, d; char e [4]; string f;
+    return f;
 }
