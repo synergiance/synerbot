@@ -469,6 +469,8 @@ int memberEntry::getHighestHostMask (const vector<int>& stringNums,
     vector<int> IPv4hostNums;
     vector<int> IPv6hostNums;
     vector<int> hostNums;
+    string tmpMask;
+    int tmpNum;
     for (unsigned x = 0; x < strings.size(); x++) {
         string str = strings[x];
         if (debugMode) cout<<"Identifying: "<<str<<endl;
@@ -488,8 +490,25 @@ int memberEntry::getHighestHostMask (const vector<int>& stringNums,
             DNShostNums.push_back(stringNums[x]);
             DNShosts.push_back(DNShostBits);
         } else {// Add to array for old method
+            if (debugMode) cout<<"Adding to legacy array\n";
             hosts.push_back(str);
             hostNums.push_back(stringNums[x]);
+        }
+    }
+    if (hosts.size() > 0) {
+        if (debugMode) cout<<"Acting legacy method\n";
+        getHighestMask(hostNums, hosts, tmpMask, tmpNum);
+    }
+    if (IPv4hosts.size() > 0) {
+        if (debugMode) cout<<"Comparing IPv4 hosts\n";
+        for (unsigned x = 0; x < IPv4hosts.size() - 1; x++) {
+            //code
+        }
+    }
+    if (IPv6hosts.size() > 0) {
+        if (debugMode) cout<<"Comparing IPv6 hosts\n";
+        for (unsigned x = 0; x < IPv6hosts.size() - 1; x++) {
+            //code
         }
     }
     return 0;
