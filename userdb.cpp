@@ -558,10 +558,7 @@ int memberEntry::getHighestHostMask (const vector<int>& stringNums,
 
 int memberEntry::quadhextoint(string hexNum)
 {// Converts up to 4 hex characters to an int, returns -1 if string is too long
-    char c;
-    size_t a, b;
-    unsigned d, e = 0;
-    unsigned char f;
+    size_t a, b; char c; unsigned d, e = 0; unsigned char f;
     if (a = hexNum.size() > 4) return -1;
     for (b = 0; b < a; b++) {
         c = hexNum[a-1-b] - 48;
