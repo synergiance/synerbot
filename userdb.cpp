@@ -469,7 +469,7 @@ int memberEntry::getHighestHostMask (const vector<int>& stringNums,
     vector<int> IPv4hostNums;
     vector<int> IPv6hostNums;
     vector<int> hostNums;
-    string tmpMask; int tmpNum;
+    string tmpMask [4]; int tmpNum [4];
     unsigned c, x, y; unsigned char z; // Reusable variables
     for (unsigned x = 0; x < strings.size(); x++) {
         string str = strings[x];
@@ -497,58 +497,19 @@ int memberEntry::getHighestHostMask (const vector<int>& stringNums,
     }
     if (hosts.size() > 0) {
         if (debugMode) cout<<"Acting legacy method\n";
-        getHighestMask(hostNums, hosts, tmpMask, tmpNum);
+        getHighestMask(hostNums, hosts, tmpMask[0], tmpNum[0]);
     }
     if (IPv4hosts.size() > 0) {
         if (debugMode) cout<<"Comparing IPv4 hosts\n";
-        vector< vector<unsigned char> > tmpList;
-        vector< vector<bool> > tmpMaskList;
-        vector<unsigned char> tmpItem;
-        vector<bool> tmpMaskItem;
-        vector<int> tmpNumList;
-        for (z = 0; z < 4; z++) {
-            tmpItem.push_back(0);
-            tmpMaskItem.push_back(0);
-        }
-        for (x = 0; x < IPv4hosts.size() - 1; x++) {
-            for (y = x + 1; y < IPv4hosts.size(); y++) {
-                for (z = 0; z < 4; z++) {
-                    if (IPv4hosts[x][z] == IPv4hosts[y][z]) {
-                        if (z > 0 && tmpMaskItem[z-1]) {
-                            tmpItem[z] = IPv4hosts[x][z];
-                            tmpMaskItem[z] = true;
-                        }
-                    } else tmpMaskItem[z] = false;
-                }
-                if (tmpMaskItem[0]) {
-                    bool verdict;
-                    for (c = 0; c < tmpList.size(); c++) {
-                        verdict = true;
-                        for (z = 0; z < 4 && verdict; z++) {
-                            if (tmpMaskItem[z] != tmpMaskList[c][z])
-                                verdict = false;
-                            if (tmpItem[z] != tmpList[c][z])
-                                verdict = false;
-                        }
-                        if (verdict) break;
-                    }
-                    if (!verdict) {
-                        tmpList.push_back(tmpItem);
-                        tmpMaskList.push_back(tmpMaskItem);
-                        tmpNumList.push_back(IPv4hostNums[x] + IPv4hostNums[y]);
-                    }
-                }
-            }
-        }
-        //code
+        IPv4search(IPv4hostNums, IPv4hosts, tmpMask[1], tmpNum[1]);
     }
     if (IPv6hosts.size() > 0) {
         if (debugMode) cout<<"Comparing IPv6 hosts\n";
-        for (x = 0; x < IPv6hosts.size() - 1; x++) {
-            for (y = x + 1; y < IPv6hosts.size(); y++) {
-                //code
-            }
-        }
+        IPv6search(IPv6hostNums, IPv6hosts, tmpMask[2], tmpNum[2]);
+    }
+    if (DNShosts.size() > 0) {
+        if (debugMode) cout<<"Comparing DNS hosts\n";
+        DNSsearch(DNShostNums, DNShosts, tmpMask[3], tmpNum[3]);
     }
     return 0;
 }
@@ -660,6 +621,66 @@ bool memberEntry::DNSparse(string str, vector<string>& array)
     return true;
 }
 
+int memberEntry::IPv4search(const vector<int>& addrNums,
+    const vector< vector<unsigned char> >& addrs, string& mask, int& num)
+{// Searches an IPv4 sorted array, will return -1 on error
+    unsigned c, x, y; unsigned char z; // Reusable variables
+    if (debugMode) cout<<"Comparing IPv4 hosts\n";
+    vector< vector<unsigned char> > tmpList;
+    vector< vector<bool> > tmpMaskList;
+    vector<unsigned char> tmpItem;
+    vector<bool> tmpMaskItem;
+    vector<int> tmpNumList;
+    for (z = 0; z < 4; z++) {
+        tmpItem.push_back(0);
+        tmpMaskItem.push_back(0);
+    }
+    for (x = 0; x < addrs.size(); x++) if (addrs[x].size() != 4) return -1;
+    for (x = 0; x < addrs.size() - 1; x++) {
+        for (y = x + 1; y < addrs.size(); y++) {
+            for (z = 0; z < 4; z++) {
+                if (addrs[x][z] == addrs[y][z]) {
+                    if (z > 0 && tmpMaskItem[z-1]) {
+                        tmpItem[z] = addrs[x][z];
+                        tmpMaskItem[z] = true;
+                    }
+                } else tmpMaskItem[z] = false;
+            }
+            if (tmpMaskItem[0]) {
+                bool verdict;
+                for (c = 0; c < tmpList.size(); c++) {
+                    verdict = true;
+                    for (z = 0; z < 4 && verdict; z++) {
+                        if (tmpMaskItem[z] != tmpMaskList[c][z])
+                            verdict = false;
+                        if (tmpItem[z] != tmpList[c][z])
+                            verdict = false;
+                    }
+                    if (verdict) break;
+                }
+                if (!verdict) {
+                    tmpList.push_back(tmpItem);
+                    tmpMaskList.push_back(tmpMaskItem);
+                    tmpNumList.push_back(addrNums[x] + addrNums[y]);
+                }
+            }
+        }
+    }
+    return 0;
+}
+
+int memberEntry::IPv6search(const vector<int>& addrNums,
+    const vector< vector<int> >& addrs, string& mask, int& num)
+{
+    return 0;
+}
+
+int memberEntry::DNSsearch(const vector<int>& addrNums,
+    const vector< vector<string> >& addrs, string& mask, int& num)
+{
+    return 0;
+}
+
 int memberEntry::quadhextoint(string hexNum)
 {// Converts up to 4 hex characters to an int, returns -1 if string is too long
     size_t a, b; char c; unsigned d, e = 0; unsigned char f;
@@ -673,4 +694,16 @@ int memberEntry::quadhextoint(string hexNum)
         e += d * c;
     }
     return e;
+}
+
+string memberEntry::inttoquadhex(int number)
+{// Turns an int into a quad hex (IPv6)
+    unsigned char a, b, c; int d; char e [4]; string f;
+    return str;
+}
+
+string memberEntry::numchartostring(unsigned char num)
+{
+    string str;
+    return str;
 }

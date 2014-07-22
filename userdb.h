@@ -56,7 +56,16 @@ private:
     bool IPv6parse(string str, vector<int>& array);
     bool DNSparse(string str, vector<string>& array);
 
+    int IPv4search(const vector<int>& addrNums,
+        const vector< vector<unsigned char> >& addrs, string& mask, int& num);
+    int IPv6search(const vector<int>& addrNums,
+        const vector< vector<int> >& addrs, string& mask, int& num);
+    int DNSsearch(const vector<int>& addrNums,
+        const vector< vector<string> >& addrs, string& mask, int& num);
+
     int quadhextoint(string hexNum);
+    string inttoquadhex(int number);
+    string numchartostring(unsigned char num);
 };
 
 struct posPair {
