@@ -355,6 +355,7 @@ string memberEntry::mostSeen()
     tmpstr = string();
     getHighestMask(hostints, hosts, tmpstr);
     ss<<tmpstr<<" (";
+    if (debugMode) getHighestHostMask(hostints, hosts, tmpstr);
     tmp = getHighest(nameints);
     tmpstr = names[tmp];
     ss<<tmpstr<<")";
@@ -497,6 +498,7 @@ int memberEntry::getHighestHostMask (const vector<int>& stringNums,
 bool memberEntry::IPv4parse(string str, vector<unsigned char>& array)
 {// Parses an IPv4 quad octet into 4 chars, returns false if not IPv4
     if (!check_IPv4(str)) return false;
+    if (debugMode) cout<<"IPv4 string itentified, parsing...\n";
     size_t a; unsigned char b, c, d, e; char num [3];
     for (;;) {// More efficient than while (true)
         a = str.find('.'); e = 0;
@@ -504,18 +506,21 @@ bool memberEntry::IPv4parse(string str, vector<unsigned char>& array)
         if (a == string::npos) {
             for (c = 0; c < 3 && c < str.length(); c++)
                 num[c] = str[str.length() - 1 - c];
-            break;
         } else {
             for (c = 0; c < 3 && c < a; c++)
                 num[c] = str[a-1-c];
-            array.push_back(e); str.erase(0,a+1);
+            str.erase(0,a+1);
         }
         for (c = 0; c < 3; c++) {// Base 10 convert without a null term
             b = 1;
             for (d = 0; d < c; d++) b *= 10;
             e += b * (num[c] - 48);
         }
+        array.push_back(e);
+        cout<<e<<" ";
+        if (a == string::npos) break;
     }
+    cout<<"Done!\n";
     return true;
 }
 
@@ -571,22 +576,28 @@ bool memberEntry::IPv6parse(string str, vector<int>& array)
             }
         }
     }
+    if (debugMode) cout<<"Done!\n";
     return true;
 }
 
 bool memberEntry::DNSparse(string str, vector<string>& array)
 {// Parses a dot formatted DNS entry into it's sub parts
     size_t a;
+    if (str.find('.') < 0) return false;
+    if (debugMode) cout<<"DNS accepted, parsing...\n";
     for (;;) {
         a = str.rfind('.');
         if (a == string::npos) {
             array.push_back(str);
+            if (debugMode) cout<<str<<" ";
             break;
         } else {
             array.push_back(str.substr(a+1));
+            if (debugMode) cout<<str.substr(a+1)<<" ";
             str = str.substr(0,a);
         }
     }
+    if (debugMode) cout<<"Done!\n";
     return true;
 }
 
