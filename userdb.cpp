@@ -460,14 +460,17 @@ int memberEntry::getHighestHostMask (const vector<int>& stringNums,
 int memberEntry::getHighestHostMask (const vector<int>& stringNums,
     const vector<string>& strings, string& mask, int& num)
 {// Makes a wildcard mask of hostnames/IPs
-    vector< vector<string> > hosts;
+    vector< vector<string> > DNShosts;
     vector< vector<unsigned char> > IPv4hosts;
     vector< vector<int> > IPv6hosts;
-    vector<int> hostNums;
+    vector<string> hosts;
+    vector<int> DNShostNums;
     vector<int> IPv4hostNums;
     vector<int> IPv6hostNums;
+    vector<int> hostNums;
     for (unsigned x = 0; x < strings.size(); x++) {
         string str = strings[x];
+        if (debugMode) cout<<"Identifying: "<<str<<endl;
         if (check_IPv4(str)) {
             vector<unsigned char> IPv4hostBits;
             IPv4parse(str, IPv4hostBits);
@@ -478,11 +481,14 @@ int memberEntry::getHighestHostMask (const vector<int>& stringNums,
             IPv6parse(str, IPv6hostBits);
             IPv6hosts.push_back(IPv6hostBits);
             IPv6hostNums.push_back(stringNums[x]);
-        } else {
-            vector<string> hostBits;
-            DNSparse(str, hostBits);
+        } else if (str.find('.') >= 0) {
+            vector<string> DNShostBits;
+            DNSparse(str, DNShostBits);
+            DNShostNums.push_back(stringNums[x]);
+            DNShosts.push_back(DNShostBits);
+        } else {// Add to array for old method
+            hosts.push_back(str);
             hostNums.push_back(stringNums[x]);
-            hosts.push_back(hostBits);
         }
     }
     return 0;
