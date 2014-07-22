@@ -522,6 +522,7 @@ bool memberEntry::IPv4parse(string str, vector<unsigned char>& array)
 bool memberEntry::IPv6parse(string str, vector<int>& array)
 {// Parses an IPv6 quad octet into 4 chars, returns false if not IPv6
     if (!check_IPv6(str)) return false;
+    if (debugMode) cout<<"IPv6 string itentified, parsing...\n";
     size_t a, b; unsigned char c;
     a = str.find("::");
     if (a == string::npos) {// No '::' in address
@@ -529,9 +530,11 @@ bool memberEntry::IPv6parse(string str, vector<int>& array)
             b = str.find(":");
             if (b == string::npos) {// We reached the end
                 array.push_back(quadhextoint(str));
+                if (debugMode) cout<<str<<"->"<<array.back()<<" ";
                 break;
             } else {// Eat the string and move on to the next
                 array.push_back(quadhextoint(str.substr(0,b)));
+                if (debugMode) cout<<str.substr(0,b)<<"->"<<array.back()<<" ";
                 str.erase(0,b+1); // EAT THE DAMN STRING RAWR
             }
         }
@@ -545,6 +548,7 @@ bool memberEntry::IPv6parse(string str, vector<int>& array)
                 break;
             }
             array[c] = quadhextoint(str.substr(0,b));
+            if (debugMode) cout<<str.substr(0,b)<<"->"<<array[c]<<" ";
             if (a == b) {// We reached the '::'
                 str.erase(0, b + 2);
                 break;
@@ -553,12 +557,16 @@ bool memberEntry::IPv6parse(string str, vector<int>& array)
                 a -= b;
             }
         }
+        if (debugMode) cout<<":: ";
         for (c=0;c<0;c++) {
             b = str.rfind(":");
             if (b == string::npos) {// Last group in IPv6 address
-                array[7-c] = quadhextoint(str); break;
+                array[7-c] = quadhextoint(str);
+                if (debugMode) cout<<str<<"->"<<array[7-c]<<" ";
+                break;
             } else {// Not the last group, continue happily
                 array[7-c] = quadhextoint(str.substr(b+1));
+                if (debugMode) cout<<str.substr(b+1)<<"->"<<array[7-c]<<" ";
                 str.erase(b, str.size() - b + 1);
             }
         }
