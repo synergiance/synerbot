@@ -52,6 +52,10 @@ private:
     int getHighestHostMask (const vector<int>& stringNums,
         const vector<string>& strings, string& mask);
 
+    bool IPv4parse(string str, vector<unsigned char>& array);
+    bool IPv6parse(string str, vector<int>& array);
+    bool DNSparse(string str, vector<string>& array);
+
     int quadhextoint(string hexNum);
 };
 

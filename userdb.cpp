@@ -468,96 +468,114 @@ int memberEntry::getHighestHostMask (const vector<int>& stringNums,
     vector<int> IPv6hostNums;
     for (unsigned x = 0; x < strings.size(); x++) {
         string str = strings[x];
-        size_t a; // This will be used everywhere anyways so don't waste bits
         if (check_IPv4(str)) {
-            char num [3]; // Non-terminated character string of length 3
-            unsigned char b, c, d, e;
             vector<unsigned char> IPv4hostBits;
-            for (;;) {// More efficient than while (true)
-                a = str.find('.'); e = 0;
-                for (c = 0; c < 3; c++) num[c] = 0;
-                if (a == string::npos) {
-                    for (c = 0; c < 3 && c < str.length(); c++)
-                        num[c] = str[str.length() - 1 - c];
-                    break;
-                } else {
-                    for (c = 0; c < 3 && c < a; c++)
-                        num[c] = str[a-1-c];
-                    IPv4hostBits.push_back(e); str.erase(0,a+1);
-                }
-                for (c = 0; c < 3; c++) {// Base 10 convert without a null term
-                    b = 1;
-                    for (d = 0; d < c; d++) b *= 10;
-                    e += b * (num[c] - 48);
-                }
-            }
+            IPv4parse(str, IPv4hostBits);
             IPv4hosts.push_back(IPv4hostBits);
             IPv4hostNums.push_back(stringNums[x]);
         } else if (check_IPv6(str)) {
-            a = str.find("::");
-            size_t b;
-            unsigned char c;
             vector<int> IPv6hostBits;
-            string tmpStr;
-            if (a == string::npos) {// No '::' in address
-                for (;;) {
-                    b = str.find(":");
-                    if (b == string::npos) {// We reached the end
-                        IPv6hostBits.push_back(quadhextoint(str));
-                        break;
-                    } else {// Eat the string and move on to the next
-                        IPv6hostBits.push_back(quadhextoint(str.substr(0,b)));
-                        str.erase(0,b+1); // EAT THE DAMN STRING RAWR
-                    }
-                }
-            } else {// Address is shorthand, we'll have to do this in 2 parts
-                // Initialize 8 ints in the array to 0
-                for (c=0;c<8;c++) IPv6hostBits.push_back(0);
-                for (c=0;c<8;c++) {// Iterator + limiter pretty much
-                    b = str.find(":");
-                    if (b == 0) {// '::' iss at the beginning of the address
-                        str.erase(0,2);
-                        break;
-                    }
-                    IPv6hostBits[c] = quadhextoint(str.substr(0,b));
-                    if (a == b) {// We reached the '::'
-                        str.erase(0, b + 2);
-                        break;
-                    } else {// Move a up and eat the beginning of the address
-                        str.erase(0, ++b);
-                        a -= b;
-                    }
-                }
-                for (c=0;c<0;c++) {
-                    b = str.rfind(":");
-                    if (b == string::npos) {// Last group in IPv6 address
-                        IPv6hostBits[7-c] = quadhextoint(str); break;
-                    } else {// Not the last group, continue happily
-                        IPv6hostBits[7-c] = quadhextoint(str.substr(b+1));
-                        str.erase(b, str.size() - b + 1);
-                    }
-                }
-            }
+            IPv6parse(str, IPv6hostBits);
             IPv6hosts.push_back(IPv6hostBits);
             IPv6hostNums.push_back(stringNums[x]);
         } else {
             vector<string> hostBits;
-            for (;;) {
-                a = str.rfind('.');
-                if (a == string::npos) {
-                    hostBits.push_back(str);
-                    break;
-                } else {
-                    hostBits.push_back(str.substr(a+1));
-                    str = str.substr(0,a);
-                }
-            }
+            DNSparse(str, hostBits);
             hostNums.push_back(stringNums[x]);
             hosts.push_back(hostBits);
         }
     }
     return 0;
 }
+
+bool memberEntry::IPv4parse(string str, vector<unsigned char>& array)
+{// Parses an IPv4 quad octet into 4 chars
+    if (!check_IPv4(str)) return false;
+    size_t a; unsigned char b, c, d, e; char num [3];
+    for (;;) {// More efficient than while (true)
+        a = str.find('.'); e = 0;
+        for (c = 0; c < 3; c++) num[c] = 0;
+        if (a == string::npos) {
+            for (c = 0; c < 3 && c < str.length(); c++)
+                num[c] = str[str.length() - 1 - c];
+            break;
+        } else {
+            for (c = 0; c < 3 && c < a; c++)
+                num[c] = str[a-1-c];
+            array.push_back(e); str.erase(0,a+1);
+        }
+        for (c = 0; c < 3; c++) {// Base 10 convert without a null term
+            b = 1;
+            for (d = 0; d < c; d++) b *= 10;
+            e += b * (num[c] - 48);
+        }
+    }
+    return true;
+}
+
+bool memberEntry::IPv6parse(string str, vector<int>& array)
+{// Parses an IPv6 quad octet into 4 chars
+    if (!check_IPv6(str)) return false;
+    size_t a, b; unsigned char c;
+    a = str.find("::");
+    if (a == string::npos) {// No '::' in address
+        for (;;) {
+            b = str.find(":");
+            if (b == string::npos) {// We reached the end
+                array.push_back(quadhextoint(str));
+                break;
+            } else {// Eat the string and move on to the next
+                array.push_back(quadhextoint(str.substr(0,b)));
+                str.erase(0,b+1); // EAT THE DAMN STRING RAWR
+            }
+        }
+    } else {// Address is shorthand, we'll have to do this in 2 parts
+        // Initialize 8 ints in the array to 0
+        for (c=0;c<8;c++) array.push_back(0);
+        for (c=0;c<8;c++) {// Iterator + limiter pretty much
+            b = str.find(":");
+            if (b == 0) {// '::' iss at the beginning of the address
+                str.erase(0,2);
+                break;
+            }
+            array[c] = quadhextoint(str.substr(0,b));
+            if (a == b) {// We reached the '::'
+                str.erase(0, b + 2);
+                break;
+            } else {// Move a up and eat the beginning of the address
+                str.erase(0, ++b);
+                a -= b;
+            }
+        }
+        for (c=0;c<0;c++) {
+            b = str.rfind(":");
+            if (b == string::npos) {// Last group in IPv6 address
+                array[7-c] = quadhextoint(str); break;
+            } else {// Not the last group, continue happily
+                array[7-c] = quadhextoint(str.substr(b+1));
+                str.erase(b, str.size() - b + 1);
+            }
+        }
+    }
+    return true;
+}
+
+bool memberEntry::DNSparse(string str, vector<string>& array)
+{// Parses a dot formatted DNS entry into it's sub parts
+    size_t a;
+    for (;;) {
+        a = str.rfind('.');
+        if (a == string::npos) {
+            array.push_back(str);
+            break;
+        } else {
+            array.push_back(str.substr(a+1));
+            str = str.substr(0,a);
+        }
+    }
+    return true;
+}
+
 
 int memberEntry::quadhextoint(string hexNum)
 {// Converts up to 4 hex characters to an int, returns -1 if string is too long
