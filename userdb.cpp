@@ -498,7 +498,7 @@ int memberEntry::getHighestHostMask (const vector<int>& stringNums,
             size_t b;
             unsigned char c, d;
             vector<int> IPv6hostBits;
-            string tmpStr;p.-
+            string tmpStr;
             if (a == string::npos) {// No '::' in address
                 for (;;) {
                     b = str.find(":");
