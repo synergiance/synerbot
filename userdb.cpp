@@ -470,7 +470,6 @@ int memberEntry::getHighestHostMask (const vector<int>& stringNums,
     vector<int> IPv6hostNums;
     vector<int> hostNums;
     string tmpMask [4]; int tmpNum [4];
-    unsigned c, x, y; unsigned char z; // Reusable variables
     for (unsigned x = 0; x < strings.size(); x++) {
         string str = strings[x];
         if (debugMode) cout<<"Identifying: "<<str<<endl;
@@ -633,11 +632,13 @@ int memberEntry::IPv4search(const vector<int>& addrNums,
     vector<int> tmpNumList;
     for (z = 0; z < 4; z++) {
         tmpItem.push_back(0);
-        tmpMaskItem.push_back(0);
+        tmpMaskItem.push_back(false);
     }
     for (x = 0; x < addrs.size(); x++) if (addrs[x].size() != 4) return -1;
     for (x = 0; x < addrs.size() - 1; x++) {
+        if (debugMode) cout<<"Comparing: "<<compileIPv4(addrs[x])<<endl;
         for (y = x + 1; y < addrs.size(); y++) {
+            if (debugMode) cout<<"To: "<<compileIPv4(addrs[y])<<endl;
             for (z = 0; z < 4; z++) {
                 if (addrs[x][z] == addrs[y][z]) {
                     if (z > 0 && tmpMaskItem[z-1]) {
@@ -646,6 +647,7 @@ int memberEntry::IPv4search(const vector<int>& addrNums,
                     }
                 } else tmpMaskItem[z] = false;
             }
+            if (debugMode) cout<<"Mask: "<<compileIPv4(tmpItem, tmpMaskItem);
             if (tmpMaskItem[0]) {
                 bool verdict;
                 for (c = 0; c < tmpList.size(); c++) {
@@ -656,6 +658,7 @@ int memberEntry::IPv4search(const vector<int>& addrNums,
                         if (tmpItem[z] != tmpList[c][z])
                             verdict = false;
                     }
+                    if (debugMode) cout<<(verdict?"Taken":"Added")<<endl;
                     if (verdict) break;
                 }
                 if (!verdict) {
@@ -681,6 +684,28 @@ int memberEntry::DNSsearch(const vector<int>& addrNums,
     return 0;
 }
 
+string memberEntry::compileIPv4(vector<unsigned char> nums)
+{// Boilerplate again, sue me
+    vector<bool> mask;
+    for (unsigned char c = 0; c < 4; c++) mask.push_back(false);
+    return compileIPv4(nums, mask);
+}
+
+string memberEntry::compileIPv4(vector<unsigned char> nums, vector<bool> mask)
+{
+    string str;
+    for (unsigned char c = 0; c < 4; c++) {
+        str += mask[c]? nums[c] : '*';
+        if (c < 3) str += ".";
+    }
+    return str;
+}
+
+string memberEntry::compileIPv6(vector<int> nums)
+{
+    string str; return str;
+}
+
 int memberEntry::quadhextoint(string hexNum)
 {// Converts up to 4 hex characters to an int, returns -1 if string is too long
     size_t a, b; char c; unsigned d, e = 0; unsigned char f;
@@ -698,12 +723,39 @@ int memberEntry::quadhextoint(string hexNum)
 
 string memberEntry::inttoquadhex(int number)
 {// Turns an int into a quad hex (IPv6)
-    unsigned char a, b, c; int d; char e [5]; string f;
+    unsigned char a, b, c; int d; char e[5]; string f;
+    d = number;
+    for (c = 0; c < 4 && d > 0; c++) {
+        a = d % 16;
+        d /= 16;
+        e[c] = a + 48;
+        if (e[c] > 57) e[c] += 39;
+    }
+    e[c] = '\0';
+    for (a = --c; c > a / 2; c--) {
+        b = e[c];
+        e[c] = e[a-c];
+        e[a-c] = b;
+    }
+    f = e;
     return f;
 }
 
 string memberEntry::numchartostring(unsigned char num)
 {
-    unsigned char a, b, c, d; char e [4]; string f;
+    unsigned char a, b, c, d; char e[4]; string f;
+    d = num;
+    for (c = 0; c < 4 && d > 0; c++) {
+        a = d % 10;
+        d /= 10;
+        e[c] = a + 48;
+    }
+    e[c] = '\0';
+    for (a = --c; c > a / 2; c--) {
+        b = e[c];
+        e[c] = e[a-c];
+        e[a-c] = b;
+    }
+    f = e;
     return f;
 }

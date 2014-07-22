@@ -63,6 +63,10 @@ private:
     int DNSsearch(const vector<int>& addrNums,
         const vector< vector<string> >& addrs, string& mask, int& num);
 
+    string compileIPv4(vector<unsigned char> nums);
+    string compileIPv4(vector<unsigned char> nums, vector<bool> mask);
+    string compileIPv6(vector<int> nums);
+
     int quadhextoint(string hexNum);
     string inttoquadhex(int number);
     string numchartostring(unsigned char num);
