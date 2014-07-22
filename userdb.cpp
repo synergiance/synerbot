@@ -499,6 +499,18 @@ int memberEntry::getHighestHostMask (const vector<int>& stringNums,
         if (debugMode) cout<<"Acting legacy method\n";
         getHighestMask(hostNums, hosts, tmpMask, tmpNum);
     }
+    if (IPv4hosts.size() > 0) {
+        if (debugMode) cout<<"Comparing IPv4 hosts\n";
+        for (unsigned x = 0; x < IPv4hosts.size() - 1; x++) {
+            //code
+        }
+    }
+    if (IPv6hosts.size() > 0) {
+        if (debugMode) cout<<"Comparing IPv6 hosts\n";
+        for (unsigned x = 0; x < IPv6hosts.size() - 1; x++) {
+            //code
+        }
+    }
     return 0;
 }
 
