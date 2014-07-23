@@ -7,6 +7,7 @@
 
 #include <string>
 #include <vector>
+#include <bitset>
 
 using namespace std;
 
@@ -52,19 +53,19 @@ private:
     int getHighestHostMask (const vector<int>& stringNums,
         const vector<string>& strings, string& mask);
 
-    bool IPv4parse(string str, vector<unsigned char>& array);
+    bool IPv4parse(string str, unsigned char * array);
     bool IPv6parse(string str, vector<int>& array);
     bool DNSparse(string str, vector<string>& array);
 
     int IPv4search(const vector<int>& addrNums,
-        const vector< vector<unsigned char> >& addrs, string& mask, int& num);
+        const vector<unsigned char * >& addrs, string& mask, int& num);
     int IPv6search(const vector<int>& addrNums,
         const vector< vector<int> >& addrs, string& mask, int& num);
     int DNSsearch(const vector<int>& addrNums,
         const vector< vector<string> >& addrs, string& mask, int& num);
 
-    string compileIPv4(vector<unsigned char> nums);
-    string compileIPv4(vector<unsigned char> nums, vector<bool> mask);
+    string compileIPv4(unsigned char * nums);
+    string compileIPv4(unsigned char * nums, bitset<4> mask);
     string compileIPv6(vector<int> nums);
 
     int quadhextoint(string hexNum);

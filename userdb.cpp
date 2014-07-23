@@ -17,6 +17,7 @@ A class designed to keep track of users across hostnames
 #include <iostream>
 #include <stdlib.h>
 #include <sstream>
+#include <bitset>
 //#include <regex>
 
 #include "userdb.h"
@@ -462,7 +463,7 @@ int memberEntry::getHighestHostMask (const vector<int>& stringNums,
     const vector<string>& strings, string& mask, int& num)
 {// Makes a wildcard mask of hostnames/IPs
     vector< vector<string> > DNShosts;
-    vector< vector<unsigned char> > IPv4hosts;
+    vector<unsigned char * > IPv4hosts;
     vector< vector<int> > IPv6hosts;
     vector<string> hosts;
     vector<int> DNShostNums;
@@ -480,7 +481,7 @@ int memberEntry::getHighestHostMask (const vector<int>& stringNums,
         string str = strings[x];
         if (debugMode) cout<<"Identifying: "<<str<<endl;
         if (check_IPv4(str)) {
-            vector<unsigned char> IPv4hostBits;
+            unsigned char * IPv4hostBits = new unsigned char[4];
             IPv4parse(str, IPv4hostBits);
             IPv4hosts.push_back(IPv4hostBits);
             IPv4hostNums.push_back(stringNums[x]);
@@ -508,6 +509,7 @@ int memberEntry::getHighestHostMask (const vector<int>& stringNums,
     if (IPv4hosts.size() > 0) {
         if (debugMode) cout<<"Comparing IPv4 hosts\n";
         IPv4search(IPv4hostNums, IPv4hosts, tmpMask[1], tmpNum[1]);
+        for (unsigned c = 0; c < IPv4hosts.size(); c++) delete[] IPv4hosts[c];
     }
     if (IPv6hosts.size() > 0) {
         if (debugMode) cout<<"Comparing IPv6 hosts\n";
@@ -530,32 +532,32 @@ int memberEntry::getHighestHostMask (const vector<int>& stringNums,
     return 0;
 }
 
-bool memberEntry::IPv4parse(string str, vector<unsigned char>& array)
+bool memberEntry::IPv4parse(string str, unsigned char * array)
 {// Parses an IPv4 quad octet into 4 chars, returns false if not IPv4
     if (!check_IPv4(str)) return false;
     if (debugMode) cout<<"IPv4 string itentified, parsing...\n";
-    size_t a; unsigned char b, c, d, e; char num [3]; size_t f;
-    for (;;) {// More efficient than while (true)
+    size_t a, b; unsigned char c, d, e, f, g; char num [3];
+    for (g = 0; g < 4; g++) {// More efficient than while (true)
         a = str.find('.'); e = 0;
         for (c = 0; c < 3; c++) num[c] = 0;
         if (a == string::npos) {
             if (debugMode) cout<<str<<" ";
-            f = str.length();
+            b = str.length();
             for (c = 0; c < 3 && c < str.length(); c++)
                 num[c] = str[str.length() - 1 - c];
         } else {
             if (debugMode) cout<<str.substr(0,a)<<" ";
-            f = a;
+            b = a;
             for (c = 0; c < 3 && c < a; c++)
                 num[c] = str[a-1-c];
             str.erase(0,a+1);
         }
-        for (c = 0; c < f; c++) {// Base 10 convert without a null term
-            b = 1;
-            for (d = 0; d < c; d++) b *= 10;
-            e += b * (num[c] - 48);
+        for (c = 0; c < b; c++) {// Base 10 convert without a null term
+            f = 1;
+            for (d = 0; d < c; d++) f *= 10;
+            e += f * (num[c] - 48);
         }
-        array.push_back(e);
+        array[g] = e;
         if (a == string::npos) break;
     }
     if (debugMode) cout<<"-> "<<compileIPv4(array)<<" Done!\n";
@@ -640,23 +642,22 @@ bool memberEntry::DNSparse(string str, vector<string>& array)
 }
 
 int memberEntry::IPv4search(const vector<int>& addrNums,
-    const vector< vector<unsigned char> >& addrs, string& mask, int& num)
+    const vector<unsigned char * >& addrs, string& mask, int& num)
 {// Searches an IPv4 sorted array, will return -1 on error
     unsigned c, x, y; unsigned char z; int a; // Reusable variables
-    vector< vector<unsigned char> > tmpList;
-    vector< vector<bool> > tmpMaskList;
-    vector<unsigned char> tmpItem;
-    vector<bool> tmpMaskItem;
+    vector<unsigned char * > tmpList;
+    vector<bitset<4> > tmpMaskList;
+    unsigned char * tmpItem;
+    bitset<4> tmpMaskItem;
     vector<int> tmpNumList;
-    for (z = 0; z < 4; z++) {
-        tmpItem.push_back(0);
-        tmpMaskItem.push_back(false);
-    }
-    for (x = 0; x < addrs.size(); x++) if (addrs[x].size() != 4) return -1;
+    for (x = 0; x < addrs.size(); x++) if (sizeof(addrs[x]) < 4) return -1;
     for (x = 0; x < addrs.size() - 1; x++) {
         if (debugMode) cout<<"Comparing: "<<compileIPv4(addrs[x])<<endl;
         for (y = x + 1; y < addrs.size(); y++) {
+            bool verdict, match;
             if (debugMode) cout<<"To: "<<compileIPv4(addrs[y])<<endl;
+            tmpMaskItem.reset();
+            tmpItem = new unsigned char[4];
             for (z = 0; z < 4; z++) {
                 if (addrs[x][z] == addrs[y][z]) {
                     if (z == 0 || tmpMaskItem[z-1]) {
@@ -667,8 +668,8 @@ int memberEntry::IPv4search(const vector<int>& addrNums,
             }
             if (debugMode) cout<<"Mask: "<<compileIPv4(tmpItem, tmpMaskItem);
             if (tmpMaskItem[0]) {
-                bool verdict, match;
-                for (c = 0; c < tmpList.size(); c++) {
+                verdict = false;
+                for (c = 0; c < tmpList.size() && !verdict; c++) {
                     verdict = true;
                     for (z = 0; z < 4 && verdict; z++) {
                         if (tmpMaskItem[z] != tmpMaskList[c][z])
@@ -676,7 +677,6 @@ int memberEntry::IPv4search(const vector<int>& addrNums,
                         if (tmpItem[z] != tmpList[c][z])
                             verdict = false;
                     }
-                    if (verdict) break;
                 }
                 if (!verdict) {
                     a = 0;
@@ -691,7 +691,7 @@ int memberEntry::IPv4search(const vector<int>& addrNums,
                     tmpList.push_back(tmpItem);
                     tmpMaskList.push_back(tmpMaskItem);
                     tmpNumList.push_back(a);
-                }
+                } else delete[] tmpItem;
                 if (debugMode) cout<<(verdict?" Taken":" Added")<<endl;
             } else if (debugMode) cout<<" Invalid"<<endl;
         }
@@ -707,6 +707,7 @@ int memberEntry::IPv4search(const vector<int>& addrNums,
             if (debugMode) cout<<" √";
         }
         if (debugMode) cout<<endl;
+        delete[] tmpList[c]; // Free memory, we're done
     }
     for (c = 0; c < addrNums.size(); c++) {
         if (debugMode) cout<<compileIPv4(addrs[c])<<" "<<addrNums[c];
@@ -716,11 +717,6 @@ int memberEntry::IPv4search(const vector<int>& addrNums,
             if (debugMode) cout<<" √";
         }
         if (debugMode) cout<<endl;
-    }
-    for (c = 0; c < tmpList.size(); c++) {
-        for (z = 0; z < 4; z++) {
-            tmpList[c][z] = 0;
-        }
     }
     if (debugMode) cout<<"Selected: "<<mask<<" "<<num<<endl;
     return 0;
@@ -739,13 +735,13 @@ int memberEntry::DNSsearch(const vector<int>& addrNums,
 }
 
 // Boiler plating, sue me
-string memberEntry::compileIPv4(vector<unsigned char> nums)
-{ vector<bool> mask; for (unsigned char c = 0; c < 4; c++)
-mask.push_back(true); return compileIPv4(nums, mask); }
+string memberEntry::compileIPv4(unsigned char * nums)
+{ bitset<4> mask; mask.set(); return compileIPv4(nums, mask); }
 
-string memberEntry::compileIPv4(vector<unsigned char> nums, vector<bool> mask)
+string memberEntry::compileIPv4(unsigned char * nums, bitset<4> mask)
 {// Takes a quad char, and compiles it into a dot formatted string
     string str;
+    if (sizeof(nums) < 4) return string();
     for (unsigned char c = 0; c < 4; c++) {
         str += mask[c]? numchartostring(nums[c]) : "*";
         if (c < 3) str += ".";
