@@ -344,7 +344,7 @@ string memberEntry::firstSeen()
 string memberEntry::mostSeen()
 {// Returns most seen variation of current member entry
     stringstream ss;
-    string tmpstr;
+    string tmpstr, tmpstr2;
     unsigned tmp = 0;
     ss<<"Most seen as: ";
     tmp = getHighest(nickints);
@@ -355,8 +355,9 @@ string memberEntry::mostSeen()
     ss<<tmpstr<<"@";
     tmpstr = string();
     getHighestMask(hostints, hosts, tmpstr);
+    getHighestHostMask(hostints, hosts, tmpstr2);
+    if (tmpstr2.size() > 0) tmpstr = tmpstr2;
     ss<<tmpstr<<" (";
-    if (debugMode) getHighestHostMask(hostints, hosts, tmpstr);
     tmp = getHighest(nameints);
     tmpstr = names[tmp];
     ss<<tmpstr<<")";
