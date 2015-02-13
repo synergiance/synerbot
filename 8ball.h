@@ -22,9 +22,9 @@ public:
 
     void getanswer();
 
+private:
     void say(string target, string message);
 
-private:
     mt19937* rnd;
     CMutex *MessageQueue;
     bool loaded;

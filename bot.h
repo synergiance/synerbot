@@ -17,6 +17,7 @@
 #include "english.h"
 #include "quote.h"
 #include "userdb.h"
+#include "8ball.h"
 
 using namespace std;
 
@@ -57,6 +58,7 @@ private:
     CEnglish* EngLang;
     mt19937* rnd;
     CUserDB* UserDB;
+    c8ball* ShakerBall;
 
     // Important static values
     static long atoimax;

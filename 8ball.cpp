@@ -56,7 +56,7 @@ bool c8ball::loadstrings(string file)
 }
 
 void c8ball::getanswer()
-{
+{// 8-ball selector thingy for Nat
     if (loaded)
     {// Only say a quote if we loaded the file
         uniform_int_distribution<int> dist(0, ballarray.size() - 1);
@@ -66,6 +66,6 @@ void c8ball::getanswer()
 }
 
 void c8ball::say(string target, string message)
-{
+{// Nat likes to tell me to add more comments
     MessageQueue->push("SAY " + target + " " + message);
 }

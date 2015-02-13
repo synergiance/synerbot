@@ -16,6 +16,7 @@
 #include "english.h"
 #include "quote.h"
 #include "userdb.h"
+#include "8ball.h"
 
 // Global Includes
 #include <iostream>
@@ -67,12 +68,14 @@ IrcBot::IrcBot(string cfg, int bDebug, bool bVerbose)
     char* rndmem = new char[sizeof(mt19937)];
     char* qtsmem = new char[sizeof(QuoteHandler)];
     char* usrmem = new char[sizeof(CUserDB)];
+    char* balmem = new char[sizeof(c8ball)];
 
     // Set modules
     botConfig = new (bcfgint) CConfig(cfg);
     botPriv = new (bprmint) CPrivleges();
     EngLang = new (engmem) CEnglish();
     UserDB = new (usrmem) CUserDB();
+
 
     rnd = new (rndmem) mt19937(rndseed);
 
@@ -97,6 +100,8 @@ IrcBot::IrcBot(string cfg, int bDebug, bool bVerbose)
     botSock = new (netmem) CNetSocket(server, port, *MessageQueue, bDebug);
     CQuotes = new (qtsmem) QuoteHandler(*MessageQueue, *botPriv, channelName);
     CQuotes->setVerbosity(bVerbose);
+
+    ShakerBall = new (balmem) c8ball(*MessageQueue, channelName);
 
     UserDB->setDebug(debugMode == 25);
 }
@@ -423,6 +428,9 @@ int IrcBot::commandHandle(string cmd, string args, string talkto, string usr)
         if (check_IPv6(args)) say(talkto, "That was an IPv6 address"); else
         if (check_IPv4(args)) say(talkto, "That was an IPv4 address"); else
                               say(talkto, "That was not an IP");
+    } else if (toLower(cmd).compare("shake") == 0 ||
+               toLower(cmd).compare("8ball") == 0) {
+        ShakerBall->getanswer();
     }
     
     // Admin commands
