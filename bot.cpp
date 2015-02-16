@@ -101,7 +101,7 @@ IrcBot::IrcBot(string cfg, int bDebug, bool bVerbose)
     CQuotes = new (qtsmem) QuoteHandler(*MessageQueue, *botPriv, channelName);
     CQuotes->setVerbosity(bVerbose);
 
-    ShakerBall = new (balmem) c8ball(*MessageQueue, channelName);
+    ShakerBall = new (balmem) c8ball(*MessageQueue);
 
     UserDB->setDebug(debugMode == 25);
 }
@@ -430,7 +430,7 @@ int IrcBot::commandHandle(string cmd, string args, string talkto, string usr)
                               say(talkto, "That was not an IP");
     } else if (toLower(cmd).compare("shake") == 0 ||
                toLower(cmd).compare("8ball") == 0) {
-        ShakerBall->getanswer(); cmdMatch = true;
+        ShakerBall->getanswer(talkto); cmdMatch = true;
     }
     
     // Admin commands

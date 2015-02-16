@@ -19,7 +19,7 @@
 
 using namespace std;
 
-c8ball::c8ball(CMutex& buffer, string chnl)
+c8ball::c8ball(CMutex& buffer)
 {// Constructor
     unsigned rndseed = chrono::system_clock::now().time_since_epoch().count();
     char* rndmem = new char[sizeof(mt19937)];
@@ -28,7 +28,6 @@ c8ball::c8ball(CMutex& buffer, string chnl)
     loaded = loadstrings("8ball.lng");
 
     MessageQueue = &buffer;
-    channel = chnl;
 }
 
 bool c8ball::loadstrings(string file)
@@ -55,13 +54,13 @@ bool c8ball::loadstrings(string file)
     return fState;
 }
 
-void c8ball::getanswer()
+void c8ball::getanswer(string talkto)
 {// 8-ball selector thingy for Nat
     if (loaded)
     {// Only say a quote if we loaded the file
         uniform_int_distribution<int> dist(0, ballarray.size() - 1);
         int intTmp = dist(*rnd);
-        say(channel, ballarray[intTmp]);
+        say(talkto, ballarray[intTmp]);
     }
 }
 

@@ -16,11 +16,11 @@ using namespace std;
 
 class c8ball {
 public:
-    c8ball(CMutex& buffer, string chnl);
+    c8ball(CMutex& buffer);
 
     bool loadstrings(string file);
 
-    void getanswer();
+    void getanswer(string talkto);
 
 private:
     void say(string target, string message);
@@ -28,7 +28,6 @@ private:
     mt19937* rnd;
     CMutex *MessageQueue;
     bool loaded;
-    string channel;
 
     vector<string> ballarray;
 };
