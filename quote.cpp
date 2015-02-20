@@ -145,9 +145,11 @@ void QuoteHandler::command(string cmd, string args, string talkto, string usr)
     }
     else if (admin && (cmd.compare("save") == 0))
     {
+        bool savedtmp = addedQuotes;
         if (verboseMode) cout<<"User initiated save\n";
         saveQuotes(quoteFile);
-        say(talkto, "Quotes saved!");
+        if (savedtmp) say(talkto, "Quotes saved!");
+        else say(talkto, "No new quotes to save");
     }
     else if ((cmd.compare("show") == 0)
           || (cmd.compare("remove") == 0)
