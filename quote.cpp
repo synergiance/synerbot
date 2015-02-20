@@ -143,9 +143,16 @@ void QuoteHandler::command(string cmd, string args, string talkto, string usr)
             say(talkto, "Usage: quote " + cmd + " <number>");
         }
     }
+    else if (admin && (cmd.compare("save") == 0))
+    {
+        if (verboseMode) cout<<"User initiated save\n";
+        saveQuotes(quoteFile);
+        say(talkto, "Quotes saved!");
+    }
     else if ((cmd.compare("show") == 0)
           || (cmd.compare("remove") == 0)
-          || (cmd.compare("rem") == 0))
+          || (cmd.compare("rem") == 0)
+          || (cmd.compare("save") == 0))
     {
         if (verboseMode) cout<<"Unauthorized access to "<<cmd<<endl;
         say(talkto, "You are not authorized to use that command");
@@ -244,6 +251,7 @@ int QuoteHandler::saveQuotes(string file)
             for (long index = 0; index<(long)quotes.size(); ++index)
                 qfile<<quotes.at(index)<<endl;
             qfile.close();
+            addedQuotes = false;
             cout<<" Done\n";
         } else {
             cout<<"File error, no quotes saved\n";
@@ -291,6 +299,13 @@ void QuoteHandler::help(string cmd, string usr, string talkto)
         say(talkto, "Returns the amount of quotes");
         say(talkto, "Usage: quote num");
     }
+    else if (cmd.compare("save") == 0)
+    {
+        if (verboseMode) cout<<"Help Num command used\n";
+        say(talkto, "QUOTE SAVE:");
+        say(talkto, "Saves the quotes to disk immediately");
+        say(talkto, "Usage: quote save");
+    }
     else if (cmd.compare("help") == 0)
     {
         if (verboseMode) cout<<"Help Help command used (quote)\n";
@@ -304,7 +319,7 @@ void QuoteHandler::help(string cmd, string usr, string talkto)
         say(talkto, "QUOTE:");
         say(talkto, "Recites a quote at random");
         say(talkto, "Usage: quote");
-        say(talkto, "Subcommands: show, remove, add, num, help");
+        say(talkto, "Subcommands: show, remove, add, num, help, save");
     }
 }
 
