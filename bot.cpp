@@ -431,6 +431,8 @@ int IrcBot::commandHandle(string cmd, string args, string talkto, string usr)
     } else if (toLower(cmd).compare("shake") == 0 ||
                toLower(cmd).compare("8ball") == 0) {
         ShakerBall->getanswer(talkto); cmdMatch = true;
+    } else if (toLower(cnd).compare("about") == 0) {
+        say(talkto, "Programmed by Fiona aka. Synergiance"); cmdMatch = true;
     }
     
     // Admin commands
