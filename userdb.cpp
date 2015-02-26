@@ -808,3 +808,8 @@ string memberEntry::numchartostring(unsigned char num)
     f = e;
     return f;
 }
+
+void memberEntry::fuseWith(memberEntry food)
+{
+    //code
+}

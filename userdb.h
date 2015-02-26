@@ -41,6 +41,8 @@ public:
     string mostSeen();
     string lastSeen();
 
+    void fuseWith(memberEntry food);
+
     bool debugMode;
 private:
     unsigned getHighest(const vector<int>& array);
