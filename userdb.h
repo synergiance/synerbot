@@ -73,6 +73,9 @@ private:
     int quadhextoint(string hexNum);
     string inttoquadhex(int number);
     string numchartostring(unsigned char num);
+
+    void mergeLists(vector<string>& meStrings,   vector<int>& meInts,
+                    vector<string>& themStrings, vector<int>& themInts);
 };
 
 struct posPair {
