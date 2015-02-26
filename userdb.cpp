@@ -817,14 +817,14 @@ void memberEntry::fuseWith(memberEntry food)
     entrylen = food.nicks.size(); mylen = nicks.size(); match = false;
     for (int x = 0; x < entrylen; x++) {
         for (int y = 0; y < mylen && !match; y++) {
-            if (nicks(y).compare(food.nicks(x)) == 0) {
-                nickints(y) += food.nickints(x);
+            if (nicks[y].compare(food.nicks[x]) == 0) {
+                nickints[y] += food.nickints[x];
                 match = true;
             }
         }
         if (!match) {
-            nicks.push_back(food.nicks(x));
-            nickints.push_back(food.nickints(x));
+            nicks.push_back(food.nicks[x]);
+            nickints.push_back(food.nickints[x]);
         }
     }
 
@@ -832,14 +832,14 @@ void memberEntry::fuseWith(memberEntry food)
     entrylen = food.users.size(); mylen = users.size(); match = false;
     for (int x = 0; x < entrylen; x++) {
         for (int y = 0; y < mylen && !match; y++) {
-            if (users(y).compare(food.users(x)) == 0) {
-                userints(y) += food.userints(x);
+            if (users[y].compare(food.users[x]) == 0) {
+                userints[y] += food.userints[x];
                 match = true;
             }
         }
         if (!match) {
-            users.push_back(food.users(x));
-            userints.push_back(food.userints(x));
+            users.push_back(food.users[x]);
+            userints.push_back(food.userints[x]);
         }
     }
 
@@ -847,14 +847,14 @@ void memberEntry::fuseWith(memberEntry food)
     entrylen = food.hosts.size(); mylen = hosts.size(); match = false;
     for (int x = 0; x < entrylen; x++) {
         for (int y = 0; y < mylen && !match; y++) {
-            if (hosts(y).compare(food.hosts(x)) == 0) {
-                hostints(y) += food.hostints(x);
+            if (hosts[y].compare(food.hosts[x]) == 0) {
+                hostints[y] += food.hostints[x];
                 match = true;
             }
         }
         if (!match) {
-            hosts.push_back(food.hosts(x));
-            hostints.push_back(food.hostints(x));
+            hosts.push_back(food.hosts[x]);
+            hostints.push_back(food.hostints[x]);
         }
     }
 
@@ -862,14 +862,14 @@ void memberEntry::fuseWith(memberEntry food)
     entrylen = food.names.size(); mylen = names.size(); match = false;
     for (int x = 0; x < entrylen; x++) {
         for (int y = 0; y < mylen && !match; y++) {
-            if (names(y).compare(food.names(x)) == 0) {
-                nameints(y) += food.nameints(x);
+            if (names[y].compare(food.names[x]) == 0) {
+                nameints[y] += food.nameints[x];
                 match = true;
             }
         }
         if (!match) {
-            names.push_back(food.names(x));
-            nameints.push_back(food.nameints(x));
+            names.push_back(food.names[x]);
+            nameints.push_back(food.nameints[x]);
         }
     }
 }
