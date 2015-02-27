@@ -217,6 +217,24 @@ posPair CUserDB::lookupUser(string nick, string user, string host, string name)
     return scores;
 }
 
+posPair CUserDB::lookupUser(string query)
+{// Searches and finds a user based on a parameter
+    posPair scores;
+    if (debugMode) cout<<"Searching user database for: "<<query<<endl;
+    if (members.size() > 0) {
+        for (unsigned c = 0; c < members.size(); c++) {
+            unsigned char tmpScore;
+            tmpScore = scoreUser(members[c], query);
+            if (tmpScore > 10) {
+                scores.positions.push_back(c);
+                scores.scores.push_back(tmpScore);
+            }
+        }
+    }
+    if (scores.scores.size() == 0) lookupUser(query, query, query, query);
+    return scores;
+}
+
 unsigned char CUserDB::scoreUsers(memberEntry& usr1, memberEntry& usr2)
 {// Compare 2 members against eachother
     return 0;
@@ -224,7 +242,104 @@ unsigned char CUserDB::scoreUsers(memberEntry& usr1, memberEntry& usr2)
 
 unsigned char CUserDB::scoreUser(memberEntry& usr, string test)
 {// Check a search string
-    return 0;
+    // Scoreboard
+    int nickscore = 0, nickpossible = 0;
+    int userscore = 0, userpossible = 0;
+    int namescore = 0, namepossible = 0;
+    //int hostscore = 0, hostpossible = 0;
+
+    int total;
+
+    int c; // Generic counter is generic
+    int tmp; // Generic temporary variable
+
+    // Our thrreshold will be 5% we can ignore one offs this way
+    int threshold = 0;
+    for (c = 0; c < usr.nicks.size(); c++) threshold += usr.nickints[c];
+    threshold /= 20;
+
+    // Cycle through the nick list
+    for (c = 0; c < usr.nicks.size(); c++) {
+        if (usr.nickints[c] > threshold) {
+            tmp = compareString(test, usr.nicks[c]);
+            if (tmp >= 3) {
+                nickscore += tmp;
+                nickpossible += usr.nicks[c].size();
+            }
+            if (tmp == test.size()) {
+                nickscore = 33;
+                nickpossible = 33;
+                break;
+            }
+        }
+    }
+
+    // Cycle through the user list
+    for (c = 0; c < usr.users.size(); c++) {
+        if (usr.userints[c] > threshold) {
+            tmp = compareString(test, usr.users[c]);
+            if (tmp >= 3) {
+                userscore += tmp;
+                userpossible += usr.users[c].size();
+            }
+            if (tmp == test.size()) {
+                userscore = 33;
+                userpossible = 33;
+                break;
+            }
+        }
+    }
+
+    // Cycle through the name list
+    for (c = 0; c < usr.names.size(); c++) {
+        if (usr.nameints[c] > threshold) {
+            tmp = compareString(test, usr.names[c]);
+            if (tmp >= 3) {
+                namescore += tmp;
+                namepossible += usr.names[c].size();
+            }
+            if (tmp == test.size()) {
+                namescore = 33;
+                namepossible = 33;
+                break;
+            }
+        }
+    }
+
+    // Get better averages
+    if (nickpossible != 33) nickscore *= 33 / nickpossible;
+    if (userpossible != 33) userscore *= 33 / userpossible;
+    if (namepossible != 33) namescore *= 33 / namepossible;
+
+    total = nickscore + userscore + namescore;
+    if (total > 48) total += 1;
+
+    return total;
+}
+
+int CUserDB::compareString(string str1, string str2)
+{// Compares 2 strings against eachother
+    int score = 0;
+    int x, y, z;
+    bool found = false;
+
+    // We want the lower of the two sizes here
+    if (str1.size() < str2.size())
+        z = str1.size();
+    else
+        z = str2.size();
+
+    // Let's iterate through with different substrings
+    for (x = z; !found && x > 1; x--) {
+        for (y = 0; !found && y <= str2.size() - x; y++) {
+            if (str2.find(str1.substr(y, z)) != string::npos) {
+                score = y;
+                found = true;
+            }
+        }
+    }
+
+    return score;
 }
 
 void CUserDB::readdb()

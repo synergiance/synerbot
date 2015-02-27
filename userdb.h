@@ -97,6 +97,7 @@ public:
     string spotUser(string nick, string user, string host, string name);
     int searchUser(string nick, string user, string host, string name);
     posPair lookupUser(string nick, string user, string host, string name);
+    posPair lookupUser(string query);
 
     string compileUser(int num);
 
@@ -112,6 +113,7 @@ private:
 
     unsigned char scoreUsers(memberEntry& usr1, memberEntry& usr2);
     unsigned char scoreUser(memberEntry& usr, string test);
+    int compareString(string str1, string str2);
 };
 
 #endif /* CUSERDB_H_ */

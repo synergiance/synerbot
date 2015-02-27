@@ -463,7 +463,7 @@ int IrcBot::commandHandle(string cmd, string args, string talkto, string usr)
 
 void IrcBot::lookup(string search, string talkto)
 {
-    posPair memberNumbers = UserDB->lookupUser(search, search, search, search);
+    posPair memberNumbers = UserDB->lookupUser(search);
     if (memberNumbers.scores.size() == 0)
         say(talkto, "I don't believe I have met " + search);
     else {
