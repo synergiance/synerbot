@@ -110,6 +110,8 @@ private:
     void readdb();
     void writedb();
 
+    unsigned char scoreUsers(memberEntry& usr1, memberEntry& usr2);
+    unsigned char scoreUser(memberEntry& usr, string test);
 };
 
 #endif /* CUSERDB_H_ */

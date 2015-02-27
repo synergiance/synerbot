@@ -217,6 +217,16 @@ posPair CUserDB::lookupUser(string nick, string user, string host, string name)
     return scores;
 }
 
+unsigned char CUserDB::scoreUsers(memberEntry& usr1, memberEntry& usr2)
+{// Compare 2 members against eachother
+    //code
+}
+
+unsigned char CUserDB::scoreUser(memberEntry& usr, string test)
+{// Check a search string
+    //code
+}
+
 void CUserDB::readdb()
 {// Reads the user database into memory
     ifstream ifile (userdbfile.c_str());
