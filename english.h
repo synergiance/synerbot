@@ -40,6 +40,8 @@ public:
     //CEnglish(string file);
     //virtual ~CEnglish();
 
+    void setDebug(bool debug);
+
     // Access functions
     //string getNoun(bool daddylang, int tense);
     //string getVerb(bool daddylang, int tense);
@@ -49,6 +51,7 @@ public:
     string getHello(string nick, bool only_roman);
 private:
     mt19937* rnd;
+    bool debugMode;
 
     // Files
     string folderName;

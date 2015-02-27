@@ -219,12 +219,12 @@ posPair CUserDB::lookupUser(string nick, string user, string host, string name)
 
 unsigned char CUserDB::scoreUsers(memberEntry& usr1, memberEntry& usr2)
 {// Compare 2 members against eachother
-    //code
+    return 0;
 }
 
 unsigned char CUserDB::scoreUser(memberEntry& usr, string test)
 {// Check a search string
-    //code
+    return 0;
 }
 
 void CUserDB::readdb()

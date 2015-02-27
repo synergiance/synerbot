@@ -21,6 +21,7 @@
 
 // Local Imports
 #include "english.h"
+#include "miscbotlib.h"
 
 using namespace std;
 
@@ -70,7 +71,16 @@ CEnglish::CEnglish()
     // File Names
     folderName = "lang";
     wordFileName = "words.db";
-    phraseFileName = "phrases.txt";
+    phraseFileName = "english.lng";
+
+    //checkDir();
+
+    //readPhrases(phraseFileName);
+}
+
+void CEnglish::setDebug(bool debug)
+{// Sets the debug mode
+    debugMode = debug;
 }
 
 string CEnglish::getHello(string nick, bool only_roman)
@@ -180,12 +190,31 @@ int CEnglish::writeWords(string fileName)
 }
 
 int CEnglish::readPhrases(string fileName)
-{
+{// Reads the phrase file
+    ifstream ifile (fileName.c_str());
+    if (ifile) {// All good, the file exists lets proceed
+        string section, strInput;
+        while (getline(ifile, strInput)) {
+            trimWhite(strInput);
+            if (strInput.front() == '[' && strInput.back() == ']') {
+                section = strInput.substr(1, strInput.size() - 2);
+            } else if (strInput.compare("") == 0) {
+                continue;
+            } else if (section.compare("") == 0) {
+                continue;
+            } else if (toUpper(section).compare("GREETINGS") == 0) {
+                hellos.push_back(strInput);
+            }
+        }
+        ifile.close();
+    } else {// Uh oh, something went wrong, disable module
+        return -1;
+    }
     return 0;
 }
 
 int CEnglish::writePhrases(string fileName)
-{
+{// Writes changes to the phrase file
     checkDir();
     return 0;
 }
