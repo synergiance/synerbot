@@ -306,6 +306,12 @@ unsigned char CUserDB::scoreUser(memberEntry& usr, string test)
         }
     }
 
+    if (debugMode) {
+        cout<<"Score: "<<nickscore<<"/"<<nickpossible<<" "
+                       <<userscore<<"/"<<userpossible<<" "
+                       <<namescore<<"/"<<namepossible<<endl;
+    }
+
     // Get better averages
     if (nickpossible != 33)
         nickscore = int((double)nickscore * 33 / (double)nickpossible);
@@ -316,6 +322,8 @@ unsigned char CUserDB::scoreUser(memberEntry& usr, string test)
 
     total = nickscore + userscore + namescore;
     if (total > 48) total += 1;
+
+    if (debugMode) cout<<"Total: "<<total<<endl;
 
     return total;
 }
