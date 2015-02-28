@@ -314,11 +314,11 @@ unsigned char CUserDB::scoreUser(memberEntry& usr, string test)
 
     // Get better averages
     if (nickpossible != 33)
-        nickscore = int((double)nickscore * 33 / (double)nickpossible);
+        nickscore = int((nickscore * 33) / (double)nickpossible);
     if (userpossible != 33)
-        userscore = int((double)userscore * 33 / (double)userpossible);
+        userscore = int((userscore * 33) / (double)userpossible);
     if (namepossible != 33)
-        namescore = int((double)userscore * 33 / (double)namepossible);
+        namescore = int((namescore * 33) / (double)namepossible);
 
     total = nickscore + userscore + namescore;
     if (total > 48) total += 1;
