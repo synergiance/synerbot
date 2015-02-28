@@ -250,8 +250,8 @@ unsigned char CUserDB::scoreUser(memberEntry& usr, string test)
 
     int total;
 
-    int c; // Generic counter is generic
-    int tmp; // Generic temporary variable
+    unsigned c; // Generic counter is generic
+    unsigned tmp; // Generic temporary variable
 
     if (debugMode) cout<<"Scoring\n";
 
@@ -311,9 +311,12 @@ unsigned char CUserDB::scoreUser(memberEntry& usr, string test)
 
     if (debugMode) cout<<"Testing2\n";
     // Get better averages
-    if (nickpossible != 33) nickscore *= 33 / nickpossible;
-    if (userpossible != 33) userscore *= 33 / userpossible;
-    if (namepossible != 33) namescore *= 33 / namepossible;
+    if (nickpossible != 33)
+        nickscore = int((double)nickscore * 33 / (double)nickpossible);
+    if (userpossible != 33)
+        userscore = int((double)userscore * 33 / (double)userpossible);
+    if (namepossible != 33)
+        namescore = int((double)userscore * 33 / (double)namepossible);
 
     if (debugMode) cout<<"testing3\n";
     total = nickscore + userscore + namescore;
@@ -325,7 +328,7 @@ unsigned char CUserDB::scoreUser(memberEntry& usr, string test)
 int CUserDB::compareString(string str1, string str2)
 {// Compares 2 strings against eachother
     int score = 0;
-    int x, y, z;
+    unsigned x, y, z;
     bool found = false;
 
     // We want the lower of the two sizes here
