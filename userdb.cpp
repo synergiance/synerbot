@@ -323,6 +323,11 @@ unsigned char CUserDB::scoreUser(memberEntry& usr, string test)
     total = nickscore + userscore + namescore;
     if (total > 48) total += 1;
 
+    // Bonuses for exact matches
+    if (nickscore == 33) total += (100 - total) / 2;
+    if (userscore == 33) total += (100 - total) / 2;
+    if (namescore == 33) total += (100 - total) / 2;
+
     if (debugMode) cout<<"Total: "<<total<<endl;
 
     return total;
