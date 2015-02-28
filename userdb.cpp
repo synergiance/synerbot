@@ -253,11 +253,14 @@ unsigned char CUserDB::scoreUser(memberEntry& usr, string test)
     int c; // Generic counter is generic
     int tmp; // Generic temporary variable
 
+    if (debugMode) cout<<"Scoring\n";
+
     // Our thrreshold will be 5% we can ignore one offs this way
     int threshold = 0;
     for (c = 0; c < usr.nicks.size(); c++) threshold += usr.nickints[c];
     threshold /= 20;
 
+    if (debugMode) cout<<"Testing\n";
     // Cycle through the nick list
     for (c = 0; c < usr.nicks.size(); c++) {
         if (usr.nickints[c] > threshold) {
@@ -306,11 +309,13 @@ unsigned char CUserDB::scoreUser(memberEntry& usr, string test)
         }
     }
 
+    if (debugMode) cout<<"Testing2\n";
     // Get better averages
     if (nickpossible != 33) nickscore *= 33 / nickpossible;
     if (userpossible != 33) userscore *= 33 / userpossible;
     if (namepossible != 33) namescore *= 33 / namepossible;
 
+    if (debugMode) cout<<"testing3\n";
     total = nickscore + userscore + namescore;
     if (total > 48) total += 1;
 
