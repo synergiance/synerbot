@@ -342,7 +342,7 @@ int CUserDB::compareString(string str1, string str2)
         }
     }
 
-    if (debugMode) cout<<"Comparing: "<<str1<<" & "<<str2<<" = "<<y<<endl;
+    if (debugMode) cout<<"Comparing: "<<str1<<" & "<<str2<<" = "<<score<<endl;
 
     return score;
 }
