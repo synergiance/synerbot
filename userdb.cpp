@@ -225,7 +225,7 @@ posPair CUserDB::lookupUser(string query)
         for (unsigned c = 0; c < members.size(); c++) {
             unsigned char tmpScore;
             tmpScore = scoreUser(members[c], query);
-            if (tmpScore >= 50) {
+            if (tmpScore >= 30) {
                 scores.positions.push_back(c);
                 scores.scores.push_back(tmpScore);
             }
