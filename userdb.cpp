@@ -264,7 +264,10 @@ unsigned char CUserDB::scoreUser(memberEntry& usr, string test)
             tmp = compareString(test, usr.nicks[c]);
             if (tmp >= 3) {
                 nickscore += tmp;
-                nickpossible += usr.nicks[c].size();
+                if (test.size() > usr.nicks[c].size())
+                    nickpossible += test.size();
+                else
+                    nickpossible += usr.nicks[c].size();
             }
             if (tmp == test.size()) {
                 nickscore = 33;
@@ -280,7 +283,10 @@ unsigned char CUserDB::scoreUser(memberEntry& usr, string test)
             tmp = compareString(test, usr.users[c]);
             if (tmp >= 3) {
                 userscore += tmp;
-                userpossible += usr.users[c].size();
+                if (test.size() > usr.users[c].size())
+                    userpossible += test.size();
+                else
+                    userpossible += usr.users[c].size();
             }
             if (tmp == test.size()) {
                 userscore = 33;
@@ -296,7 +302,10 @@ unsigned char CUserDB::scoreUser(memberEntry& usr, string test)
             tmp = compareString(test, usr.names[c]);
             if (tmp >= 3) {
                 namescore += tmp;
-                namepossible += usr.names[c].size();
+                if (test.size() > usr.names[c].size())
+                    namepossible += test.size();
+                else
+                    namepossible += usr.names[c].size();
             }
             if (tmp == test.size()) {
                 namescore = 33;
