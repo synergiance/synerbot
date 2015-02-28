@@ -335,7 +335,8 @@ int CUserDB::compareString(string str1, string str2)
     // Let's iterate through with different substrings
     for (x = z; !found && x > 1; x--) {
         for (y = 0; !found && y <= str2.size() - x; y++) {
-            if (str2.find(str1.substr(y, x)) != string::npos) {
+            if (toLower(str2).find(toLower(str1).substr(y, x)) != string::npos)
+            {
                 score = x;
                 found = true;
             }
