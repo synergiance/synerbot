@@ -282,11 +282,6 @@ void IrcBot::msgHandel(string buf)
     string sender;
     string cmd;
 
-    /* -- Duplicate output
-    if (debugMode == 6)
-        cout<<buf;
-    */
-    
     // Parse message
     code = msgParse(buf, sender, message, cmd);
     
