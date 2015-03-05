@@ -227,21 +227,9 @@ void IrcBot::otherHandle(string command, string message)
 
 int IrcBot::msgParse(string buf, string& sender, string& message, string& cmd)
 {// Grabs IRC sender, message code, and message
-    int tmp, intCode;
+    int tmp;
     string str = buf;
-    
-    // Find pings
-    if (str.substr(0,4).find("PING") == 0)
-    {
-        sender = "PING";
-        if (str.size() > 7)
-            message = str.substr(6, str.size() - 7);
-        else
-            message = "";
-        return -1;
-        //break;
-    }
-    
+
     // Trim out the fat
     tmp = str.find("\r");
     if (tmp != -1)
@@ -251,28 +239,13 @@ int IrcBot::msgParse(string buf, string& sender, string& message, string& cmd)
     tmp = str.find(" ") + 1;
     sender = str.substr(1, tmp - 2);
     str = str.substr(tmp, str.size() - tmp);
-    
-    // Parse message code
-    intCode = atoi(str.substr(0,3).c_str());
-    if (intCode == 0)
-    { // Text IRC message - Communication
-        // Parse out command
-        tmp = str.find(" ") + 1;
-        cmd = str.substr(0, tmp - 1);
-        message = str.substr(tmp, str.size() - tmp);
-    }
-    else
-    { // Numerical IRC message - server messages?
-        // Since all IRC codes are 3 digits, this is really easy
-        str = str.substr(4, str.size() - 4);
 
-        // Remove receiver
-        tmp = str.find(" ") + 1;
-        message = str.substr(tmp, str.size() - tmp);
-        cmd = "";
-    }
-    
-    return intCode;
+    // Parse out command
+    tmp = str.find(" ") + 1;
+    cmd = str.substr(0, tmp - 1);
+    message = str.substr(tmp, str.size() - tmp);
+
+    return 0;
 }
 
 void IrcBot::msgHandel(string buf)
@@ -284,10 +257,6 @@ void IrcBot::msgHandel(string buf)
 
     // Parse message
     code = msgParse(buf, sender, message, cmd);
-    
-    if (debugMode == 5)
-        if (code > 0)
-            cout<<"<"<<sender<<"> ("<<code<<") "<<message<<endl;
 
     if (code == 0) {
         if (debugMode == 21 || debugMode == 5)
