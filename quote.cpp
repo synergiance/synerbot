@@ -76,7 +76,8 @@ void QuoteHandler::command(string cmd, string args, string talkto, string usr)
             say(talkto, "Quote already exists");
         } else if (tmpq == 0) {
             if (verboseMode) cout<<"Adding quote:\n"<<args<<endl;
-            say(talkto, "Quote added");
+            say(talkto, "Quote added:");
+            say(talkto, str + " ~" + str2);
         } else {
             if (verboseMode) cout<<"Quote null\n";
             say(talkto, "Invalid quote: Null");
