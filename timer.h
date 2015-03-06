@@ -9,19 +9,24 @@
 #include <string>
 #include <vector>
 #include <thread>
+#include <chrono>
 
 #include "cmutex.h"
 
 using namespace std;
 
-void delayedCommand(int delay, string command);
-
 #ifndef TIMER_H_
 #define TIMER_H_
 
-class timer {
+class cTimer {
 private:
     vector<thread> timers;
+
+    void timerCmd(time_t delay, string cmd);
 };
 
 #endif /* TIMER_H_ */
+
+cTimer* timer;
+
+void delayedCommand(int delay, string command);

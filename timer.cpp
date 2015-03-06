@@ -16,6 +16,7 @@ This class is designed to do everything time related, including delayed actions
 #include <string>
 #include <vector>
 #include <thread>
+#include <chrono>
 
 // Local Includes
 #include "timer.h"
