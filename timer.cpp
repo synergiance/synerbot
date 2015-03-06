@@ -24,6 +24,6 @@ This class is designed to do everything time related, including delayed actions
 using namespace std;
 
 void delayedCommand(int delay, string command)
-{// A command that can be delayed a certain number of seconds
+{// A command that can be delayed a certain amount of time in seconds
 	//code
 }
