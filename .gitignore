@@ -20,6 +20,9 @@
 *.out
 *.app
 
+# vim backup files
+*~
+
 # File system garbage
 .DS_Store
 
