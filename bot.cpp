@@ -311,9 +311,13 @@ void IrcBot::AI(string sender, string cmd, string msg)
                 } else {// Someone tried to say hi as if I were a bot
                     say(channel, "I prefer a hello");
                 }
-            } else if (regex_search(toLower(message), regex(rgxHello)))
+            } else if (regex_search(toLower(message), regex(rgxHello))) {
                 say(channel, EngLang->getHello(name, false));
-                // Above regex_search call segfaults in cygwin
+                // Above regex_search call segfaults in gcc < 4.9
+            }
+            else if (toLower(message).find(nick) != string::npos) {
+                say(channel, EngLang->getReply(name));
+            }
         } else
         {// Message is a user
             extractCommandArgs(message, command, args);

@@ -49,6 +49,7 @@ public:
     //string getAdverb(bool daddylang);
 
     string getHello(string nick, bool only_roman);
+    string getReply(string nick);
 private:
     mt19937* rnd;
     bool debugMode;
@@ -65,6 +66,7 @@ private:
     vector<word> adverbs;
 
     vector<string> hellos;
+    vector<string> replies;
 
     //void loadDictionary();
     //void saveDictionary();

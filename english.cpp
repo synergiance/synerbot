@@ -25,6 +25,10 @@
 
 using namespace std;
 
+const char utf8bom[4] = {(char)239, (char)187, (char)191, 0};
+const char utf16be[3] = {(char)254, (char)255, 0};
+const char utf16le[3] = {(char)255, (char)254, 0};
+
 /*
 
 It feels strange reading this but:
@@ -66,7 +70,7 @@ CEnglish::CEnglish()
     char* rndmem = new char[sizeof(mt19937)];
     rnd = new (rndmem) mt19937(rndseed);
 
-    addHi();
+    //addHi();
 
     // File Names
     folderName = "lang";
@@ -75,7 +79,7 @@ CEnglish::CEnglish()
 
     //checkDir();
 
-    //readPhrases(phraseFileName);
+    readPhrases(phraseFileName);
 }
 
 void CEnglish::setDebug(bool debug)
@@ -96,9 +100,15 @@ string CEnglish::getHello(string nick, bool only_roman)
     return str;
 }
 
+string CEnglish::getReply(string nick)
+{
+    uniform_int_distribution<int> dist(0, replies.size() - 1);
+    return replies[dist(*rnd)];
+}
+
 // # Octatherp
 // * Sextile
-
+/* This code should be unneeded
 void CEnglish::addHi()
 {// TODO: Make dynamic
     hellos.push_back("-Hi");
@@ -138,6 +148,7 @@ void CEnglish::addHi()
     hellos.push_back("-Hiya");
     hellos.push_back("-G'day,");
 }
+*/
 
 /*
 
@@ -196,6 +207,14 @@ int CEnglish::readPhrases(string fileName)
         string section, strInput;
         while (getline(ifile, strInput)) {
             trimWhite(strInput);
+            // Check for and remove BOM here - TODO
+            if (strInput.find(utf8bom) == 0) {
+                strInput.erase(0,3);
+            } else if ((strInput.find(utf16le) == 0)
+                    || (strInput.find(utf16be) == 0)) {
+                strInput.erase(0,2);
+            }
+            if (strInput.back() == '\r') strInput.erase(strInput.length() - 1);
             if (strInput.front() == '[' && strInput.back() == ']') {
                 section = strInput.substr(1, strInput.size() - 2);
             } else if (strInput.compare("") == 0) {
@@ -204,10 +223,14 @@ int CEnglish::readPhrases(string fileName)
                 continue;
             } else if (toUpper(section).compare("GREETINGS") == 0) {
                 hellos.push_back(strInput);
+            } else if (toUpper(section).compare("REPLIES") == 0) {
+                replies.push_back(strInput);
             }
         }
         ifile.close();
     } else {// Uh oh, something went wrong, disable module
+        hellos.push_back("-Hi");
+        replies.push_back("Who, me?");
         return -1;
     }
     return 0;
