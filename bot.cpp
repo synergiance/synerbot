@@ -406,6 +406,9 @@ int IrcBot::commandHandle(string cmd, string args, string talkto, string usr)
     } else if (cmd.compare("?OTRv23?") == 0) {
         say(talkto, "Off the record messaging is not supported by " + nick);
         cmdMatch = true;
+    } else if ((toLower(cmd).compare("a") == 0) &&
+              (toLower(args).compare("real command") == 0)) {
+        say(talkto, "Ò.Ó"); cmdMatch = true;
     }
     
     // Admin commands
