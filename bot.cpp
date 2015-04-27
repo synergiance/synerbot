@@ -403,6 +403,9 @@ int IrcBot::commandHandle(string cmd, string args, string talkto, string usr)
         ShakerBall->getanswer(talkto); cmdMatch = true;
     } else if (toLower(cmd).compare("about") == 0) {
         say(talkto, "Programmed by Fiona aka. Synergiance"); cmdMatch = true;
+    } else if (cmd.compare("?OTRv23?") == 0) {
+        say(talkto, "Off the record messaging is not supported by " + nick);
+        cmdMatch = true;
     }
     
     // Admin commands
