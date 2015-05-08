@@ -120,5 +120,7 @@ bool rgxMatch(string str1, string str2)
 { return regex_match(str1, regex(str2)); }
 bool rgxSearch(string str1, string str2)
 { return regex_search(str1, regex(str2)); }
-/* string rgxReplace(string str1, string str2)
-{ return regex_replace(str1, regex(str2)); } */
+string rgxReplace(string str1, string str2, string str3)
+{ return regex_replace(str1, regex(str2), str3); }
+string rgxReturn(string str1, string str2)
+{ smatch m; regex_search(str1, m, regex(str2)); return m.str(); }
