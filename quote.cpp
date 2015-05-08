@@ -332,11 +332,14 @@ string QuoteHandler::getQuoter(string& quote)
     int found = 0;
     int strLen = quote.size();
     string quoter;
+    int maxLen = 0;
     if (quote[c] == '<') {
-        for (c = 1; found == 0 && c < strLen; c++) {
-            if (quote[c] == ' ') found = -1;
+        if (strLen < 30) maxLen = strLen;
+        for (c = 1; found <= 0 && found >= -2 && c < maxLen; c++) {
+            if (quote[c] == ' ') found--;
             if (quote[c] == '>') found = c;
         }
+        if (found < 0) found = -1;
     }
     if (found > 1 && found + 1 < strLen) {
         quoter = quote.substr(1, found - 1);
@@ -344,10 +347,12 @@ string QuoteHandler::getQuoter(string& quote)
     }
     else {
         found = 0;
-        for (c = strLen - 1; found == 0 && c >= 0; c--) {
-            if (quote[c] == ' ') found = -1;
+        if (strLen < 30) maxLen = 0; else maxLen = strLen - 30;
+        for (c = strLen - 1; found <= 0 && found >= -2 && c >= 0; c--) {
+            if (quote[c] == ' ') found--;
             if (quote[c] == '~') found = c;
         }
+        if (found < 0) found = -1;
         if (found > 0 && ++found < strLen) {
             quoter = quote.substr(found);
             quote = quote.substr(0, found - 2);
