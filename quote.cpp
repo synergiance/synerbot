@@ -328,18 +328,13 @@ void QuoteHandler::help(string cmd, string usr, string talkto)
 
 string QuoteHandler::getQuoter(string& quote)
 {
-    int c = 0;
     int found = 0;
     int strLen = quote.size();
     string quoter;
     int maxLen = 0;
-    if (quote[c] == '<') {
-        if (strLen < 30) maxLen = strLen;
-        for (c = 1; found <= 0 && found >= -2 && c < maxLen; c++) {
-            if (quote[c] == ' ') found--;
-            if (quote[c] == '>') found = c;
-        }
-        if (found < 0) found = -1;
+    if (rgxSearch(quote, "^<\\w+( \\w+){0,2}>\\s")) {
+        found = quote.find('>');
+        if (found > 31) found = 0;
     }
     if (found > 1 && found + 1 < strLen) {
         quoter = quote.substr(1, found - 1);
@@ -348,11 +343,10 @@ string QuoteHandler::getQuoter(string& quote)
     else {
         found = 0;
         if (strLen < 30) maxLen = 0; else maxLen = strLen - 30;
-        for (c = strLen - 1; found <= 0 && found >= -2 && c >= 0; c--) {
-            if (quote[c] == ' ') found--;
-            if (quote[c] == '~') found = c;
+        if (rgxSearch(quote, "\\s~\\w+( \\w+){0,2}$")) {
+            found = quote.rfind('~');
+            if (found < maxLen) found = 0;
         }
-        if (found < 0) found = -1;
         if (found > 0 && ++found < strLen) {
             quoter = quote.substr(found);
             quote = quote.substr(0, found - 2);
