@@ -11,6 +11,7 @@
 // Global Imports
 #include <string>
 #include <vector>
+#include <regex>
 #include <cctype>
 #include <climits>
 
@@ -113,3 +114,11 @@ void compare(string str1, string str2, unsigned& begin, unsigned& end)
         if (str1[str1.size() - end] != str2[str2.size() - end]) break;
     end--;
 }
+
+// Regex forwarders
+bool rgxMatch(string str1, string str2)
+{ return regex_match(str1, regex(str2)); }
+bool rgxSearch(string str1, string str2)
+{ return regex_search(str1, regex(str2)); }
+/* string rgxReplace(string str1, string str2)
+{ return regex_replace(str1, regex(str2)); } */

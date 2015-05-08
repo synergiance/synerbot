@@ -39,7 +39,6 @@
 #include <cstdlib>
 #include <sstream>
 #include <random> // Convert all rand() to random
-#include <regex>
 
 // RFCs to check out: 2810, 2811, 2812, 2813
 // http://www.irchelp.org/irchelp/rfc/
@@ -288,8 +287,8 @@ void IrcBot::AI(string sender, string cmd, string msg)
             if (verboseMode)
                 cout<<name<<" said on "<<channel<<": "<<message<<endl;
 
-            if (regex_match(toLower(message.substr(0, nick.size() + 1)),
-                regex(toLower(nick) + "(:|,)")))
+            if (rgxMatch(toLower(message.substr(0, nick.size() + 1)),
+                toLower(nick) + "(:|,)"))
             {// Got pinged, determine command
                 if (message.size() > nick.size() + 2)
                 {// Now we know there's text to parse after the ping
@@ -311,7 +310,7 @@ void IrcBot::AI(string sender, string cmd, string msg)
                 } else {// Someone tried to say hi as if I were a bot
                     say(channel, "I prefer a hello");
                 }
-            } else if (regex_search(toLower(message), regex(rgxHello))) {
+            } else if (rgxSearch(toLower(message), rgxHello)) {
                 say(channel, EngLang->getHello(name, false));
                 // Above regex_search call segfaults in gcc < 4.9
             }
