@@ -21,8 +21,10 @@ using namespace std;
 
 struct CMutexMessage
 {
+public:
     string command;
     vector<string> command_arguments;
+    string str();
 };
 
 class CMutex
@@ -37,14 +39,14 @@ public:
     bool pull(string& str, int timeout);
     bool pull(string& str, int timeout, int delay);
 
-    /* // Access array -- New
+    // Access array -- New
     void push(CMutexMessage str);
     bool pull(CMutexMessage& str);
     bool pull(CMutexMessage& str, int timeout);
-    bool pull(CMutexMessage& str, int timeout, int delay); */
+    bool pull(CMutexMessage& str, int timeout, int delay);
 private:
     // Array
-    vector<string> strBuffer;
+    vector<CMutexMessage> strBuffer;
 
     bool debugMode;
     atomic_bool moreQuotes;
@@ -54,7 +56,7 @@ private:
     condition_variable cv;
 
     // Blocked function
-    bool access(bool adding, string& str);
+    bool access(bool adding, CMutexMessage& msg);
 };
 
 #endif /* CMUTEX_H_ */
