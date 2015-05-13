@@ -175,7 +175,7 @@ bool CMutex::pull(CMutexMessage& str, int timeout, int delay)
 
 string CMutexMessage::str()
 {// Compiles a string out of the mutex message
-    if (command.compare("") == 1) return "";
+    if (command.compare("") == 0) return "";
     string tmp = command;
     for (string s : command_arguments) {
         tmp += '\n' + s;
