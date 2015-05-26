@@ -48,7 +48,7 @@ private:
     int addQuote(string quote, string sender);
     int remQuote(int pos);
     bool loadQuotes(string file);
-    int saveQuotes(string file);
+    int saveQuotes(string file, bool filtered = false);
     void help(string cmd, string usr, string talkto);
     void say(string target, string message);
 

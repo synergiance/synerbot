@@ -10,6 +10,7 @@
 #include <vector>
 #include <thread>
 #include <chrono>
+#include <condition_variable>
 
 #include "cmutex.h"
 
@@ -18,15 +19,21 @@ using namespace std;
 #ifndef TIMER_H_
 #define TIMER_H_
 
-class cTimer {
-private:
-    vector<thread> timers;
 
-    void timerCmd(time_t delay, string cmd);
+
+class cTimer {
+public:
+    cTimer(CMutex& theQ);
+    ~cTimer();
+    void delayCommand(string duration, CMutexMessage event);
+private:
+    bool stopping;
+    condition_variable cv;
+    mutex mtx;
+
+    CMutex *MessageQueue;
+
+    void timerThread(string duration, CMutexMessage event);
 };
 
 #endif /* TIMER_H_ */
-
-cTimer* timer;
-
-void delayedCommand(int delay, string command);

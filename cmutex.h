@@ -25,6 +25,7 @@ public:
     string command;
     vector<string> command_arguments;
     string str();
+    void clear();
 };
 
 class CMutex

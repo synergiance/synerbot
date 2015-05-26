@@ -91,6 +91,7 @@ int CPrivleges::saveFile()
 bool CPrivleges::checkUsr(string usr)
 {// Checks whether a specified user is an admin
     bool bReturn = false;
+    if (usr.compare("") == 0) return false;
     //cout<<"Testing: "<<usr<<endl;
     if (admins.size() == 0)
         bReturn = (toLower(usr).find(defAdmin) == 0);

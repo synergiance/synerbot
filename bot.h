@@ -18,6 +18,7 @@
 #include "quote.h"
 #include "userdb.h"
 #include "8ball.h"
+#include "timer.h"
 
 using namespace std;
 
@@ -59,6 +60,7 @@ private:
     mt19937* rnd;
     CUserDB* UserDB;
     c8ball* ShakerBall;
+    cTimer* botTimer;
 
     // Important static values
     static long atoimax;
@@ -71,15 +73,13 @@ private:
     volatile bool stopping;
 
     // Functions
-    char * timeNow();
-
     bool sendData(char *msg);
     bool sendData(string msg);
 
     void sendPong(string data);
 
     bool globalHandle(string cmd);
-    void otherHandle(string command, string message);
+    void otherHandle(CMutexMessage event);
     void msgHandel(string buf);
     void nicklistHandle(string list);
     void whoisHandle(string buf);

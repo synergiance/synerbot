@@ -157,6 +157,7 @@ bool CMutex::pull(CMutexMessage& str, int timeout, int delay)
 // Returns true if buffer is not empty
 // timeout is in milliseconds
 // delay is in microseconds
+    str.clear();
     if (timeout >= 0)
     {
         if (!moreQuotes)
@@ -181,4 +182,10 @@ string CMutexMessage::str()
         tmp += '\n' + s;
     }
     return tmp;
+}
+
+void CMutexMessage::clear()
+{// Clears out the message
+    command = string();
+    command_arguments.clear();
 }

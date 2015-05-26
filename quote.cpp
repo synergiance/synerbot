@@ -60,6 +60,22 @@ void QuoteHandler::command(string cmd, string args, string talkto, string usr)
 {
     bool admin = botPriv->checkUsr(usr);
     if (cmd.compare("help") == 0) help(args, usr, talkto);
+    else if (talkto.compare("") == 0)
+    {// Special bot commands
+        if (toUpper(cmd).compare("SAVE") == 0)
+        {// This is a timed save on a loop every 5 minutes
+            saveQuotes(quoteFile, !verboseMode);
+            if (args.compare("TIMER") == 0) {
+                CMutexMessage newEvent;
+                newEvent.command = "TIMER";
+                newEvent.command_arguments.push_back("ADD");
+                newEvent.command_arguments.push_back("QUOTE");
+                newEvent.command_arguments.push_back("5M");
+                newEvent.command_arguments.push_back("SAVE");
+                newEvent.command_arguments.push_back("TIMER");
+            }
+        }
+    }
     else if (cmd.compare("add") == 0)
     {// Add a quote
         int tmpq;
@@ -69,7 +85,7 @@ void QuoteHandler::command(string cmd, string args, string talkto, string usr)
         if (str2 == "") str2 = usr.substr(0, usr.find('!'));
         //say(talkto, str + " ~" + str2);
         if (str2 == "kitsune") {
-            if (verboseMode) cout<<"Invalid quote: Faggit";
+            if (verboseMode) cout<<"Invalid quote: Kitsune";
             say(talkto, "Lol that kid doesn't say anything original");
         } else if ((tmpq = addQuote(str, str2)) == -1) {
             if (verboseMode) cout<<"Quote already exists:\n"<<args<<endl;
@@ -242,7 +258,7 @@ bool QuoteHandler::loadQuotes(string file)
     return fState;
 }
 
-int QuoteHandler::saveQuotes(string file)
+int QuoteHandler::saveQuotes(string file, bool filtered)
 {// Saves quotes buffer to file, returns 0 if successful
     int fState = 0;
     if (addedQuotes)
@@ -261,7 +277,7 @@ int QuoteHandler::saveQuotes(string file)
             fState = -1;
         }
     } else {
-        cout<<"No buffered quotes to save\n";
+        if (!filtered) cout<<"No buffered quotes to save\n";
         fState = 1;
     }
     return fState;

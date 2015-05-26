@@ -17,6 +17,7 @@
 #include "quote.h"
 #include "userdb.h"
 #include "8ball.h"
+#include "timer.h"
 
 // Global Includes
 #include <iostream>
@@ -68,6 +69,7 @@ IrcBot::IrcBot(string cfg, int bDebug, bool bVerbose)
     char* qtsmem = new char[sizeof(QuoteHandler)];
     char* usrmem = new char[sizeof(CUserDB)];
     char* balmem = new char[sizeof(c8ball)];
+    char* tmrmem = new char[sizeof(cTimer)];
 
     // Set modules
     botConfig = new (bcfgint) CConfig(cfg);
@@ -97,6 +99,7 @@ IrcBot::IrcBot(string cfg, int bDebug, bool bVerbose)
     else
         MessageQueue = new (msgmem) CMutex();
     botSock = new (netmem) CNetSocket(server, port, *MessageQueue, bDebug);
+    botTimer = new (tmrmem) cTimer(*MessageQueue);
     CQuotes = new (qtsmem) QuoteHandler(*MessageQueue, *botPriv, channelName);
     CQuotes->setVerbosity(bVerbose);
 
@@ -132,41 +135,39 @@ void IrcBot::start()
 
     botSock->botConnect(nick, usr, realName);
 
-    string str, cmd, msg;
+    CMutexMessage event;
 
     while (keepRunning)
     {// Main loop
-        str = ""; cmd = ""; msg = "";
-
         if (moreBuffer)
-            moreBuffer = MessageQueue->pull(str, -1);
+            moreBuffer = MessageQueue->pull(event, -1);
         else if (checkAgain)
         {
-            moreBuffer = MessageQueue->pull(str, -1);
+            moreBuffer = MessageQueue->pull(event, -1);
             checkAgain = false;
         }
         else
-            moreBuffer = MessageQueue->pull(str, delay++ * 100);
+            moreBuffer = MessageQueue->pull(event, delay++ * 100);
 
         if (delay > maxDelay) delay = maxDelay;
 
         if (stopping) botSock->botDisconnect();
-        if (!getFirstWord(str, cmd, msg)) continue;
-        if (msg.compare("") == 0) continue;
+        if (event.command.compare("") == 0) continue;
+        if (event.command_arguments.size() == 0) continue;
 
         checkAgain = true;
 
         delay /= 4;
         if (delay < minDelay) delay = minDelay;
 
-        if (toUpper(cmd).compare("RAW") == 0) {
-            msgHandel(msg);
+        if (toUpper(event.command).compare("RAW") == 0) {
+            msgHandel(event.command_arguments[0]);
         }
-        else if (toUpper(cmd).compare("GLOBAL") == 0) {
-            if (!globalHandle(msg)) keepRunning = false;
+        else if (toUpper(event.command).compare("GLOBAL") == 0) {
+            if (!globalHandle(event.command_arguments[0])) keepRunning = false;
         }
         else {
-            otherHandle(cmd, msg);
+            otherHandle(event);
         }
     }
 }
@@ -191,37 +192,74 @@ bool IrcBot::globalHandle(string cmd)
     if (toUpper(command).compare("CONNECTED") == 0) cout<<"Connected!\n";
     if (toUpper(command).compare("NICKLIST") == 0) nicklistHandle(message);
     if (toUpper(command).compare("MOTD") == 0)
-    {
+    {// Join our channel
         cout<<"Joining "<<channelName<<"\n";
         sendData("JOIN " + channelName + "\r\n");
+
+        // Start our save timer
+        CMutexMessage newEvent;
+        newEvent.command = "TIMER";
+        newEvent.command_arguments.push_back("ADD");
+        newEvent.command_arguments.push_back("QUOTE");
+        newEvent.command_arguments.push_back("2M");
+        newEvent.command_arguments.push_back("SAVE");
+        newEvent.command_arguments.push_back("TIMER");
+        MessageQueue->push(newEvent);
     }
     if (toUpper(command).compare("COUT") == 0) cout<<message<<endl; // Deprecated
     return true;
 }
 
-void IrcBot::otherHandle(string command, string message)
+void IrcBot::otherHandle(CMutexMessage event)
 {
-    if (debugMode == 30) cout<<"OTHER HANDLER: "<<command<<" "<<message<<endl;
-    if (toUpper(command).compare("COUT") == 0) {
-        if (message.back() == '\n') message.pop_back();
-        if (message.back() == '\r') message.pop_back();
-        cout<<message<<endl;
+    if (debugMode == 30)
+        cout<<"OTHER HANDLER: "<<event.command<<" "
+        <<event.command_arguments[0]<<endl;
+    if (toUpper(event.command).compare("COUT") == 0) {
+        if (event.command_arguments[0].back() == '\n')
+            event.command_arguments[0].pop_back();
+        if (event.command_arguments[0].back() == '\r')
+            event.command_arguments[0].pop_back();
+        cout<<event.command_arguments[0]<<endl;
     }
-    if (toUpper(command).compare("SAY") == 0)
+    if (toUpper(event.command).compare("SAY") == 0)
     {
         string channel, channel_message;
-        if (getFirstWord(message, channel, channel_message)
+        if (getFirstWord(event.command_arguments[0], channel, channel_message)
                 && channel_message.compare("") != 0)
             say(channel, channel_message);
     }
-    if (toUpper(command).compare("ACTION") == 0)
+    if (toUpper(event.command).compare("ACTION") == 0)
     {
         string channel, channel_message;
-        if (getFirstWord(message, channel, channel_message)
+        if (getFirstWord(event.command_arguments[0], channel, channel_message)
                 && channel_message.compare("") != 0)
             action(channel, channel_message);
     }
-    if (toUpper(command).compare("WHOISRPLY") == 0) whoisHandle(message);
+    if (toUpper(event.command).compare("WHOISRPLY") == 0)
+        whoisHandle(event.command_arguments[0]);
+    if (toUpper(event.command).compare("TIMER") == 0) {
+        if (toUpper(event.command_arguments[0]).compare("ADD") == 0) {
+            if (event.command_arguments.size() < 4) return;
+            CMutexMessage newEvent;
+            newEvent.command = event.command_arguments[1];
+            for (unsigned char c = 3; c < event.command_arguments.size(); c++) {
+                newEvent.command_arguments.push_back(event.command_arguments[c]);
+            }
+            botTimer->delayCommand(event.command_arguments[2], newEvent);
+        }
+    }
+    if (toUpper(event.command).compare("QUOTE") == 0) {
+        string arguments [4];
+        if (event.command_arguments.size() == 0) return;
+        for (unsigned char c = 0; c < 4; c++) {
+            if (c < event.command_arguments.size())
+                arguments[c] = event.command_arguments[c];
+            else
+                arguments[c] = string();
+        }
+        CQuotes->command(arguments[0], arguments[1], arguments[2], arguments[3]);
+    }
 }
 
 int IrcBot::msgParse(string buf, string& sender, string& message, string& cmd)
