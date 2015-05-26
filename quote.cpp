@@ -348,7 +348,7 @@ string QuoteHandler::getQuoter(string& quote)
     int strLen = quote.size();
     string quoter;
     int maxLen = 0;
-    if (rgxSearch(quote, "^<\\w+( \\w+){0,2}>\\s")) {
+    if (rgxSearch(quote, "^<[@+~&]?\\w+( \\w+){0,2}>\\s")) {
         found = quote.find('>');
         if (found > 31) found = 0;
     }
