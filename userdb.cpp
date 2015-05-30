@@ -915,7 +915,7 @@ int memberEntry::quadhextoint(string hexNum)
     for (b = 0; b < a; b++) {
         c = hexNum[a-1-b] - 48;
         if (c > 9) c -= 7; // A-F range
-        if (c > 9) c -= 32; // a-f range
+        if (c > 15) c -= 32; // a-f range
         d = 1;
         for (f = 0; f < b; f++) d *= 16;
         e += d * c;

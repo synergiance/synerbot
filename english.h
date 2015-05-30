@@ -32,11 +32,23 @@ struct word
     vector<wordLink> links;
 };
 
+struct namedList
+{
+    string name();
+    namedList(string name);
+    vector<string> list;
+    void push_back(string str);
+    int size();
+    string &operator[] (int n);
+private:
+    string listName;
+};
+
 class CEnglish
 {
 public:
     // Constructors
-    CEnglish();
+    CEnglish(bool debug = true);
     //CEnglish(string file);
     //virtual ~CEnglish();
 
@@ -50,9 +62,13 @@ public:
 
     string getHello(string nick, bool only_roman);
     string getReply(string nick);
+
+    string toss(string text = "");
+    string flip(string text);
 private:
     mt19937* rnd;
     bool debugMode;
+    vector<namedList> phrases;
 
     // Files
     string folderName;
@@ -65,13 +81,15 @@ private:
     vector<word> adjectives;
     vector<word> adverbs;
 
-    vector<string> hellos;
-    vector<string> replies;
+    //vector<string> hellos;
+    //vector<string> replies;
 
     //void loadDictionary();
     //void saveDictionary();
 
     void addHi();
+
+    int searchList(string str);
 
     // File IO
     int readWords(string fileName);

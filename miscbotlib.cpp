@@ -15,6 +15,8 @@
 #include <cctype>
 #include <climits>
 
+#include <iostream>
+
 using namespace std;
 
 string toLower(string str)
@@ -124,3 +126,78 @@ string rgxReturn(string str1, string str2)
 { smatch m; regex_search(str1, m, regex(str2)); return m.str(); }
 string rgxReplace(string str1, string str2, string str3)
 { return regex_replace(str1, regex(str2), str3); }
+
+// Unicode
+long fromUnicode(string str)
+{// This function will take a unicode character and convert it into an int
+    short len = unicodeLen(str[0]);
+    unsigned char a = 0;
+    unsigned char b = 128;
+    short c;
+    long val = 0;
+    long tmp = 1;
+    if (len != str.size()) return -1;
+    for (c = 1; c < len; c++) {
+        a = str[len - c];
+        a -= 128;
+        if (a >= 64) return -1;
+        val += a * tmp;
+        tmp *= 64;
+    }
+    a = str[0];
+    for (c = 0; c < len; c++) {
+        a -= b;
+        b /= 2;
+    }
+    if (a >= b) return -1;
+    val += a * tmp;
+    return val;
+}
+
+string toUnicode(long val)
+{// This forms a unicode character from it's value
+    unsigned long tmpVal = val;
+    if (tmpVal >= 2147483648) return "";
+    short c = 0;
+    unsigned char a;
+    unsigned char b = 128;
+    unsigned char d = 2;
+    string str = "";
+    if (tmpVal < 128) {str = tmpVal; return str;}
+    for (c = 0; c < 6 && tmpVal >= 64; c++) {
+        a = char(tmpVal % 64);
+        tmpVal /= 64;
+        a += 128;
+        str.insert(0,1,a);
+    }
+    a = (char)tmpVal;
+    for (short e = 5 - c; e > 0; e--) d *= 2;
+    if (a >= d) {
+        c++;
+        a += 128;
+        str.insert(0,1,a);
+        a = 0;
+    }
+    for (c++; c > 0; c--) {
+        a += b;
+        b /= 2;
+    }
+    str.insert(0,1,a);
+    return str;
+}
+
+short unicodeLen(char c)
+{// Gets the length of the unicode sequence
+    unsigned char b = 128;
+    char a = c;
+    short d;
+    bool confirm = false;
+    if (a >= 0) return 1;
+    for (d = 0; d < 6 && !confirm; d++) {
+        a -= b;
+        b /= 2;
+        if (a < b) confirm = true;
+    }
+    if (!confirm || d == 1) return -1;
+    return d;
+}

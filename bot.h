@@ -97,9 +97,13 @@ private:
     // User Functions
     void editPrivs(string cmd, string args, string talkto);
     void lookup(string search, string talkto);
+    string unicodeValuer(string str);
+    string unicodeAssembler(string str);
 
     // Utils
     void whois(string target);
+
+    long hextolong(string str);
 };
 
 #endif /* IRCBOT_H_ */

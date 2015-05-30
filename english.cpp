@@ -64,7 +64,7 @@ noun: Determiner + Pre-modifiers + NOUN + Postmodifiers/Complement
 
 */
 
-CEnglish::CEnglish()
+CEnglish::CEnglish(bool debug)
 {// Constructor
     unsigned rndseed = chrono::system_clock::now().time_since_epoch().count();
     char* rndmem = new char[sizeof(mt19937)];
@@ -77,6 +77,8 @@ CEnglish::CEnglish()
     wordFileName = "words.db";
     phraseFileName = "english.lng";
 
+    debugMode = debug;
+
     //checkDir();
 
     readPhrases(phraseFileName);
@@ -85,13 +87,16 @@ CEnglish::CEnglish()
 void CEnglish::setDebug(bool debug)
 {// Sets the debug mode
     debugMode = debug;
+    cout<<"Setting English debug module mode "<<debug<<endl;
 }
 
 string CEnglish::getHello(string nick, bool only_roman)
 {// Returns a hello
     string str;
-    uniform_int_distribution<int> dist(0, hellos.size() - 1);
-    str = hellos[dist(*rnd)];
+    int i = searchList("GREETINGS");
+    if (i == -1) return "Hi, " + nick;
+    uniform_int_distribution<int> dist(0, phrases[i].size() - 1);
+    str = phrases[i][dist(*rnd)];
     if (str.find('-') == 0)
     {
         str = str.substr(1, str.size() - 1);
@@ -102,53 +107,14 @@ string CEnglish::getHello(string nick, bool only_roman)
 
 string CEnglish::getReply(string nick)
 {
-    uniform_int_distribution<int> dist(0, replies.size() - 1);
-    return replies[dist(*rnd)];
+    int i = searchList("REPLIES");
+    if (i == -1) return "Who, me?";
+    uniform_int_distribution<int> dist(0, phrases[i].size() - 1);
+    return phrases[i][dist(*rnd)];
 }
 
 // # Octatherp
 // * Sextile
-/* This code should be unneeded
-void CEnglish::addHi()
-{// TODO: Make dynamic
-    hellos.push_back("-Hi");
-    hellos.push_back("Hello");
-    hellos.push_back("Konnichiwa");
-    hellos.push_back("Konnichiwa");
-    hellos.push_back("Moshi moshi");
-    hellos.push_back("こんにちは。");
-    hellos.push_back("-Hello,");
-    hellos.push_back("Hi");
-    hellos.push_back("-Hi,");
-    hellos.push_back("Hello");
-    hellos.push_back("-Hi");
-    hellos.push_back("-Hello");
-    hellos.push_back("Hi");
-    hellos.push_back("-Hi,");
-    hellos.push_back("Hello");
-    hellos.push_back("-Hi");
-    hellos.push_back("-Hello,");
-    hellos.push_back("Greetings");
-    hellos.push_back("-Greetings,");
-    hellos.push_back("-Greetings,");
-    hellos.push_back("Ahoy");
-    hellos.push_back("G'day");
-    hellos.push_back("Hello there");
-    hellos.push_back("Hey");
-    hellos.push_back("Hi there");
-    hellos.push_back("Howdy");
-    hellos.push_back("Salutations");
-    hellos.push_back("Yo");
-    hellos.push_back("Hiya");
-    hellos.push_back("-Ahoy,");
-    hellos.push_back("G'day mate");
-    hellos.push_back("-Hello there");
-    hellos.push_back("-Hey");
-    hellos.push_back("-Hi there");
-    hellos.push_back("-Hiya");
-    hellos.push_back("-G'day,");
-}
-*/
 
 /*
 
@@ -204,33 +170,64 @@ int CEnglish::readPhrases(string fileName)
 {// Reads the phrase file
     ifstream ifile (fileName.c_str());
     if (ifile) {// All good, the file exists lets proceed
-        string section, strInput;
+        cout<<"Phrases file found, loading contents\n";
+        string strInput;
+        int sectionID = -1;
         while (getline(ifile, strInput)) {
             trimWhite(strInput);
-            // Check for and remove BOM here - TODO
+            // Check for and remove BOM
             if (strInput.find(utf8bom) == 0) {
                 strInput.erase(0,3);
             } else if ((strInput.find(utf16le) == 0)
                     || (strInput.find(utf16be) == 0)) {
                 strInput.erase(0,2);
             }
+            // Remove carriage return if any
             if (strInput.back() == '\r') strInput.erase(strInput.length() - 1);
             if (strInput.front() == '[' && strInput.back() == ']') {
-                section = strInput.substr(1, strInput.size() - 2);
+                string section;
+                section = toUpper(strInput.substr(1, strInput.size() - 2));
+                if (section.compare("") == 0) {
+                    sectionID = -1;
+                    continue;
+                }
+                sectionID = searchList(section);
+                if (sectionID == -1) {
+                    if (debugMode) cout<<"Adding section: "<<section<<endl;
+                    namedList tmp(section);
+                    phrases.push_back(tmp);
+                    sectionID = phrases.size() - 1;
+                }
+                if (debugMode) cout<<"Section ID: "<<sectionID<<endl;
             } else if (strInput.compare("") == 0) {
+                if (debugMode) cout<<"Empty line.\n";
                 continue;
-            } else if (section.compare("") == 0) {
+            } else if (sectionID == -1) {
+                if (debugMode) cout<<"Line with no section ID\n";
                 continue;
-            } else if (toUpper(section).compare("GREETINGS") == 0) {
-                hellos.push_back(strInput);
-            } else if (toUpper(section).compare("REPLIES") == 0) {
-                replies.push_back(strInput);
+            } else if (sectionID >= phrases.size()) {
+                if (debugMode) cout<<"If this message appears, I done goofed\n";
+                sectionID = -1;
+                continue;
+            } else {
+                phrases[sectionID].push_back(strInput);
             }
         }
         ifile.close();
+        if (debugMode) cout<<"Phrases file closed.\n";
     } else {// Uh oh, something went wrong, disable module
-        hellos.push_back("-Hi");
-        replies.push_back("Who, me?");
+        cout<<"Phrases file not found. Please find it.\n";
+        namedList hello("GREETINGS");
+        hello.push_back("-Hi, ");
+        phrases.push_back(hello);
+        namedList reply("REPLIES");
+        reply.push_back("Who, me?");
+        phrases.push_back(reply);
+        namedList table("TABLES");
+        table.push_back("┻━┻");
+        phrases.push_back(table);
+        namedList tosser("TOSSERS");
+        tosser.push_back("(╯°□°）╯︵ %T");
         return -1;
     }
     return 0;
@@ -249,3 +246,34 @@ int CEnglish::checkDir()
         mkdir(folderName.c_str(), 0644);
     return 0;
 }
+
+string CEnglish::flip(string text)
+{// Turns text upside down
+    return "Not yet implemented";
+}
+
+string CEnglish::toss(string text)
+{// Flips a table or an optional string of text
+    return "Not yet implemented";
+}
+
+int CEnglish::searchList(string str)
+{// Simple search algorithm
+    for (int c = 0; c < phrases.size(); c++)
+    {
+        if (toUpper(str).compare(phrases[c].name()) == 0) return c;
+    }
+    return -1;
+}
+
+// namedList functions
+void namedList::push_back(string str)
+{ list.push_back(str); }
+int namedList::size()
+{ return list.size(); }
+string &namedList::operator[] (int n)
+{ return list[n]; }
+string namedList::name()
+{ return listName; }
+namedList::namedList(string name)
+{ listName = name; }

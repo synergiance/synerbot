@@ -21,6 +21,7 @@
 
 // Global Includes
 #include <iostream>
+#include <iomanip>
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -74,7 +75,7 @@ IrcBot::IrcBot(string cfg, int bDebug, bool bVerbose)
     // Set modules
     botConfig = new (bcfgint) CConfig(cfg);
     botPriv = new (bprmint) CPrivleges();
-    EngLang = new (engmem) CEnglish();
+    EngLang = new (engmem) CEnglish(debugMode == 40);
     UserDB = new (usrmem) CUserDB();
 
 
@@ -397,6 +398,75 @@ void IrcBot::action(string target, string message)
     return;
 }
 
+string IrcBot::unicodeValuer(string str)
+{// Turns unicode into a set of U+XXXX sets
+    unsigned long val; short len; stringstream ss;
+    if (str.compare("") == 0) return "";
+    ss<<hex;
+    for (int c = 0; c < str.size(); c++) {
+        len = unicodeLen(str[c]);
+        if (len == -1) {
+            ss<<unsigned(str[c])<<" ";
+        } else if (len == 1) {
+            val = str[c];
+            ss<<"u+"<<val<<" ";
+            if (debugMode == 36) cout<<val<<endl;
+        }
+        else {
+            val = fromUnicode(str.substr(c, len));
+            if (debugMode == 36) cout<<val<<endl;
+            if (val == -1) {
+                ss<<"INV ";
+            }
+            else {
+                ss<<"u+"<<val<<" ";
+                c += len - 1;
+            }
+        }
+    }
+    if (debugMode == 36) cout<<ss.str()<<endl;
+    return toUpper(ss.str());
+}
+
+string IrcBot::unicodeAssembler(string str)
+{// Turns unicode values into unicode characters
+    string val, tmp, strb = str;
+    int pos; long value;
+    for (;;) {
+        if ((pos = strb.find(" ")) == string::npos) break;
+        tmp = strb.substr(0, pos);
+        strb.erase(0,strb.find(" ") + 1);
+        if (toLower(tmp).find("u+") == 0) tmp.erase(0,2);
+        if (rgxMatch(tmp, "[0-7]?[0-9a-fA-F]{1,7}")) {
+            value = hextolong(tmp);
+            if (debugMode == 36) cout<<"Found: "<<tmp<<" -> "<<value<<endl;
+            val.append(toUnicode(value));
+        }
+    }
+    if (toLower(strb).find("u+") == 0) strb.erase(0,2);
+    if (rgxMatch(strb, "[0-7]?[0-9a-fA-F]{1,7}")) {
+        value = hextolong(strb);
+        if (debugMode == 36) cout<<"Found: "<<strb<<" -> "<<value<<endl;
+        val.append(toUnicode(value));
+    }
+    return val;
+}
+
+long IrcBot::hextolong(string str)
+{// Takes a hex value up to FFFFFFFF and turns it into a long
+    size_t a, b; unsigned char c; unsigned long d, e = 0; unsigned char f;
+    if ((a = str.size()) > 8) return -1;
+    for (b = 0; b < a; b++) {
+        c = str[a-1-b] - 48;
+        if (c > 9) c -= 7; // A-F range
+        if (c > 15) c -= 32; // a-f range
+        d = 1;
+        for (f = 0; f < b; f++) d *= 16;
+        e += d * c;
+    }
+    return e;
+}
+
 int IrcBot::commandHandle(string cmd, string args, string talkto, string usr)
 {// This method handles all the commands sent to the bot
     int intReturn = 0;
@@ -446,6 +516,16 @@ int IrcBot::commandHandle(string cmd, string args, string talkto, string usr)
     } else if ((toLower(cmd).compare("a") == 0) &&
               (toLower(args).compare("real command") == 0)) {
         say(talkto, "Ò.Ó"); cmdMatch = true;
+    } else if (toLower(cmd).compare("unicode") == 0) {
+        string arg, rest;
+        if (getFirstWord(args, arg, rest)) {
+            if (toLower(arg).compare("encode") == 0)
+                say(talkto, unicodeAssembler(rest)); cmdMatch = true;
+            if (toLower(arg).compare("decode") == 0)
+                say(talkto, unicodeValuer(rest)); cmdMatch = true;
+        } else {
+            say(talkto, "Unicode is nice, I use UTF-8"); cmdMatch = true;
+        }
     }
     
     // Admin commands

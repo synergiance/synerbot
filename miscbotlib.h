@@ -30,3 +30,8 @@ bool rgxMatch(string str1, string str2);
 bool rgxSearch(string str1, string str2);
 string rgxReturn(string str1, string str2);
 string rgxReplace(string str1, string str2, string str3);
+
+// Unicode
+long fromUnicode(string str);
+string toUnicode(long val);
+short unicodeLen(char c);
