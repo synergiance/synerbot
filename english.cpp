@@ -29,6 +29,12 @@ const char utf8bom[4] = {(char)239, (char)187, (char)191, 0};
 const char utf16be[3] = {(char)254, (char)255, 0};
 const char utf16le[3] = {(char)255, (char)254, 0};
 
+const long flipLetters[26] = {
+    0x250, 0x71,  0x254, 0x70,  0x1DD, 0x25F, 0x183, 0x265, 0x1D09,
+    0x27E, 0x29E, 0x6C,  0x26F, 0x75,  0x6F,  0x64,  0x62,  0x279,
+    0x73,  0x287, 0x6E,  0x28C, 0x28D, 0x78,  0x28E, 0x7A
+};
+
 /*
 
 It feels strange reading this but:
@@ -249,12 +255,136 @@ int CEnglish::checkDir()
 
 string CEnglish::flip(string text)
 {// Turns text upside down
-    return "Not yet implemented";
+    string str;
+    if (text.size() == 0) return string();
+    vector<long> tmp = unidecode(toLower(text));
+    short c;
+    for (long unichar: tmp) {
+        for (c = 0; c < 26; c++) {
+            if (c + 0x61 == unichar) {
+                str.insert(0, toUnicode(flipLetters[c]));
+                break;
+            } else if (flipLetters[c] == unichar) {
+                str.insert(0, toUnicode(c + 0x61));
+                break;
+            }
+        }
+        if (unichar == 0x20) str.insert(0, " ");
+    }
+    return str;
 }
 
 string CEnglish::toss(string text)
 {// Flips a table or an optional string of text
-    return "Not yet implemented";
+    string str = getRandom("TOSSERS");
+    size_t foundChar = 0;
+    if (text.size() == 0) {
+        for (;;) {
+            if ((foundChar = str.find("%T")) == string::npos) break;
+            str.erase(foundChar, 2);
+            str.insert(foundChar, getRandom("TABLES"));
+        }
+    } else {
+        int numTables = 0;
+        int numWords = 1;
+        string flipped = flip(text);
+        cout<<str<<" -> "<<flipped<<endl;
+        for (;;) {
+            if ((foundChar = str.find("%T", foundChar)) == string::npos) break;
+            numTables++; foundChar++;
+        }
+        if (numTables == 1) {
+            foundChar = str.find("%T");
+            str.erase(foundChar, 2);
+            str.insert(foundChar, flipped);
+        } else {
+            for (int c = 1; c < flipped.size(); c++) {
+                if (flipped[c] == 0x20) {
+                    if (flipped[c] == flipped[c-1]){
+                        flipped.erase(c);
+                        c--;
+                    } else numWords++;
+                }
+            }
+            vector<string> demWords;
+            string tmpStr;
+            uniform_int_distribution<int> dist(0, 5);
+            size_t word_len = 0, word_pos = 0;
+            int randNum, c;
+            for (;;) {
+                if ((word_len = flipped.find(' ', word_pos)) == string::npos)
+                    word_len = flipped.size();
+                word_len -= word_pos;
+                if (numWords < numTables) {
+                    randNum = dist(*rnd);
+                    if (randNum > 3) {
+                        string str1, str2;
+                        unisplit(flipped.substr(word_pos, word_len), str1, str2);
+                        demWords.push_back(str1);
+                        demWords.push_back(str2);
+                        numWords++;
+                    } else if (randNum == 3) {
+                        demWords.push_back(flipped.substr(word_pos, word_len));
+                        demWords.push_back(getRandom("TABLES"));
+                        numWords++;
+                    } else {
+                        demWords.push_back(flipped.substr(word_pos, word_len));
+                    }
+                } else {
+                    demWords.push_back(flipped.substr(word_pos, word_len));
+                }
+                word_pos += word_len + 1;
+                if (word_pos >= flipped.size()) break;
+            }
+            if (demWords.size() > numTables) {
+                short lengths [numTables];
+                short tmp = short(demWords.size() / numTables);
+                for (c = 0; c < numTables; c++) lengths[c] = tmp;
+                tmp = short(demWords.size() % numTables);
+                uniform_int_distribution<int> dist(0, numTables - 1);
+                for (c = 0; c < tmp; c++) lengths[dist(*rnd)] += 1;
+                vector<string> temporaryList;
+                for (string word: demWords) temporaryList.push_back(word);
+                demWords.clear();
+                int d;
+                for (c = 0; c < numTables; c++) {
+                    demWords.push_back(temporaryList[0]);
+                    for (d = 1; d < lengths[c]; d++)
+                        demWords.back() += " " + temporaryList[d];
+                    for (d = 0; d < lengths[c]; d++)
+                        temporaryList.erase(temporaryList.begin());
+                }
+                numWords = demWords.size();
+            }
+            for (c = 0; c < numTables; c++) {
+                uniform_int_distribution<int> dist(1, numTables - c);
+                if ((foundChar = str.find("%T")) == string::npos) break;
+                str.erase(foundChar, 2);
+                int a = dist(*rnd);
+                cout<<numTables<<", "<<demWords.size()<<", "<<c<<" "<<a<<endl;
+                if (a <= demWords.size()) {
+                    str.insert(foundChar, demWords.back());
+                    demWords.pop_back();
+                }
+                else str.insert(foundChar, getRandom("TABLES"));
+            }
+        }
+    }
+    return str;
+}
+
+void CEnglish::unisplit(string str, string& begin, string& end)
+{// Split in the middle unicode style
+    vector<long> mischief = unidecode(str);
+    begin = string();
+    end = string();
+    for (int c = 0; c < mischief.size(); c++) {
+        if (c < mischief.size() / 2) {
+            begin.append(toUnicode(mischief[c]));
+        } else {
+            end.append(toUnicode(mischief[c]));
+        }
+    }
 }
 
 int CEnglish::searchList(string str)
@@ -264,6 +394,20 @@ int CEnglish::searchList(string str)
         if (toUpper(str).compare(phrases[c].name()) == 0) return c;
     }
     return -1;
+}
+
+string CEnglish::getRandom(string str)
+{// Return a random string from named list
+    int i = searchList(str);
+    if (i == -1) return string();
+    return getRandom(i);
+}
+
+string CEnglish::getRandom(int i)
+{// Return a random string from specified list
+    if (i < 0 || i >= phrases.size()) return string();
+    uniform_int_distribution<int> dist(0, phrases[i].size() - 1);
+    return phrases[i][dist(*rnd)];
 }
 
 // namedList functions

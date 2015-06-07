@@ -35,3 +35,4 @@ string rgxReplace(string str1, string str2, string str3);
 long fromUnicode(string str);
 string toUnicode(long val);
 short unicodeLen(char c);
+vector<long> unidecode(string str);

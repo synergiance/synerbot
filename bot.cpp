@@ -498,7 +498,11 @@ int IrcBot::commandHandle(string cmd, string args, string talkto, string usr)
     } else if (toLower(cmd).compare("roulette") == 0) {
         say(talkto, "lol, no"); cmdMatch = true;
     } else if (toLower(cmd).compare("toss") == 0) {
-        say(talkto, "(╯°□°）╯︵ ┻━┻"); cmdMatch = true;
+        say(talkto, EngLang->toss(args)); cmdMatch = true;
+    } else if (toLower(cmd).compare("flip") == 0) {
+        if (args.size() > 0) say(talkto, EngLang->flip(args));
+        else say(talkto, "Please include some text to flip");
+        cmdMatch = true;
     } else if (toLower(cmd).compare("whois") == 0) {
         lookup(args, talkto); cmdMatch = true;
     } else if (toLower(cmd).compare("addresstype") == 0) { cmdMatch = true;

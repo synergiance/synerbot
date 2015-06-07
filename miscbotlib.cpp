@@ -12,6 +12,7 @@
 #include <string>
 #include <vector>
 #include <regex>
+#include <random>
 #include <cctype>
 #include <climits>
 
@@ -74,7 +75,7 @@ bool getFirstWord(string message, string& first, string& rest)
         if (tmp == -1)
         {// Only one word
             first = str;
-            rest = "";
+            rest = string();
         }
         else
         {// Multiple words
@@ -83,6 +84,9 @@ bool getFirstWord(string message, string& first, string& rest)
             trimWhite(rest);
         }
         ecaStatus = true;
+    } else {
+        first = string();
+        rest = string();
     }
     return ecaStatus;
 }
@@ -201,4 +205,20 @@ short unicodeLen(char c)
     }
     if (!confirm || d == 1) return -1;
     return d;
+}
+
+vector<long> unidecode(string str)
+{// Returns the long values of the chars
+    vector<long> ret;
+    short charLen;
+    long tmp;
+    if (str.size() == 0) return ret;
+    for (int c = 0; c < str.size(); c += charLen) {
+        charLen = unicodeLen(str[c]);
+        if (charLen == 1) ret.push_back(str[c]);
+        if (charLen == -1) continue;
+        if ((tmp = fromUnicode(str.substr(c, charLen))) == -1) continue;
+        ret.push_back(tmp);
+    }
+    return ret;
 }

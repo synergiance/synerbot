@@ -65,6 +65,8 @@ public:
 
     string toss(string text = "");
     string flip(string text);
+
+    string getRandom(string str);
 private:
     mt19937* rnd;
     bool debugMode;
@@ -87,9 +89,10 @@ private:
     //void loadDictionary();
     //void saveDictionary();
 
-    void addHi();
-
     int searchList(string str);
+    string getRandom(int i);
+
+    void unisplit(string str, string& begin, string& end);
 
     // File IO
     int readWords(string fileName);
