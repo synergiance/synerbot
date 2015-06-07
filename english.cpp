@@ -288,7 +288,6 @@ string CEnglish::toss(string text)
         int numTables = 0;
         int numWords = 1;
         string flipped = flip(text);
-        cout<<str<<" -> "<<flipped<<endl;
         for (;;) {
             if ((foundChar = str.find("%T", foundChar)) == string::npos) break;
             numTables++; foundChar++;
@@ -361,7 +360,6 @@ string CEnglish::toss(string text)
                 if ((foundChar = str.find("%T")) == string::npos) break;
                 str.erase(foundChar, 2);
                 int a = dist(*rnd);
-                cout<<numTables<<", "<<demWords.size()<<", "<<c<<" "<<a<<endl;
                 if (a <= demWords.size()) {
                     str.insert(foundChar, demWords.back());
                     demWords.pop_back();
