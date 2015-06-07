@@ -314,23 +314,24 @@ string CEnglish::toss(string text)
                 if ((word_len = flipped.find(' ', word_pos)) == string::npos)
                     word_len = flipped.size();
                 word_len -= word_pos;
+                tmpStr = flipped.substr(word_pos, word_len);
                 if (numWords < numTables) {
                     randNum = dist(*rnd);
-                    if (randNum > 3) {
+                    if (randNum > 3 && unidecode(tmpStr).size() >= 8) {
                         string str1, str2;
-                        unisplit(flipped.substr(word_pos, word_len), str1, str2);
+                        unisplit(tmpStr, str1, str2);
                         demWords.push_back(str1);
                         demWords.push_back(str2);
                         numWords++;
                     } else if (randNum == 3) {
-                        demWords.push_back(flipped.substr(word_pos, word_len));
+                        demWords.push_back(tmpStr);
                         demWords.push_back(getRandom("TABLES"));
                         numWords++;
                     } else {
-                        demWords.push_back(flipped.substr(word_pos, word_len));
+                        demWords.push_back(tmpStr);
                     }
                 } else {
-                    demWords.push_back(flipped.substr(word_pos, word_len));
+                    demWords.push_back(tmpStr);
                 }
                 word_pos += word_len + 1;
                 if (word_pos >= flipped.size()) break;
