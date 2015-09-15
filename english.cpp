@@ -234,6 +234,10 @@ int CEnglish::readPhrases(string fileName)
         phrases.push_back(table);
         namedList tosser("TOSSERS");
         tosser.push_back("(╯°□°）╯︵ %T");
+        phrases.push_back(tosser);
+        namedList badcommand("BADCOMMAND");
+        badcommand.push_back("Try a real command");
+        phrases.push_back(badcommand);
         return -1;
     }
     return 0;

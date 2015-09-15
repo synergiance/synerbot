@@ -553,7 +553,7 @@ int IrcBot::commandHandle(string cmd, string args, string talkto, string usr)
     // No command matched
     if (!cmdMatch)
     {
-        say(talkto, "Try a real command");
+        say(talkto, EngLang->getRandom("BADCOMMAND"));
     }
     return intReturn;
 }
