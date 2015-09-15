@@ -41,6 +41,7 @@
 #include <cstdlib>
 #include <sstream>
 #include <random> // Convert all rand() to random
+#include <cstdint> // MAX
 
 // RFCs to check out: 2810, 2811, 2812, 2813
 // http://www.irchelp.org/irchelp/rfc/
@@ -400,12 +401,12 @@ void IrcBot::action(string target, string message)
 
 string IrcBot::unicodeValuer(string str)
 {// Turns unicode into a set of U+XXXX sets
-    long val; short len; stringstream ss;
+    long val; size_t len; stringstream ss;
     if (str.compare("") == 0) return "";
     ss<<hex;
     for (size_t c = 0; c < str.size(); c++) {
         len = unicodeLen(str[c]);
-        if (len == -1) {
+        if (len == SIZE_MAX) {
             ss<<unsigned(str[c])<<" ";
         } else if (len == 1) {
             val = str[c];
