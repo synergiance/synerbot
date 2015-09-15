@@ -409,7 +409,7 @@ string CEnglish::getRandom(string str)
 
 string CEnglish::getRandom(size_t i)
 {// Return a random string from specified list
-    if (i < 0 || i >= phrases.size()) return string();
+    if (i >= phrases.size()) return string();
     uniform_int_distribution<size_t> dist(0, phrases[i].size() - 1);
     return phrases[i][dist(*rnd)];
 }
