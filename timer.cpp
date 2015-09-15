@@ -19,6 +19,7 @@ This class is designed to do everything time related, including delayed actions
 #include <chrono>
 #include <cctype>
 #include <condition_variable>
+#include <cstdlib> // atoi
 
 // Local Includes
 #include "timer.h"

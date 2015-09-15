@@ -400,10 +400,10 @@ void IrcBot::action(string target, string message)
 
 string IrcBot::unicodeValuer(string str)
 {// Turns unicode into a set of U+XXXX sets
-    unsigned long val; short len; stringstream ss;
+    long val; short len; stringstream ss;
     if (str.compare("") == 0) return "";
     ss<<hex;
-    for (int c = 0; c < str.size(); c++) {
+    for (size_t c = 0; c < str.size(); c++) {
         len = unicodeLen(str[c]);
         if (len == -1) {
             ss<<unsigned(str[c])<<" ";
@@ -431,7 +431,7 @@ string IrcBot::unicodeValuer(string str)
 string IrcBot::unicodeAssembler(string str)
 {// Turns unicode values into unicode characters
     string val, tmp, strb = str;
-    int pos; long value;
+    size_t pos; long value;
     for (;;) {
         if ((pos = strb.find(" ")) == string::npos) break;
         tmp = strb.substr(0, pos);

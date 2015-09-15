@@ -38,8 +38,8 @@ struct namedList
     namedList(string name);
     vector<string> list;
     void push_back(string str);
-    int size();
-    string &operator[] (int n);
+    size_t size();
+    string &operator[] (size_t n);
 private:
     string listName;
 };
@@ -89,8 +89,8 @@ private:
     //void loadDictionary();
     //void saveDictionary();
 
-    int searchList(string str);
-    string getRandom(int i);
+    size_t searchList(string str);
+    string getRandom(size_t i);
 
     void unisplit(string str, string& begin, string& end);
 

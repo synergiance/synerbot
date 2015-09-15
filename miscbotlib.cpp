@@ -135,10 +135,10 @@ string rgxReplace(string str1, string str2, string str3)
 // Unicode
 long fromUnicode(string str)
 {// This function will take a unicode character and convert it into an int
-    short len = unicodeLen(str[0]);
+    size_t len = unicodeLen(str[0]);
     unsigned char a = 0;
     unsigned char b = 128;
-    short c;
+    size_t c;
     long val = 0;
     long tmp = 1;
     if (len != str.size()) return -1;
@@ -191,11 +191,11 @@ string toUnicode(long val)
     return str;
 }
 
-short unicodeLen(char c)
+size_t unicodeLen(char c)
 {// Gets the length of the unicode sequence
     unsigned char b = 128;
     char a = c;
-    short d;
+    size_t d;
     bool confirm = false;
     if (a >= 0) return 1;
     for (d = 0; d < 6 && !confirm; d++) {
@@ -213,7 +213,7 @@ vector<long> unidecode(string str)
     short charLen;
     long tmp;
     if (str.size() == 0) return ret;
-    for (int c = 0; c < str.size(); c += charLen) {
+    for (size_t c = 0; c < str.size(); c += charLen) {
         charLen = unicodeLen(str[c]);
         if (charLen == 1) ret.push_back(str[c]);
         if (charLen == -1) continue;

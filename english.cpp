@@ -13,6 +13,7 @@
 #include <time.h>
 #include <iostream>
 #include <fstream>
+#include <cstdint> // MAX
 
 // Linux Imports
 #include <unistd.h>
@@ -178,7 +179,7 @@ int CEnglish::readPhrases(string fileName)
     if (ifile) {// All good, the file exists lets proceed
         cout<<"Phrases file found, loading contents\n";
         string strInput;
-        int sectionID = -1;
+        size_t sectionID = SIZE_MAX;
         while (getline(ifile, strInput)) {
             trimWhite(strInput);
             // Check for and remove BOM
@@ -194,11 +195,11 @@ int CEnglish::readPhrases(string fileName)
                 string section;
                 section = toUpper(strInput.substr(1, strInput.size() - 2));
                 if (section.compare("") == 0) {
-                    sectionID = -1;
+                    sectionID = SIZE_MAX;
                     continue;
                 }
                 sectionID = searchList(section);
-                if (sectionID == -1) {
+                if (sectionID == SIZE_MAX) {
                     if (debugMode) cout<<"Adding section: "<<section<<endl;
                     namedList tmp(section);
                     phrases.push_back(tmp);
@@ -208,12 +209,12 @@ int CEnglish::readPhrases(string fileName)
             } else if (strInput.compare("") == 0) {
                 if (debugMode) cout<<"Empty line.\n";
                 continue;
-            } else if (sectionID == -1) {
+            } else if (sectionID == SIZE_MAX) {
                 if (debugMode) cout<<"Line with no section ID\n";
                 continue;
             } else if (sectionID >= phrases.size()) {
                 if (debugMode) cout<<"If this message appears, I done goofed\n";
-                sectionID = -1;
+                sectionID = SIZE_MAX;
                 continue;
             } else {
                 phrases[sectionID].push_back(strInput);
@@ -289,8 +290,8 @@ string CEnglish::toss(string text)
             str.insert(foundChar, getRandom("TABLES"));
         }
     } else {
-        int numTables = 0;
-        int numWords = 1;
+        size_t numTables = 0;
+        size_t numWords = 1;
         string flipped = flip(text);
         for (;;) {
             if ((foundChar = str.find("%T", foundChar)) == string::npos) break;
@@ -301,7 +302,7 @@ string CEnglish::toss(string text)
             str.erase(foundChar, 2);
             str.insert(foundChar, flipped);
         } else {
-            for (int c = 1; c < flipped.size(); c++) {
+            for (size_t c = 1; c < flipped.size(); c++) {
                 if (flipped[c] == 0x20) {
                     if (flipped[c] == flipped[c-1]){
                         flipped.erase(c);
@@ -311,9 +312,9 @@ string CEnglish::toss(string text)
             }
             vector<string> demWords;
             string tmpStr;
-            uniform_int_distribution<int> dist(0, 5);
-            size_t word_len = 0, word_pos = 0;
-            int randNum, c;
+            uniform_int_distribution<char> dist(0, 5);
+            size_t word_len = 0, word_pos = 0, c;
+            char randNum;
             for (;;) {
                 if ((word_len = flipped.find(' ', word_pos)) == string::npos)
                     word_len = flipped.size();
@@ -341,16 +342,16 @@ string CEnglish::toss(string text)
                 if (word_pos >= flipped.size()) break;
             }
             if (demWords.size() > numTables) {
-                short lengths [numTables];
-                short tmp = short(demWords.size() / numTables);
+                size_t lengths [numTables];
+                size_t tmp = demWords.size() / numTables;
                 for (c = 0; c < numTables; c++) lengths[c] = tmp;
-                tmp = short(demWords.size() % numTables);
-                uniform_int_distribution<int> dist(0, numTables - 1);
+                tmp = demWords.size() % numTables;
+                uniform_int_distribution<size_t> dist(0, numTables - 1);
                 for (c = 0; c < tmp; c++) lengths[dist(*rnd)] += 1;
                 vector<string> temporaryList;
                 for (string word: demWords) temporaryList.push_back(word);
                 demWords.clear();
-                int d;
+                size_t d;
                 for (c = 0; c < numTables; c++) {
                     demWords.push_back(temporaryList[0]);
                     for (d = 1; d < lengths[c]; d++)
@@ -361,10 +362,10 @@ string CEnglish::toss(string text)
                 numWords = demWords.size();
             }
             for (c = 0; c < numTables; c++) {
-                uniform_int_distribution<int> dist(1, numTables - c);
+                uniform_int_distribution<size_t> dist(1, numTables - c);
                 if ((foundChar = str.find("%T")) == string::npos) break;
                 str.erase(foundChar, 2);
-                int a = dist(*rnd);
+                size_t a = dist(*rnd);
                 if (a <= demWords.size()) {
                     str.insert(foundChar, demWords.back());
                     demWords.pop_back();
@@ -381,7 +382,7 @@ void CEnglish::unisplit(string str, string& begin, string& end)
     vector<long> mischief = unidecode(str);
     begin = string();
     end = string();
-    for (int c = 0; c < mischief.size(); c++) {
+    for (size_t c = 0; c < mischief.size(); c++) {
         if (c < mischief.size() / 2) {
             begin.append(toUnicode(mischief[c]));
         } else {
@@ -390,35 +391,35 @@ void CEnglish::unisplit(string str, string& begin, string& end)
     }
 }
 
-int CEnglish::searchList(string str)
+size_t CEnglish::searchList(string str)
 {// Simple search algorithm
-    for (int c = 0; c < phrases.size(); c++)
+    for (size_t c = 0; c < phrases.size(); c++)
     {
         if (toUpper(str).compare(phrases[c].name()) == 0) return c;
     }
-    return -1;
+    return SIZE_MAX;
 }
 
 string CEnglish::getRandom(string str)
 {// Return a random string from named list
-    int i = searchList(str);
-    if (i == -1) return string();
+    size_t i = searchList(str);
+    if (i == SIZE_MAX) return string();
     return getRandom(i);
 }
 
-string CEnglish::getRandom(int i)
+string CEnglish::getRandom(size_t i)
 {// Return a random string from specified list
     if (i < 0 || i >= phrases.size()) return string();
-    uniform_int_distribution<int> dist(0, phrases[i].size() - 1);
+    uniform_int_distribution<size_t> dist(0, phrases[i].size() - 1);
     return phrases[i][dist(*rnd)];
 }
 
 // namedList functions
 void namedList::push_back(string str)
 { list.push_back(str); }
-int namedList::size()
+size_t namedList::size()
 { return list.size(); }
-string &namedList::operator[] (int n)
+string &namedList::operator[] (size_t n)
 { return list[n]; }
 string namedList::name()
 { return listName; }
