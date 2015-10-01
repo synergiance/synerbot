@@ -2,7 +2,7 @@
  * 8ball.h
  *
  *  Created on 12 February 2015
- *      By: Tim Gerety
+ *      By: Synergiance
  */
 
 #include <string>

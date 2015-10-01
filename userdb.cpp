@@ -2,7 +2,7 @@
  * userdb.cpp
  *
  *  Created on 20 June 2014
- *      By: Tim Gerety
+ *      By: Synergiance
  */
 
 /*

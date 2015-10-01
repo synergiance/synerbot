@@ -2,7 +2,7 @@
  * privleges.h
  *
  *  Created on 11 April 2014
- *      By: Tim Gerety
+ *      By: Synergiance
  */
 
 // Global Imports

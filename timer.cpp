@@ -2,7 +2,7 @@
  * timer.cpp
  *
  *  Created on 5 March 2015
- *      By: Fiona (Synergiance)
+ *      By: Synergiance
  */
 
 /*

@@ -2,7 +2,7 @@
  * cmutex.h
  *
  *  Created on 17 April 2014
- *      By: Tim Gerety
+ *      By: Synergiance
  */
 
 #include <iostream>

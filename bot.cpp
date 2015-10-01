@@ -518,7 +518,7 @@ int IrcBot::commandHandle(string cmd, string args, string talkto, string usr)
                toLower(cmd).compare("8ball") == 0) {
         ShakerBall->getanswer(talkto); cmdMatch = true;
     } else if (toLower(cmd).compare("about") == 0) {
-        say(talkto, "Programmed by Fiona aka. Synergiance"); cmdMatch = true;
+        say(talkto, "Programmed by Synergiance"); cmdMatch = true;
     } else if (cmd.substr(0,4).compare("?OTR") == 0) {
         say(talkto, "Off the record messaging is not supported by " + nick);
         cmdMatch = true;
