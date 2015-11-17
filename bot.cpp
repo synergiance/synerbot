@@ -502,7 +502,10 @@ int IrcBot::commandHandle(string cmd, string args, string talkto, string usr)
         if (toLower(args).compare(toLower(nick)) == 0) {
             say(talkto, "Nice try"); cmdMatch = true;
         } else {
-            say(talkto, EngLang->toss(args)); cmdMatch = true;
+            string str = args;
+            if (toLower(args).compare("me") == 0)
+                str = usr.substr(0, usr.find("!"));
+            say(talkto, EngLang->toss(str)); cmdMatch = true;
         }
     } else if (toLower(cmd).compare("flip") == 0) {
         if (args.size() > 0) say(talkto, EngLang->flip(args));
@@ -535,6 +538,10 @@ int IrcBot::commandHandle(string cmd, string args, string talkto, string usr)
         } else {
             say(talkto, "Unicode is nice, I use UTF-8"); cmdMatch = true;
         }
+    } else if (rgxMatch(cmd, "(kick|eat|hug|chew|lick|cuff|shoot|hit|poke|glomp|love|kill|grab)")) {
+        string str = args;
+        if (toLower(args).compare("me") == 0) str = usr.substr(0, usr.find("!"));
+        action(talkto, cmd + "s " + str); cmdMatch = true;
     }
     
     // Admin commands
