@@ -14,6 +14,27 @@ using namespace std;
 #ifndef CUSERDB_H_
 #define CUSERDB_H_
 
+struct entry;
+
+struct datalog {
+    string title;
+    int timesSeen;
+    int lastSeen;
+    int firstSeen;
+    entry * link;
+};
+
+struct entry {
+    string title;
+    int timesSeen;
+    int lastSeen;
+    int firstSeen;
+    vector<datalog> data1;
+    vector<datalog> data2;
+    vector<datalog> data3;
+};
+
+
 struct memberEntry {
 public:
     vector<string> nicks;
