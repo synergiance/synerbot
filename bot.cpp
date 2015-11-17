@@ -538,7 +538,7 @@ int IrcBot::commandHandle(string cmd, string args, string talkto, string usr)
         } else {
             say(talkto, "Unicode is nice, I use UTF-8"); cmdMatch = true;
         }
-    } else if (rgxMatch(cmd, "(kick|eat|hug|chew|lick|cuff|shoot|hit|poke|glomp|love|kill|grab)")) {
+    } else if (rgxMatch(toLower(cmd), "(kick|eat|hug|chew|lick|cuff|shoot|hit|zap|poke|glomp|love|kill|grab)")) {
         string str = args;
         if (toLower(args).compare("me") == 0) str = usr.substr(0, usr.find("!"));
         action(talkto, cmd + "s " + str); cmdMatch = true;
