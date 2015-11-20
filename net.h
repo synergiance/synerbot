@@ -40,6 +40,8 @@ public:
     void toThread(string data);
 
     bool setDisconnectMessage(string message);
+
+    string getSvrIP();
 private:
     // Sockets
     int sockfd;  // The network
@@ -58,6 +60,7 @@ private:
     string botUser;
     string botRealName;
     string disconMessage;
+    string svrIP;
 
     volatile bool isConnected; mutex mtxConnected;
 

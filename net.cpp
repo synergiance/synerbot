@@ -389,6 +389,11 @@ int CNetSocket::activateSocket()
     if (debugMode == 14) MessageQueue->push("COUT NET Connect Success");
     if (s == -1) { close(sockfd); return -1; }
 
+    // Import IP address
+    char str[res->ai_addrlen];
+    inet_ntop(res->ai_family, res->ai_addr, str, res->ai_addrlen);
+    svrIP = str;
+
     freeaddrinfo(res);
 
     return 0;
@@ -553,6 +558,9 @@ void CNetSocket::handleNumber(string sender, int code, string message)
     }
     return;
 }
+
+// Getter, nothing to see here, move along
+string CNetSocket::getSvrIP() { return svrIP; }
 
 /*
 inet_pton(AF_INET, "192.0.2.1", &(sa.sin_addr)); // IPv4
