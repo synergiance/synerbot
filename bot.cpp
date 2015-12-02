@@ -489,7 +489,7 @@ int IrcBot::commandHandle(string cmd, string args, string talkto, string usr)
     // Normal commands
 
     // Say a random quote
-    if (cmd.compare("quote") == 0) {
+    if (toLower(cmd).compare("quote") == 0) {
         // Forward everything to method
         string subcmd; string subargs;
         if (!(extractCommandArgs(args, subcmd, subargs))) {
