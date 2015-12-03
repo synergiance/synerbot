@@ -534,13 +534,13 @@ void CNetSocket::handleNumber(string sender, int code, string message)
         break;
 
     // Whois reply (all is prefixed with nickname)
-    case 310: // is using modes [flags] authflags: [flags]
+    case 310: // is using modes [flags] authflags: [flags] (maybe op)
     case 311: // user information [nick] [user] [host] * :[realname]
     case 312: // server user is connected to [nick] [svrhost] :[svrdesc]
     case 317: // idle/signon [nick] [seconds] [time] :seconds idle, signon time
     case 318: // End of whois list
     case 319: // Channels user is connected to [nick] :[@#channel] <#channel2>
-    case 338: // is actually [userhost] [IP]
+    case 338: // is actually [userhost] [IP] (yourself specific or op)
     case 672: // CGI:IRC client
 
     // yourself specific whois
