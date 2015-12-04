@@ -10,6 +10,8 @@
 #include <bitset>
 #include <time.h>
 
+#include "cmutex.h"
+
 using namespace std;
 
 #ifndef CUSERDB_H_
@@ -117,11 +119,12 @@ class CUserDB
 {
 public:
     // Constructors
-    CUserDB();
+    CUserDB(CMutex& buffer);
     ~CUserDB();
 
     void setDebug(bool mode);
 
+    void spotUser(string channel, string nick);
     string checkUser(string username);
     string checkUser(string nick, string user, string host, string name);
     string spotUser(string nick, string user, string host, string name);
@@ -133,6 +136,7 @@ public:
 
     memberEntry getUser(int num);
 private:
+    vector<connectedUser> connectedUsers;
     vector<entry> nicks;
     vector<entry> hosts;
     vector<entry> users;
@@ -140,6 +144,7 @@ private:
 
     vector<memberEntry> members;
     string userdbfile;
+    CMutex* MessageQueue;
 
     bool debugMode;
 

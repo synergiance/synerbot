@@ -77,8 +77,11 @@ IrcBot::IrcBot(string cfg, int bDebug, bool bVerbose)
     botConfig = new (bcfgint) CConfig(cfg);
     botPriv = new (bprmint) CPrivleges();
     EngLang = new (engmem) CEnglish(debugMode == 40);
-    UserDB = new (usrmem) CUserDB();
 
+    if (debugMode == 8 || debugMode == 13 || debugMode == 28)
+        MessageQueue = new (msgmem) CMutex(true);
+    else
+        MessageQueue = new (msgmem) CMutex();
 
     rnd = new (rndmem) mt19937(rndseed);
 
@@ -96,10 +99,7 @@ IrcBot::IrcBot(string cfg, int bDebug, bool bVerbose)
              + toLower(nick) + "\\b";
 
     // Set other modules
-    if (debugMode == 8 || debugMode == 13 || debugMode == 28)
-        MessageQueue = new (msgmem) CMutex(true);
-    else
-        MessageQueue = new (msgmem) CMutex();
+    UserDB = new (usrmem) CUserDB(*MessageQueue);
     botSock = new (netmem) CNetSocket(server, port, *MessageQueue, bDebug);
     botTimer = new (tmrmem) cTimer(*MessageQueue);
     CQuotes = new (qtsmem) QuoteHandler(*MessageQueue, *botPriv, channelName);
@@ -244,6 +244,8 @@ void IrcBot::otherHandle(CMutexMessage event)
     }
     if (toUpper(event.command).compare("WHOISRPLY") == 0)
         whoisHandle(event.command_arguments[0]);
+    if (toUpper(event.command).compare("WHOIS") == 0)
+        whois(event.command_arguments[0]);
     if (toUpper(event.command).compare("TIMER") == 0) {
         if (toUpper(event.command_arguments[0]).compare("ADD") == 0) {
             if (event.command_arguments.size() < 4) return;
@@ -679,8 +681,7 @@ void IrcBot::nicklistHandle(string list)
         string buf2;
         getFirstWord(buf, str, buf2);
         buf = buf2;
-        if (matchesChars(str[0], "~&@%+")) str.erase(0,1);
-        whois(str);
+        UserDB->spotUser(channelName, str);
     }
 }
 
@@ -693,6 +694,8 @@ void IrcBot::whoisHandle(string buf)
     getFirstWord(args, nick, tmp);
     switch (num)
     {
+        case 310: // is using modes [flags] authflags: [flags] (maybe op)
+            break;
         case 311: // nickuserhost / real name
             getFirstWord(tmp, user, args);
             getFirstWord(args, host, tmp);
@@ -707,9 +710,13 @@ void IrcBot::whoisHandle(string buf)
             break;
         case 319: // channels
             break;
+        case 338: // is actually [userhost] [IP] (yourself specific or op)
+            break;
         case 378: // My userhost/IP
             break;
         case 379: // My modes
+            break;
+        case 672: // CGI:IRC client
             break;
         default: // Halp aliens stole my penis
             break;

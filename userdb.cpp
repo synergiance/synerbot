@@ -24,11 +24,13 @@ A class designed to keep track of users across hostnames
 #include "userdb.h"
 #include "miscbotlib.h"
 #include "net.h"
+#include "cmutex.h"
 
 using namespace std;
 
-CUserDB::CUserDB()
+CUserDB::CUserDB(CMutex& buffer)
 {
+    MessageQueue = &buffer;
     userdbfile = "userdb.db";
     readdb();
     debugMode = false;
@@ -50,6 +52,19 @@ string CUserDB::checkUser(string username)
     if (parseUser(username, nick, user, host))
         tmp = searchUser(nick, user, host, "");
     return compileUser(tmp);
+}
+
+void CUserDB::spotUser(string channel, string nick)
+{// Add to connected user list, send out a whois request
+    connectedUser user;
+    string str = nick;
+    while (matchesChars(str[0], "~&@%+")) {
+        str.erase(0,1); // This character will be saved in the future
+    }
+    user.nick = str;
+    time(&user.signon);
+    connectedUsers.push_back(user);
+    MessageQueue->push("GLOBAL WHOIS " + str);
 }
 
 string CUserDB::spotUser(string nick, string user, string host, string name)
