@@ -8,6 +8,7 @@
 #include <string>
 #include <vector>
 #include <bitset>
+#include <time.h>
 
 using namespace std;
 
@@ -18,22 +19,30 @@ struct entry;
 
 struct datalog {
     string title;
-    int timesSeen;
-    int lastSeen;
-    int firstSeen;
+    long timesSeen;
+    time_t timeSeen;
+    time_t lastSeen;
+    time_t firstSeen;
     entry * link;
 };
 
 struct entry {
     string title;
-    int timesSeen;
-    int lastSeen;
-    int firstSeen;
+    long timesSeen;
+    time_t timeSeen;
+    time_t lastSeen;
+    time_t firstSeen;
     vector<datalog> data1;
     vector<datalog> data2;
     vector<datalog> data3;
 };
 
+struct connectedUser {
+    string nick, user, host, name;
+    vector<string> channels;
+    time_t signon;
+    bool servicesIdentified, botIdentified;
+};
 
 struct memberEntry {
 public:
@@ -124,6 +133,11 @@ public:
 
     memberEntry getUser(int num);
 private:
+    vector<entry> nicks;
+    vector<entry> hosts;
+    vector<entry> users;
+    vector<entry> names;
+
     vector<memberEntry> members;
     string userdbfile;
 

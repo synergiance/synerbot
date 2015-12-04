@@ -495,7 +495,7 @@ void CNetSocket::handleNumber(string sender, int code, string message)
     switch (code)
     {
 
-    case 1: // This means we logged in successfully
+    case 1: // This means we logged in successfully (welcome)
         MessageQueue->push("GLOBAL CONNECTED");
         //cout<<"Connected\n";
         break;
@@ -516,10 +516,12 @@ void CNetSocket::handleNumber(string sender, int code, string message)
     case 42: // Your unique ID (Inspircd)
     case 251: // Network info?
     case 252: // operators online
+    case 253: // Unknown connections
     case 254: // I have x channels formed
     case 255: // I have x clients and y servers
     case 265: // Current local users
     case 266: // Current global users
+    case 439: // Please wait while we process your connection (rizon)
         break;
     
     // Channel nick list

@@ -18,6 +18,7 @@ A class designed to keep track of users across hostnames
 #include <stdlib.h>
 #include <sstream>
 #include <bitset>
+#include <time.h>
 //#include <regex>
 
 #include "userdb.h"
