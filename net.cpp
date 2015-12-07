@@ -390,7 +390,7 @@ int CNetSocket::activateSocket()
     if (s == -1) { close(sockfd); return -1; }
 
     // Import IP address
-    char str[39];
+    char str[40];
     void *ptr;
     switch (res->ai_family)
     {
@@ -401,7 +401,7 @@ int CNetSocket::activateSocket()
             ptr = &((struct sockaddr_in6 *) res->ai_addr)->sin6_addr;
             break;
     }
-    inet_ntop(res->ai_family, ptr, str, 39);
+    inet_ntop(res->ai_family, ptr, str, 40);
     svrIP = str;
 
     freeaddrinfo(res);
