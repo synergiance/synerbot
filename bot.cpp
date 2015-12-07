@@ -193,8 +193,8 @@ bool IrcBot::globalHandle(string cmd)
     { botSock->toThread("net disconnected"); return false; }
     if (toUpper(command).compare("CONNECTED") == 0) {
         string str = botSock->getSvrIP();
-        if (str.compare("") == 0) str = "unknown server";
-        cout<<"Connected to "<<str<<endl;
+        if (str.compare("") == 0) str = "IP Error";
+        cout<<"Connected to "<<server<<" ("<<str<<")"<<endl;
     }
     if (toUpper(command).compare("NICKLIST") == 0) nicklistHandle(message);
     if (toUpper(command).compare("MOTD") == 0)
