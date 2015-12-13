@@ -110,6 +110,8 @@ string CEnglish::getHello(string nick, bool only_roman)
         str += " " + nick;
     }
     return str;
+    // <3
+    //return "J3nny RUL3Z!!!";
 }
 
 string CEnglish::getReply(string nick)
