@@ -562,6 +562,24 @@ void CNetSocket::handleNumber(string sender, int code, string message)
         MessageQueue->push(ss.str());
         break;
 
+    // error messages
+    case 400: // Error occurred executing command but reason is unknown
+    case 401: // No such nick
+    case 402: // No such server
+    case 403: // Channel does not exist
+    case 404: // No permission to send to channel
+    case 405: // Too many channels
+    case 406: // No such nick to whowas command
+    case 407: // Too many targets
+    case 408: // No such service (SQUERY) No colors allowed (Bahamut)
+    case 409: // No origin on ping/pong
+    case 471: // Channel is full
+    case 472: // Unknown mode
+    case 473: // You must be invited to this channel
+    case 474: // Banned from channel
+    case 475: // Key locked channel wrong key
+        break;
+
     // Messages we don't yet handle will display on screen
     default:
         if (debugMode == 4)
