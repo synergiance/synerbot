@@ -9,6 +9,8 @@
 
 #include <string>
 
+using std::string;
+
 bool     posrgx_match(string str1, string str2);
 bool    posrgx_search(string str1, string str2);
 string  posrgx_return(string str1, string str2);

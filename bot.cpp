@@ -95,8 +95,8 @@ IrcBot::IrcBot(string cfg, int bDebug, bool bVerbose)
     channelName = botConfig->getChannelName();
     port = botConfig->getPort();
 
-    rgxHello = "\\b(hi|hello|greetings|hey|ahoy|g'day|howdy|yo|hiya),? "
-             + toLower(nick) + "\\b";
+    rgxHello = "[[:<:]](hi|hello|greetings|hey|ahoy|g'day|howdy|yo|hiya),? "
+             + toLower(nick) + "[[:>:]]";
 
     // Set other modules
     UserDB = new (usrmem) CUserDB(*MessageQueue);
@@ -358,7 +358,7 @@ void IrcBot::AI(string sender, string cmd, string msg)
                 }
             } else if (rgxSearch(toLower(message), rgxHello)) {
                 say(channel, EngLang->getHello(name, false));
-                // Above regex_search call segfaults in gcc < 4.9
+                // Above regex_search call segfaults in gcc < 4.9 (maybe)
             }
             else if (toLower(message).find(nick) != string::npos) {
                 say(channel, EngLang->getReply(name));
