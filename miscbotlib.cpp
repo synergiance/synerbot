@@ -7,7 +7,7 @@
 
 // Local Imports
 #include "miscbotlib.h"
-#include "posrgx.h"
+//#include "posrgx.h"
 
 // Global Imports
 #include <string>
@@ -16,6 +16,9 @@
 #include <random>
 #include <cctype>
 #include <climits>
+
+// Boost
+#include <boost/regex.hpp>
 
 // Debug use only
 //#include <iostream>
@@ -125,13 +128,16 @@ void compare(string str1, string str2, unsigned& begin, unsigned& end)
 
 // Regex forwarders
 bool rgxMatch(string str1, string str2)
-{ return posrgx_match(str1, str2); }
+{ return boost::regex_match(str1, boost::regex(str2)); }
 bool rgxSearch(string str1, string str2)
-{ return posrgx_search(str1, str2); }
-string rgxReturn(string str1, string str2)
-{ return posrgx_return(str1, str2); }
+{ return boost::regex_search(str1, boost::regex(str2)); }
+string rgxReturn(string str1, string str2) {
+    boost::smatch m;
+    boost::regex_search(str1, m, boost::regex(str2));
+    return m.str();
+}
 string rgxReplace(string str1, string str2, string str3)
-{ return regex_replace(str1, regex(str2), str3); }
+{ return boost::regex_replace(str1, boost::regex(str2), str3); }
 
 // Unicode
 long fromUnicode(string str)
