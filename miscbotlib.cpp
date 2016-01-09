@@ -7,6 +7,7 @@
 
 // Local Imports
 #include "miscbotlib.h"
+#include "posrgx.h"
 
 // Global Imports
 #include <string>
