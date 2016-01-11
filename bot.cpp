@@ -95,7 +95,7 @@ IrcBot::IrcBot(string cfg, int bDebug, bool bVerbose)
     channelName = botConfig->getChannelName();
     port = botConfig->getPort();
 
-    rgxHello = "[[:<:]](hi|hello|greetings|hey|ahoy|g'day|howdy|yo|hiya),? "
+    rgxHello = "[[:<:]](hi|hello|greetings|hey|ahoy|g'day|howdy|yo|hiya),{0,1} "
              + toLower(nick) + "[[:>:]]";
 
     // Set other modules
