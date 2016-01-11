@@ -98,7 +98,7 @@ IrcBot::IrcBot(string cfg, int bDebug, bool bVerbose)
     /*
     rgxHello = "[[:<:]](hi|hello|greetings|hey|ahoy|g'day|howdy|yo|hiya),{0,1} "
              + toLower(nick) + "[[:>:]]"; */
-    rgxHello = "[[:<:]]([:graph:]*[alphanum]),? " + toLower(nick) + "[[:>:]]";
+    rgxHello = "[[:<:]]([[:graph:]]*[[:alnum:]]),? " + toLower(nick) + "[[:>:]]";
 
     // Set other modules
     UserDB = new (usrmem) CUserDB(*MessageQueue);
