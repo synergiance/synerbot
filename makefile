@@ -4,7 +4,7 @@ CFLAGS=$(ARGS) -std=c++11 -ggdb -Wall -pthread
 OFLAGS=-c $(CFLAGS)
 LFLAGS=$(CFLAGS) -lboost_regex
 OBJ=main.o bot.o config.o privleges.o miscbotlib.o cmutex.o net.o \
-english.o quote.o userdb.o 8ball.o timer.o
+english.o quote.o userdb.o 8ball.o timer.o posrgx.o
 
 all: ibot
 
