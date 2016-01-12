@@ -35,8 +35,8 @@ bool rgxPos(string str1, string str2, vector< vector<regmatch_t> > &matches)
     char       * rgxPos;
     regex_t      rgxCmp; // Compiled regex
     regmatch_t * rgxGrp; // Return regex array
-    int          rgxMax; // Maximum number of groups
-    int          rgxNum; // Number of groups
+    size_t       rgxMax; // Maximum number of groups
+    size_t       rgxNum; // Number of groups
     bool         retVal;
 
     if (regcomp(&rgxCmp, str2.c_str(), REG_EXTENDED)) return false;
@@ -61,7 +61,7 @@ bool rgxPos(string str1, string str2, vector< vector<regmatch_t> > &matches)
         }
         vector<regmatch_t> groups;
         for (size_t c = 0; c < rgxNum; c++) {
-            if (rgxGrp[c].rm_so == (size_t)-1) break;
+            if ((size_t)rgxGrp[c].rm_so == (size_t)-1) break;
             groups.push_back(rgxGrp[c]);
         }
         rgxPos += rgxGrp[0].rm_eo;
@@ -78,7 +78,7 @@ bool posrgx_match(string str1, string str2)
 {// Determines if entire string matches a regex
     regmatch_t r;
     if (rgxPos(str1, str2, r))
-        if (r.rm_so == 0 && r.rm_eo == str1.length())
+        if (r.rm_so == 0 && (size_t)r.rm_eo == str1.length())
             return true;
     return false;
 }
