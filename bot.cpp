@@ -484,8 +484,8 @@ long IrcBot::hextolong(string str)
 void IrcBot::rollcall(string target)
 {// Responds in IRC to say the roll of this bot
     say(target, "Synerbot is a pet bot belonging to synergiance who is really "
-                "kind of dumb, since he only knows how to do a few things.");
-    say(target, "Be scared though if you hear anything about Natural language "
+                "kind of dumb, since he only knows how to do a few things.  "
+                "Be scared though if you hear anything about Natural language "
                 "processing from Synergiance.");
 }
 
