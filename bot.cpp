@@ -365,9 +365,10 @@ void IrcBot::AI(string sender, string cmd, string msg)
                 }
             } else if (rgxMatch(toLower(message), rgxHello)) {
                 say(channel, EngLang->getHello(name, false));
-            }
-            else if (toLower(message).find(nick) != string::npos) {
+            } else if (toLower(message).find(nick) != string::npos) {
                 say(channel, EngLang->getReply(name));
+            } else if (toLower(message).compare("!rollcall") == 0) {
+                rollcall(channel);
             }
         } else
         {// Message is a user
@@ -480,6 +481,14 @@ long IrcBot::hextolong(string str)
     return e;
 }
 
+void IrcBot::rollcall(string target)
+{// Responds in IRC to say the roll of this bot
+    say(target, "Synerbot is a pet bot belonging to synergiance who is really "
+                "kind of dumb, since he only knows how to do a few things.");
+    say(target, "Be scared though if you hear anything about Natural language "
+                "processing from Synergiance.");
+}
+
 int IrcBot::commandHandle(string cmd, string args, string talkto, string usr)
 {// This method handles all the commands sent to the bot
     int intReturn = 0;
@@ -508,6 +517,8 @@ int IrcBot::commandHandle(string cmd, string args, string talkto, string usr)
         cmdMatch = true;
     } else if (toLower(cmd).compare("augh") == 0) {
         say(talkto, "AUGH"); cmdMatch = true;
+    } else if (toLower(cmd).compare("rollcall") == 0) {
+        rollcall(talkto); cmdMatch = true;
     } else if (toLower(cmd).compare("roulette") == 0) {
         say(talkto, "lol, no"); cmdMatch = true;
     } else if (toLower(cmd).compare("toss") == 0) {

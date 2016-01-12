@@ -94,6 +94,8 @@ private:
     void say(string target, string message);
     void action(string target, string message);
 
+    void rollcall(string target);
+
     // User Functions
     void editPrivs(string cmd, string args, string talkto);
     void lookup(string search, string talkto);
