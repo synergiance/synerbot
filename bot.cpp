@@ -98,7 +98,9 @@ IrcBot::IrcBot(string cfg, int bDebug, bool bVerbose)
     /*
     rgxHello = "[[:<:]](hi|hello|greetings|hey|ahoy|g'day|howdy|yo|hiya),{0,1} "
              + toLower(nick) + "[[:>:]]"; */
-    rgxHello = "[[:<:]]([[:graph:]]*[[:alnum:]]),? " + toLower(nick) + "[[:>:]]";
+    //rgxHello = "([[:graph:]]*[[:alnum:]]),? " + toLower(nick);
+    rgxHello = "(hi|hello|greetings|hey|ahoy|g'day|howdy|yo|hiya),? "
+             + toLower(nick);
 
     // Set other modules
     UserDB = new (usrmem) CUserDB(*MessageQueue);
@@ -320,6 +322,8 @@ void IrcBot::AI(string sender, string cmd, string msg)
     string name;
     string command;
     string args;
+
+    vector<string> rgxReturn;
     
     // Get sender's name
     name = sender.substr(0, sender.find("!"));
@@ -329,6 +333,7 @@ void IrcBot::AI(string sender, string cmd, string msg)
         channel = msg.substr(0, msg.find(" "));
         message = msg.substr(channel.size() + 2,
             msg.size() - (channel.size() + 2));
+        trimWhite(message);
         if (channel.substr(0,1) == "#")
         {// Message is a channel
             // Only output if debug mode is on
@@ -358,9 +363,8 @@ void IrcBot::AI(string sender, string cmd, string msg)
                 } else {// Someone tried to say hi as if I were a bot
                     say(channel, "I prefer a hello");
                 }
-            } else if (rgxSearch(toLower(message), rgxHello)) {
+            } else if (rgxMatch(toLower(message), rgxHello)) {
                 say(channel, EngLang->getHello(name, false));
-                // Above regex_search call segfaults in gcc < 4.9 (maybe)
             }
             else if (toLower(message).find(nick) != string::npos) {
                 say(channel, EngLang->getReply(name));

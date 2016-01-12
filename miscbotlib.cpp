@@ -129,12 +129,16 @@ void compare(string str1, string str2, unsigned& begin, unsigned& end)
 // Regex forwarders
 bool rgxMatch(string str1, string str2)
 { return posrgx_match(str1, str2); }
+bool rgxMatch(string str1, string str2, vector<string> &groups)
+{ return posrgx_match(str1, str2, groups); }
 bool rgxSearch(string str1, string str2)
 { return posrgx_search(str1, str2); }
-string rgxReturn(string str1, string str2)
-{ return posrgx_return(str1, str2); }
+bool rgxSearch(string str1, string str2, string &str3)
+{ return posrgx_search(str1, str2, str3); }
 string rgxReplace(string str1, string str2, string str3)
 { return posrgx_replace(str1, str2, str3); }
+string rgxReplaceGroup(string str1, string str2, string str3)
+{ return posrgx_replace_group(str1, str2, str3); }
 
 /* Old boost/c++11 code (for c++11 remove boost::)
 // Regex forwarders

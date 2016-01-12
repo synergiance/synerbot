@@ -62,6 +62,7 @@ public:
 
     string getHello(string nick, bool only_roman);
     string getReply(string nick);
+    bool isHello(string str);
 
     string toss(string text = "");
     string flip(string text);

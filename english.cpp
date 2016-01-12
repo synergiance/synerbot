@@ -122,6 +122,21 @@ string CEnglish::getReply(string nick)
     return phrases[i][dist(*rnd)];
 }
 
+bool CEnglish::isHello(string str)
+{
+    int i = searchList("HELLOS");
+    if (i == -1) {
+        if (toLower(str).compare("hi") == 0)
+            return true;
+        else
+            return false;
+    }
+    for (string s : phrases[i].list)
+        if (toLower(str).compare(s) == 0)
+            return true;
+    return false;
+}
+
 // # Octatherp
 // * Sextile
 

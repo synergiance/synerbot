@@ -27,9 +27,12 @@ void compare(string str1, string str2, unsigned& begin, unsigned& end);
 
 // Regex forwarders
 bool rgxMatch(string str1, string str2);
+bool rgxMatch(string str1, string str2, vector<string> &groups);
 bool rgxSearch(string str1, string str2);
-string rgxReturn(string str1, string str2);
+bool rgxSearch(string str1, string str2, string &str3);
+bool rgxSearch(string str1, string str2, vector< vector<string> > &matches);
 string rgxReplace(string str1, string str2, string str3);
+string rgxReplaceGroup(string str1, string str2, string str3);
 
 // Unicode
 long fromUnicode(string str);
