@@ -504,6 +504,9 @@ int IrcBot::commandHandle(string cmd, string args, string talkto, string usr)
     }
     
     // Normal commands
+    if (rgxMatch(toLower(cmd), "(hi|hello|greetings|hey|ahoy|g'day|howdy|yo|hiya)")) {
+        say(talkto, EngLang->getHello(usr, false));
+    }
 
     // Say a random quote
     if (toLower(cmd).compare("quote") == 0) {
