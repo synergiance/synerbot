@@ -14,7 +14,6 @@
 // Global Imports
 #include <string>
 #include <vector>
-#include <regex>
 #include <iostream>
 #include <fstream>
 #include <random>
@@ -342,13 +341,21 @@ void QuoteHandler::help(string cmd, string usr, string talkto)
     }
 }
 
+#ifdef POSIX_REGEX
+#define QUOTER_START "<[%@+~&]?[[:word:]]+( [[:word:]]+){0,2}>[[:space:]]"
+#define QUOTER_END "[[:space:]]~[[:word:]]+( [[:word:]]+){0,2}"
+#else
+#define QUOTER_START "^<[%@+~&]?\\w+( \\w+){0,2}>\\s"
+#define QUOTER_END "\\s~\\w+( \\w+){0,2}$"
+#endif
+
 string QuoteHandler::getQuoter(string& quote)
 {
     int found = 0;
     int strLen = quote.size();
     string quoter;
     int maxLen = 0;
-    if (rgxSearch(quote, "^<[@+~&]?\\w+( \\w+){0,2}>\\s")) {
+    if (rgxSearch(quote, QUOTER_START)) {
         found = quote.find('>');
         if (found > 31) found = 0;
     }
@@ -359,7 +366,7 @@ string QuoteHandler::getQuoter(string& quote)
     else {
         found = 0;
         if (strLen < 30) maxLen = 0; else maxLen = strLen - 30;
-        if (rgxSearch(quote, "\\s~\\w+( \\w+){0,2}$")) {
+        if (rgxSearch(quote, QUOTER_END)) {
             found = quote.rfind('~');
             if (found < maxLen) found = 0;
         }
@@ -370,7 +377,7 @@ string QuoteHandler::getQuoter(string& quote)
     }
     if (quoter != "") {
         char chr = quoter[0];
-        if (matchesChars(chr, "@+~&")) quoter.erase(0,1);
+        if (matchesChars(chr, "%@+~&")) quoter.erase(0,1);
     }
     return quoter;
 }

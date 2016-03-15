@@ -5,6 +5,14 @@
  *      By: Synergiance
  */
 
+/* Regex version define:
+ * POSIX_REGEX - Use the standard posix regex (not quite working)
+ * BOOST_REGEX - Use Boost's regex implementation (Check for boost support)
+ * STD_REGEX - Use only if you have a newer compiler
+ */
+
+#define STD_REGEX
+
 #include <string>
 #include <vector>
 

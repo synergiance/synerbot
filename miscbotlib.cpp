@@ -12,13 +12,19 @@
 // Global Imports
 #include <string>
 #include <vector>
-#include <regex>
 #include <random>
 #include <cctype>
 #include <climits>
 
-// Boost
-//#include <boost/regex.hpp>
+// STD Regex
+#ifdef STD_REGEX
+#include <regex>
+#endif
+
+// Boost Regex
+#ifdef BOOST_REGEX
+#include <boost/regex.hpp>
+#endif
 
 // Debug use only
 //#include <iostream>
@@ -126,6 +132,8 @@ void compare(string str1, string str2, unsigned& begin, unsigned& end)
     end--;
 }
 
+/* POSIX regex */
+#ifdef POSIX_REGEX
 // Regex forwarders
 bool rgxMatch(string str1, string str2)
 { return posrgx_match(str1, str2); }
@@ -139,8 +147,10 @@ string rgxReplace(string str1, string str2, string str3)
 { return posrgx_replace(str1, str2, str3); }
 string rgxReplaceGroup(string str1, string str2, string str3)
 { return posrgx_replace_group(str1, str2, str3); }
+#endif
 
-/* Old boost/c++11 code (for c++11 remove boost::)
+#ifdef BOOST_REGEX
+/* Old boost/c++11 code (for c++11 remove boost::) */
 // Regex forwarders
 bool rgxMatch(string str1, string str2)
 { return boost::regex_match(str1, boost::regex(str2)); }
@@ -153,7 +163,22 @@ string rgxReturn(string str1, string str2) {
 }
 string rgxReplace(string str1, string str2, string str3)
 { return boost::regex_replace(str1, boost::regex(str2), str3); }
-*/
+#endif
+
+#ifdef STD_REGEX
+/* C++11 regex */
+bool rgxMatch(string str1, string str2)
+{ return std::regex_match(str1, std::regex(str2)); }
+bool rgxSearch(string str1, string str2)
+{ return std::regex_search(str1, std::regex(str2)); }
+string rgxReturn(string str1, string str2) {
+    std::smatch m;
+    std::regex_search(str1, m, std::regex(str2));
+    return m.str();
+}
+string rgxReplace(string str1, string str2, string str3)
+{ return std::regex_replace(str1, std::regex(str2), str3); }
+#endif
 
 // Unicode
 long fromUnicode(string str)
