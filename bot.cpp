@@ -217,6 +217,7 @@ bool IrcBot::globalHandle(string cmd)
         MessageQueue->push(newEvent);
     }
     if (toUpper(command).compare("COUT") == 0) cout<<message<<endl; // Deprecated
+    if (toUpper(command).compare("WHOIS") == 0) whois(message);
     return true;
 }
 

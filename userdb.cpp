@@ -56,15 +56,24 @@ string CUserDB::checkUser(string username)
 
 void CUserDB::spotUser(string channel, string nick)
 {// Add to connected user list, send out a whois request
-    connectedUser user;
     string str = nick;
+    bool match = false;
     while (matchesChars(str[0], "~&@%+")) {
         str.erase(0,1); // This character will be saved in the future
     }
-    user.nick = str;
-    time(&user.signon);
-    connectedUsers.push_back(user);
-    MessageQueue->push("GLOBAL WHOIS " + str);
+    for (connectedUser &usr : connectedUsers) {
+        if (str.compare(usr.nick) == 0) {
+            match = true;
+            break;
+        }
+    }
+    if (!match) {
+        connectedUser user;
+        user.nick = str;
+        time(&user.signon);
+        connectedUsers.push_back(user);
+        MessageQueue->push("GLOBAL WHOIS " + str);
+    }
 }
 
 string CUserDB::spotUser(string nick, string user, string host, string name)

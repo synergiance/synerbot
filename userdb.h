@@ -34,6 +34,7 @@ struct entry {
     time_t timeSeen;
     time_t lastSeen;
     time_t firstSeen;
+    bool shared;
     vector<datalog> data1;
     vector<datalog> data2;
     vector<datalog> data3;
