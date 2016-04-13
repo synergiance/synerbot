@@ -57,22 +57,31 @@ string CUserDB::checkUser(string username)
 void CUserDB::spotUser(string channel, string nick)
 {// Add to connected user list, send out a whois request
     string str = nick;
-    bool match = false;
+    connectedUser * user = NULL;
     while (matchesChars(str[0], "~&@%+")) {
         str.erase(0,1); // This character will be saved in the future
     }
     for (connectedUser &usr : connectedUsers) {
         if (str.compare(usr.nick) == 0) {
-            match = true;
+            user = &usr;
             break;
         }
     }
-    if (!match) {
-        connectedUser user;
-        user.nick = str;
-        time(&user.signon);
-        connectedUsers.push_back(user);
+    if (user == NULL) {
+        user = new connectedUser;
+        user->nick = str;
+        time(&user->signon);
+        connectedUsers.push_back(*user);
         MessageQueue->push("GLOBAL WHOIS " + str);
+    } else {
+        bool match = false;
+        for (string &chn : user->channels) {
+            if (channel.compare(chn) == 0) {
+                match = true;
+                break;
+            }
+        }
+        if (!match) user->channels.push_back(channel);
     }
 }
 
