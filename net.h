@@ -6,13 +6,13 @@
  */
 
 // Global Includes
+#include <mutex>
+#include <netinet/in.h>
 #include <string.h>
 #include <sys/types.h>
 #include <sys/socket.h>
-#include <netinet/in.h>
-#include <unistd.h>
-#include <mutex>
 #include <thread>
+#include <unistd.h>
 
 // Local Includes
 #include "cmutex.h"

@@ -6,21 +6,20 @@
  */
 
 // Global Includes
-#include <string.h>
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <unistd.h>
-#include <thread>
-#include <mutex>
-#include <stdio.h>
-#include <stdlib.h>
-#include <netdb.h>
 #include <arpa/inet.h>
+#include <mutex>
+#include <netdb.h>
 #include <netinet/in.h>
 #include <sstream>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include <sys/select.h>
+#include <sys/socket.h>
 #include <sys/time.h>
+#include <sys/types.h>
+#include <thread>
+#include <unistd.h>
 
 // Local Includes
 #include "net.h"
