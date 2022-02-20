@@ -559,10 +559,14 @@ int IrcBot::commandHandle(string cmd, string args, string talkto, string usr)
     } else if (toLower(cmd).compare("unicode") == 0) {
         string arg, rest;
         if (getFirstWord(args, arg, rest)) {
-            if (toLower(arg).compare("encode") == 0)
-                say(talkto, unicodeAssembler(rest)); cmdMatch = true;
-            if (toLower(arg).compare("decode") == 0)
-                say(talkto, unicodeValuer(rest)); cmdMatch = true;
+            if (toLower(arg).compare("encode") == 0) {
+                say(talkto, unicodeAssembler(rest));
+                cmdMatch = true;
+            }
+            if (toLower(arg).compare("decode") == 0) {
+                say(talkto, unicodeValuer(rest));
+                cmdMatch = true;
+            }
         } else {
             say(talkto, "Unicode is nice, I use UTF-8"); cmdMatch = true;
         }
